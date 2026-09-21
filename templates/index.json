@@ -1,0 +1,146 @@
+{
+    "sections": {
+        "hero_slider_section": {
+            "type": "hero-slider",
+            "settings": {}
+        },
+        "rich_text_section": {
+            "type": "rich-text",
+            "settings": {
+                "desktop_content_alignment": "vt-desktop-center",
+                "mobile_content_alignment": "vt-mobile-center",
+                "heading_width": "vt-width-medium",
+                "gap": 36,
+                "gap_mobile": 32,
+                "background_color": "#F8F9DC",
+                "text_color": "#003225",
+                "padding_top": 36,
+                "padding_bottom": 36,
+                "enable_custom_mobile_padding": true,
+                "padding_top_mobile": 32,
+                "padding_bottom_mobile": 32,
+                "show_section_divider": true,
+                "divider_color": "#003225",
+                "make_section_full_width": true
+            },
+            "blocks": {
+                "heading_block": {
+                    "type": "heading",
+                    "settings": {
+                        "heading": "<span>Earth-Core Sustainable Fashion</span>",
+                        "heading_size": "vt-hero-heading",
+                        "heading_alignment": "text-center",
+                        "heading_tag": "h1",
+                        "animation_type": "slide",
+                        "animation_direction": "from-bottom",
+                        "animation_duration": 1,
+                        "animation_delay": 0.2,
+                        "animation_easing": "ease-out-sine",
+                        "animation_blur_intensity": 5
+                    }
+                },
+                "paragraph_block": {
+                    "type": "paragraph",
+                    "settings": {
+                        "text": "<p>One tree planted per product - 100K+ Trees Planted</p>",
+                        "paragraph_size": "vt-paragraph-large",
+                        "paragraph_alignment": "text-center",
+                        "paragraph_max_width": 800,
+                        "animation_type": "slide",
+                        "animation_direction": "from-bottom",
+                        "animation_duration": 1,
+                        "animation_delay": 0.4,
+                        "animation_easing": "ease-out-sine",
+                        "animation_blur_intensity": 5
+                    }
+                },
+                "button_block": {
+                    "type": "button",
+                    "settings": {
+                        "button_label": "shop now",
+                        // "button_link": "/collections/all",
+                        "button_link": "shopify://collections/all",
+                        "open_in_new_tab": false,
+                        "button_style": "primary",
+                        "animation_type": "slide",
+                        "animation_direction": "from-bottom",
+                        "animation_duration": 1,
+                        "animation_delay": 0.6,
+                        "animation_easing": "ease-out-sine",
+                        "animation_blur_intensity": 5
+                    }
+                }
+            },
+            "block_order": [
+                "heading_block",
+                "paragraph_block",
+                "button_block"
+            ]
+        },
+        "impact_metrics_section": {
+            "type": "impact-metrics",
+            "settings": {},
+            "blocks": {
+                "heading_group_block": {
+                    "type": "heading-group",
+                    "settings": {
+                        "direction": "horizontal",
+                        "alignment": "center",
+                        "vertical_alignment": "center",
+                        "gap_desktop": 20,
+                        "gap_mobile": 14,
+                        "width": "fit",
+                        "width_custom": 100,
+                        "max_width": 420,
+                        "hide_icon_mobile": true
+                    },
+                    "blocks": {
+                        "heading_block": {
+                            "type": "heading",
+                            "settings": {
+                                "heading": "<span>Our Real Impact</span>",
+                                "heading_size": "vt-heading-h2",
+                                "heading_alignment": "text-center",
+                                "heading_tag": "h2",
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.2,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 5
+                            }
+                        },
+                        "icon_block_left": {
+                            "type": "icons",
+                            "settings": {
+                                "icon": "leaf",
+                                "icon_color": "#71CC3B",
+                                "icon_size_desktop": 40,
+                                "icon_size_mobile": 30,
+                                "show_box": false,
+                                "box_bg_color": "#003225",
+                                "box_size_desktop": 64,
+                                "box_size_mobile": 54,
+                                "box_radius": "50%"
+                            }
+                        }
+                        
+                    },
+                    "block_order": [                        
+                        "icon_block_left",
+                        "heading_block"
+                     
+                    ]
+                }
+            },
+            "block_order": [
+                "heading_group_block"
+            ]
+        }
+    },
+    "order": [
+        "hero_slider_section",
+        "rich_text_section",
+        "impact_metrics_section"
+    ]
+}

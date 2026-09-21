@@ -1,0 +1,313 @@
+{% doc %}
+  Renders a paragraph block.
+
+  @example
+  {% content_for 'block', type: 'paragraph', id: 'paragraph' %}
+{% enddoc %}
+
+{%- if block.settings.text != blank -%}
+  {%- assign animation_type = block.settings.animation_type -%}
+
+  {%- comment -%} Build animation classes {%- endcomment -%}
+  {%- assign vt_anim_classes = '' -%}
+  {%- unless animation_type == 'none' -%}
+    {%- assign vt_anim_classes = 'vt-animate vt-animate--' | append: animation_type -%}
+
+    {%- if animation_type == 'slide' or animation_type == 'float' -%}
+      {%- assign vt_anim_classes = vt_anim_classes
+        | append: ' vt-animate--dir-'
+        | append: block.settings.animation_direction
+      -%}
+    {%- endif -%}
+  {%- endunless -%}
+
+  {%- capture paragraph_class -%}
+    vt-paragraph
+    {{ block.settings.paragraph_size }}
+    {{ block.settings.paragraph_alignment }}
+    {{ vt_anim_classes }}
+  {%- endcapture -%}
+  {%- assign paragraph_class = paragraph_class | strip -%}
+
+  {%- comment -%} Build animation CSS custom properties {%- endcomment -%}
+  {%- assign vt_style = '' -%}
+  {%- unless animation_type == 'none' -%}
+    {%- assign vt_style = vt_style
+      | append: '--vt-duration: '
+      | append: block.settings.animation_duration
+      | append: 's;'
+    -%}
+    {%- assign vt_style = vt_style | append: ' --vt-delay: ' | append: block.settings.animation_delay | append: 's;' -%}
+
+    {%- if animation_type == 'slide' or animation_type == 'float' or animation_type == 'blur' -%}
+      {%- case block.settings.animation_easing -%}
+        {%- when 'linear' -%}
+          {%- assign vt_easing_value = 'linear' -%}
+        {%- when 'ease-out-sine' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
+        {%- when 'ease-in-sine' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.12, 0, 0.39, 0)' -%}
+        {%- when 'ease-in-out-sine' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.37, 0, 0.63, 1)' -%}
+        {%- when 'ease-in-cubic' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.32, 0, 0.67, 0)' -%}
+        {%- when 'ease-out-cubic' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.33, 1, 0.68, 1)' -%}
+        {%- when 'ease-in-out-cubic' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.65, 0, 0.35, 1)' -%}
+        {%- else -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
+      {%- endcase -%}
+
+      {%- assign vt_style = vt_style | append: ' --vt-easing: ' | append: vt_easing_value | append: ';' -%}
+    {%- endif -%}
+
+    {%- if animation_type == 'blur' -%}
+      {%- assign vt_style = vt_style
+        | append: ' --vt-blur: '
+        | append: block.settings.animation_blur_intensity
+        | append: 'px;'
+      -%}
+    {%- endif -%}
+  {%- endunless -%}
+
+  <div
+    class="{{ paragraph_class }}"
+    style="--vt-paragraph-max-width: {{ block.settings.paragraph_max_width }}px;{% if vt_style != '' %}{{ vt_style | strip }}{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    {{ block.settings.text }}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .vt-paragraph {
+    max-width: var(--vt-paragraph-max-width);
+  }
+
+  .vt-paragraph.text-left {
+    text-align: left;
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  .vt-paragraph.text-center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .vt-paragraph.text-right {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+    "name": "t:blocks.paragraph.name",
+    "tag": null,
+    "settings":
+    [
+        {
+            "type": "richtext",
+            "id": "text",            
+            "default": "t:blocks.paragraph.settings.text.default",
+            "label": "t:blocks.paragraph.settings.text.label"
+        },        
+        {
+            "type": "select",
+            "id": "paragraph_size",
+            "options":
+            [
+                {
+                    "value": "vt-paragraph-extra-small",
+                    "label": "t:blocks.paragraph.settings.paragraph_size.options__1.label"
+                },
+                {
+                    "value": "vt-paragraph-small",
+                    "label": "t:blocks.paragraph.settings.paragraph_size.options__2.label"
+                },
+                {
+                    "value": "vt-paragraph-medium",
+                    "label": "t:blocks.paragraph.settings.paragraph_size.options__3.label"
+                },
+                {
+                    "value": "vt-paragraph-large",
+                    "label": "t:blocks.paragraph.settings.paragraph_size.options__4.label"
+                }
+            ],
+            "default": "vt-paragraph-medium",
+            "label": "t:blocks.paragraph.settings.paragraph_size.label"
+        },
+        {
+            "type": "select",
+            "id": "paragraph_alignment",
+            "options":
+            [
+                {
+                    "value": "text-left",
+                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__1.label"
+                },
+                {
+                    "value": "text-center",
+                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__2.label"
+                },
+                {
+                    "value": "text-right",
+                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__3.label"
+                }
+            ],
+            "default": "text-center",
+            "label": "t:blocks.paragraph.settings.paragraph_alignment.label"
+        },
+        {
+            "type": "range",
+            "id": "paragraph_max_width",
+            "min": 200,
+            "max": 1200,
+            "step": 20,
+            "unit": "px",
+            "default": 600,
+            "label": "t:blocks.paragraph.settings.paragraph_max_width.label"
+        },
+        {
+            "type": "header",
+            "content": "t:blocks.paragraph.settings.header_animation.content"
+        },
+        {
+            "type": "select",
+            "id": "animation_type",
+            "options":
+            [
+                {
+                    "value": "none",
+                    "label": "t:blocks.paragraph.settings.animation_type.options__1.label"
+                },
+                {
+                    "value": "fade",
+                    "label": "t:blocks.paragraph.settings.animation_type.options__2.label"
+                },
+                {
+                    "value": "slide",
+                    "label": "t:blocks.paragraph.settings.animation_type.options__3.label"
+                },
+                {
+                    "value": "float",
+                    "label": "t:blocks.paragraph.settings.animation_type.options__4.label"
+                },
+                {
+                    "value": "blur",
+                    "label": "t:blocks.paragraph.settings.animation_type.options__5.label"
+                }
+            ],
+            "default": "none",
+            "label": "t:blocks.paragraph.settings.animation_type.label"
+        },
+        {
+            "type": "select",
+            "id": "animation_direction",
+            "options":
+            [
+                {
+                    "value": "from-left",
+                    "label": "t:blocks.paragraph.settings.animation_direction.options__1.label"
+                },
+                {
+                    "value": "from-right",
+                    "label": "t:blocks.paragraph.settings.animation_direction.options__2.label"
+                },
+                {
+                    "value": "from-top",
+                    "label": "t:blocks.paragraph.settings.animation_direction.options__3.label"
+                },
+                {
+                    "value": "from-bottom",
+                    "label": "t:blocks.paragraph.settings.animation_direction.options__4.label"
+                }
+            ],
+            "default": "from-bottom",
+            "label": "t:blocks.paragraph.settings.animation_direction.label",
+            "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' }}"
+        },
+        {
+            "type": "range",
+            "id": "animation_duration",
+            "min": 0.1,
+            "max": 3,
+            "step": 0.1,
+            "unit": "s",
+            "default": 1.2,
+            "label": "t:blocks.paragraph.settings.animation_duration.label",
+            "visible_if": "{{ block.settings.animation_type != 'none' }}"
+        },
+        {
+            "type": "range",
+            "id": "animation_delay",
+            "min": 0,
+            "max": 2,
+            "step": 0.1,
+            "unit": "s",
+            "default": 0.2,
+            "label": "t:blocks.paragraph.settings.animation_delay.label",
+            "visible_if": "{{ block.settings.animation_type != 'none' }}"
+        },
+        {
+            "type": "select",
+            "id": "animation_easing",
+            "options":
+            [
+                {
+                    "value": "linear",
+                    "label": "t:blocks.paragraph.settings.animation_easing.options__1.label"
+                },
+                {
+                    "value": "ease-out-sine",
+                    "label": "t:blocks.paragraph.settings.animation_easing.options__2.label"
+                },
+                {
+                    "value": "ease-in-sine",
+                    "label": "t:blocks.paragraph.settings.animation_easing.options__3.label"
+                },
+                {
+                    "value": "ease-in-out-sine",
+                    "label": "t:blocks.paragraph.settings.animation_easing.options__4.label"
+                },
+                {
+                    "value": "ease-in-cubic",
+                    "label": "t:blocks.paragraph.settings.animation_easing.options__5.label"
+                },
+                {
+                    "value": "ease-out-cubic",
+                    "label": "t:blocks.paragraph.settings.animation_easing.options__6.label"
+                },
+                {
+                    "value": "ease-in-out-cubic",
+                    "label": "t:blocks.paragraph.settings.animation_easing.options__7.label"
+                }
+            ],
+            "default": "ease-out-sine",
+            "label": "t:blocks.paragraph.settings.animation_easing.label",
+            "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' or block.settings.animation_type == 'blur' }}"
+        },
+        {
+            "type": "range",
+            "id": "animation_blur_intensity",
+            "min": 5,
+            "max": 50,
+            "step": 1,
+            "unit": "px",
+            "default": 5,
+            "label": "t:blocks.paragraph.settings.animation_blur_intensity.label",
+            "visible_if": "{{ block.settings.animation_type == 'blur' }}"
+        }
+    ],
+    "presets":
+    [
+        {
+            "name": "t:blocks.paragraph.presets.name"
+        }
+    ]
+}
+{% endschema %}

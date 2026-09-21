@@ -1,0 +1,243 @@
+{%- doc -%}  
+  Renders a Heading group of blocks with configurable layout direction, gap and
+  alignment.
+
+  All settings apply to only one dimension to reduce configuration complexity.
+
+  This component is a wrapper concerned only with rendering its children in
+  the specified layout direction with appropriate padding and alignment.  
+  @example
+  {% content_for 'block', type: 'heading-group', id: 'heading-group' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign direction = block.settings.direction
+  assign vertical_alignment = block.settings.vertical_alignment
+  assign width_type = block.settings.width
+  assign width_custom = block.settings.width_custom
+  assign hide_icon_mobile = block.settings.hide_icon_mobile
+
+  assign gap_mobile_px = block.settings.gap_mobile
+  assign gap_desktop_px = block.settings.gap_desktop
+  assign max_width_px = block.settings.max_width
+  assign max_width_rem = max_width_px | divided_by: 16.0 | round: 3
+
+  assign alignment_slug = block.settings.alignment | replace: '_', '-'
+-%}
+
+{%- capture group_classes -%}
+  vt-heading-group
+  vt-heading-group--direction-{{ direction }}
+  vt-heading-group--align-{{ alignment_slug }}
+  vt-heading-group--valign-{{ vertical_alignment }}
+  vt-heading-group--width-{{ width_type }}
+  {%- if hide_icon_mobile %} vt-heading-group--hide-icon-mobile{% endif %}
+{%- endcapture -%}
+
+<div
+  class="{{ group_classes | strip_newlines | replace: '  ', ' ' | strip }}"
+  style="
+    --vt-heading-group-gap: {% render 'fluid-clamp', min_px: gap_mobile_px, max_px: gap_desktop_px %};
+    --vt-heading-group-max-width: clamp(20rem, 90vw, {{ max_width_rem }}rem);
+    {%- if width_type == 'custom' %}
+    --vt-heading-group-width-custom: {{ width_custom }}%;
+    {%- endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .vt-heading-group {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    gap: var(--vt-heading-group-gap, 1rem);
+    max-width: min(100%, var(--vt-heading-group-max-width, 30rem));
+  }
+
+  .vt-heading-group--direction-horizontal {
+    flex-direction: row;
+  }
+
+  .vt-heading-group--direction-vertical {
+    flex-direction: column;
+  }
+
+  .vt-heading-group--align-left {
+    justify-content: flex-start;
+  }
+
+  .vt-heading-group--align-center {
+    justify-content: center;
+    margin: 0 auto;
+  }
+
+  .vt-heading-group--align-right {
+    justify-content: flex-end;
+  }
+
+  .vt-heading-group--align-space-between {
+    justify-content: space-between;
+  }
+
+  .vt-heading-group--valign-top {
+    align-items: flex-start;
+  }
+
+  .vt-heading-group--valign-center {
+    align-items: center;
+  }
+
+  .vt-heading-group--valign-bottom {
+    align-items: flex-end;
+  }
+
+  .vt-heading-group--width-fit {
+    width: fit-content;
+  }
+
+  .vt-heading-group--width-fill {
+    width: 100%;
+  }
+
+  .vt-heading-group--width-custom {
+    width: var(--vt-heading-group-width-custom, 50%);
+  }
+
+  @media screen and (max-width: 749px) {
+    .vt-heading-group--hide-icon-mobile > :first-child {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Heading group",
+  "tag": null,
+  "blocks": [
+    { "type": "icons" }, 
+    { "type": "heading" }    
+  ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal" },
+        { "value": "vertical", "label": "Vertical" }
+      ],
+      "default": "horizontal"
+    },
+    {
+      "type": "header",
+      "content": "Alignment"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" },
+        { "value": "space_between", "label": "Space between" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "label": "Gap (desktop)",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Gap (mobile)",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "fit"
+    },
+    {
+      "type": "range",
+      "id": "width_custom",
+      "label": "Custom width",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50,
+      "visible_if": "{{ block.settings.width == 'custom' }}"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 100,
+      "max": 1200,
+      "step": 20,
+      "unit": "px",
+      "default": 480
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_icon_mobile",
+      "label": "Hide icon block on mobile",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heading group",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "icons" }        
+      ]
+    }
+  ]
+}
+{% endschema %}

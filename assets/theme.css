@@ -1,0 +1,678 @@
+/** Critical CSS for the theme. This file is included on every page. */
+
+/* Reset styles inspired by https://www.joshwcomeau.com/css/custom-css-reset/ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  min-height: 100svh;
+}
+
+html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
+  overflow: hidden;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input,
+textarea,
+select {
+  font: inherit;
+  border-radius: var(--style-border-radius-inputs, .125rem);
+}
+
+select {
+  background-color: var(--color-background);
+  color: currentcolor;
+}
+
+dialog {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+p {
+  text-wrap: pretty;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p:empty {
+  display: none;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):first-child,
+:empty:first-child+ :where(p, h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 0;
+}
+
+:is(p, h1, h2, h3, h4, h5, h6):last-child,
+:where(p, h1, h2, h3, h4, h5, h6)+ :has(+ :empty:last-child) {
+  margin-block-end: 0;
+}
+
+/* Hero and Heading style */
+
+h1,
+.h1,
+.vt-heading-h1 {
+  font-family: var(--vt-font-family-heading);
+  font-weight: var(--vt-font-heading-weight);
+  font-size: var(--vt-font-heading-1-size);
+  line-height: var(--vt-font-heading-1-line-height);
+  letter-spacing: var(--vt-font-heading-1-letter-spacing);
+  text-transform: var(--vt-font-heading-1-text-transform);
+}
+
+h2,
+.h2,
+.vt-heading-h2 {
+  font-family: var(--vt-font-family-heading);
+  font-weight: var(--vt-font-heading-weight);
+  font-size: var(--vt-font-heading-2-size);
+  line-height: var(--vt-font-heading-2-line-height);
+  letter-spacing: var(--vt-font-heading-2-letter-spacing);
+  text-transform: var(--vt-font-heading-2-text-transform);
+}
+
+h3,
+.h3,
+.vt-heading-h3 {
+  font-family: var(--vt-font-family-heading);
+  font-weight: var(--vt-font-heading-weight);
+  font-size: var(--vt-font-heading-3-size);
+  line-height: var(--vt-font-heading-3-line-height);
+  letter-spacing: var(--vt-font-heading-3-letter-spacing);
+  text-transform: var(--vt-font-heading-3-text-transform);
+}
+
+h4,
+.h4,
+.vt-heading-h4 {
+  font-family: var(--vt-font-family-heading);
+  font-weight: var(--vt-font-heading-weight);
+  font-size: var(--vt-font-heading-4-size);
+  line-height: var(--vt-font-heading-4-line-height);
+  letter-spacing: var(--vt-font-heading-4-letter-spacing);
+  text-transform: var(--vt-font-heading-4-text-transform);
+}
+
+h5,
+.h5,
+.vt-heading-h5 {
+  font-family: var(--vt-font-family-heading);
+  font-weight: var(--vt-font-heading-weight);
+  font-size: var(--vt-font-heading-5-size);
+  line-height: var(--vt-font-heading-5-line-height);
+  letter-spacing: var(--vt-font-heading-5-letter-spacing);
+  text-transform: var(--vt-font-heading-5-text-transform);
+}
+
+h6,
+.h6,
+.vt-heading-h6 {
+  font-family: var(--vt-font-family-heading);
+  font-weight: var(--vt-font-heading-weight);
+  font-size: var(--vt-font-heading-6-size);
+  line-height: var(--vt-font-heading-6-line-height);
+  letter-spacing: var(--vt-font-heading-6-letter-spacing);
+  text-transform: var(--vt-font-heading-6-text-transform);
+}
+
+.vt-hero-heading {
+  font-family: var(--vt-font-family-heading);
+  font-weight: var(--vt-font-heading-weight);
+  font-size: var(--vt-font-hero-size);
+  line-height: var(--vt-font-hero-line-height);
+  letter-spacing: var(--vt-font-hero-letter-spacing);
+  text-transform: var(--vt-font-hero-text-transform);
+}
+
+/** Theme styles below */
+body {
+  font-family: var(--vt-font-body-family);
+  background-color: var(--color-black);
+  color: var(--color-foreground);
+}
+
+/** Section layout utilities */
+
+/**
+ * Setup a grid that enables both full-width and constrained layouts
+ * depending on the class of the child elements.
+ *
+ * By default, a minimum content margin is set on the left and right
+ * sides of the section and the content is centered in the viewport to
+ * not exceed the maximum page width.
+ *
+ * When a child element is given the `full-width` class, it will span
+ * the entire viewport.
+ */
+.skip-to-content-link {
+  position: absolute !important;
+  width: .0625rem !important;
+  margin: -0.0625rem !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  height: .0625rem !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  overflow-wrap: normal !important;
+}
+
+.shopify-section {
+  --content-width: min(calc(var(--vt-page-width) - var(--vt-page-margin) * 2),
+      calc(100% - var(--vt-page-margin) * 2));
+  --content-margin: minmax(var(--vt-page-margin), 1fr);
+  --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
+
+  /* This is required to make <img> elements work as background images */
+  position: relative;
+  grid-template-columns: var(--content-grid);
+  display: grid;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-columns), 1fr);
+  gap: var(--grid-gap);
+}
+
+/* Reusable Slider Nav Arrow Buttons Component */
+.earth-slider-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.earth-slider-nav__btn {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: var(--color-secondary, #71CC3B);
+  border: .0938rem solid var(--color-secondary, #71CC3B);
+  color: var(--color-black, #003225);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.earth-slider-nav__btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 .375rem 1.125rem rgba(113, 204, 59, 0.4);
+}
+
+.earth-slider-nav__icon {
+  width: .9375rem;
+  height: .9375rem;
+  object-fit: contain;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.earth-slider-nav__btn--prev:hover .earth-slider-nav__icon--prev {
+  transform: rotate(-45deg);
+}
+
+.earth-slider-nav__btn--next:hover .earth-slider-nav__icon--next {
+  transform: rotate(45deg);
+}
+
+.earth-slider-nav--light .earth-slider-nav__btn {
+  background-color: var(--color-white, #F8F9DC);
+  border-color: var(--color-white, #F8F9DC);
+}
+
+.earth-slider-nav--light .earth-slider-nav__btn:hover {
+  background-color: var(--color-secondary, #71CC3B);
+  border-color: var(--color-secondary, #71CC3B);
+}
+
+/* Child elements, by default, are constrained to the central column of the grid. */
+.shopify-section>* {
+  grid-column: 2;
+}
+
+/* Child elements that use the full-width utility class span the entire viewport. */
+.shopify-section>.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Button style */
+
+.vt-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ============================================================
+  BUTTON BASE
+  ============================================================ */
+
+.vt-button {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--vt-button-min-height);
+  padding-inline: var(--vt-button-horizontal-padding);
+  border-width: var(--vt-button-border-width);  
+  border-style: solid;
+  border-radius: var(--vt-button-radius);
+  font-family: var(--vt-button-font-family);
+  font-size: var(--vt-button-size);
+  font-weight: var(--vt-button-font-weight);  
+  letter-spacing: var(--vt-button-letter-spacing);
+  text-transform: var(--vt-button-text-case);
+  transition: all 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  text-decoration: none;
+  overflow: hidden;
+  cursor: pointer; 
+  z-index: 1;
+}
+
+@media screen and (max-width: 749px) {
+  .vt-button {
+    padding-inline: var(--vt-button-horizontal-padding-mobile);
+  }    
+}
+
+/* ============================================================
+  PRIMARY
+  ============================================================ */
+
+.vt-button--primary {
+  background-color: var(--vt-button-primary-background);
+  color: var(--vt-button-primary-text);  
+  border-color: var(--vt-button-primary-border);    
+}
+
+/* ============================================================
+  SECONDARY
+  ============================================================ */
+
+.vt-button--secondary {
+  background-color: var(--vt-button-secondary-background);
+  color: var(--vt-button-secondary-text);  
+  border-color: var(--vt-button-secondary-border);   
+}
+
+
+/* ============================================================
+  OUTLINE
+  ============================================================ */
+
+.vt-button--outline {
+  background-color: var(--vt-button-outline-background);
+  color: var(--vt-button-outline-text);  
+  border-color: var(--vt-button-outline-border);  
+}
+
+
+/* ============================================================
+  ACCENT
+  ============================================================ */
+
+.vt-button--accent {
+  background-color: var(--vt-button-accent-background);
+  color: var(--vt-button-accent-text);  
+  border-color: var(--vt-button-accent-border);      
+}
+
+/* ============================================================
+  LINK
+  ============================================================ */
+
+.vt-button--link,
+.vt-button--link-light {
+  border: 0;
+  padding: 0;  
+  outline: none;
+  overflow: visible;
+  gap: .75rem
+}
+
+.vt-button--link {  
+  color: var(--vt-button-link-text);
+}
+
+.vt-button--link::after,
+.vt-button--link-light::after {  
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: .0625rem;
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.vt-button--link::after {  
+  background-color: var(--vt-button-link-text);
+}
+
+.vt-button--link-light {
+  color: var(--vt-button-link-light-text);
+}
+
+.vt-button--link-light::after {  
+  background-color: var(--vt-button-link-light-text);
+}
+
+.vt-button .vt-button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;  
+  border-radius: 50%;  
+}
+
+.vt-button--link .vt-button-icon{
+  background-color: var(--vt-button-link-text);
+  color: var(--vt-button-icon-link-dark);
+}
+
+.vt-button--link-light .vt-button-icon{
+  background-color: var(--vt-button-link-light-text);
+  color: var(--vt-button-icon-link-light);
+}
+
+.vt-button-icon svg {
+  width: .75rem;
+  height: .625rem;
+  flex-shrink: 0;
+}
+
+.vt-button--link:hover::after,
+.vt-button--link-light:hover::after {  
+  animation: swipeLine 0.5s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+@keyframes swipeLine {
+  0% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  45% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+  55% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+
+/* ============================================================
+  STANDARD HOVER EFFECT
+  ============================================================ */
+
+.vt-button--hover-standard::before {  
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-block: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;  
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+
+/* ============================================================
+  PRIMARY HOVER
+  ============================================================ */
+
+.vt-button--primary.vt-button--hover-standard::before {
+  background-color: var(--vt-button-primary-hover-background);    
+}
+
+.vt-button--primary.vt-button--hover-standard:hover::before {  
+  transform: scaleX(1);
+}
+
+.vt-button--primary.vt-button--hover-standard:hover {  
+  color: var(--vt-button-primary-hover-text);
+  border-color: var(--vt-button-primary-hover-border);    
+}
+
+
+/* ============================================================
+  SECONDARY HOVER
+  ============================================================ */
+
+.vt-button--secondary.vt-button--hover-standard::before {
+  background-color: var(--vt-button-secondary-hover-background);    
+}
+
+.vt-button--secondary.vt-button--hover-standard:hover::before {
+  transform: scaleX(1);
+}
+
+.vt-button--secondary.vt-button--hover-standard:hover {
+  color: var(--vt-button-secondary-hover-text);    
+  border-color: var(--vt-button-secondary-hover-border);    
+}
+
+
+/* ============================================================
+  OUTLINE HOVER
+  ============================================================ */
+
+.vt-button--outline.vt-button--hover-standard::before {
+  background-color: var(--vt-button-outline-hover-background);    
+}
+
+.vt-button--outline.vt-button--hover-standard:hover::before {
+  transform: scaleX(1);
+}
+
+.vt-button--outline.vt-button--hover-standard:hover {
+  color: var(--vt-button-outline-hover-text);
+  border-color: var(--vt-button-outline-hover-border);      
+}
+
+
+/* ============================================================
+  ACCENT HOVER
+  ============================================================ */
+
+.vt-button--accent.vt-button--hover-standard::before {
+  background-color: var(--vt-button-accent-hover-background);    
+}
+
+.vt-button--accent.vt-button--hover-standard:hover::before {
+  transform: scaleX(1);
+}
+
+.vt-button--accent.vt-button--hover-standard:hover {
+  color: var(--vt-button-accent-hover-text);
+  border-color: var(--vt-button-accent-hover-border);      
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vt-button--hover-standard::before {
+    transition: none;    
+  }
+}
+
+/* Rich Text */
+
+.vt-rich-text{
+  display: flex;
+  padding-inline: var(--vt-page-margin);
+}
+
+.vt-rich-text .vt-inner {
+  display: flex;
+  flex-direction: column;
+}
+.vt-rich-text.vt-width-small .vt-inner {
+  max-width: 50rem;
+}
+.vt-rich-text.vt-width-medium .vt-inner {
+  max-width: 70rem;
+}
+.vt-rich-text.vt-width-large .vt-inner {
+  max-width: 80rem;
+}
+.vt-rich-text.vt-width-full .vt-inner {
+  max-width: 100%;
+}
+.vt-rich-text.vt-desktop-left {
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+.vt-rich-text.vt-desktop-left .vt-inner {
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+}
+.vt-rich-text.vt-desktop-center {
+  align-items: center;
+  text-align: center;
+  justify-content: center;  
+}
+.vt-rich-text.vt-desktop-center .vt-inner {
+  align-items: center;
+  text-align: center;
+  justify-content: center;  
+}
+.vt-rich-text.vt-desktop-right {
+  align-items: flex-end;
+  justify-content: flex-end;
+  text-align: right;
+}
+.vt-rich-text.vt-desktop-right .vt-inner {
+  align-items: flex-end;
+  justify-content: flex-end;
+  text-align: right;
+}
+
+@media screen and (max-width: 749px) {
+  .vt-rich-text.vt-mobile-left {
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .vt-rich-text.vt-desktop-left .vt-inner {
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .vt-rich-text.vt-mobile-center {
+    align-items: center;
+    text-align: center;
+    justify-content: center;    
+  }
+  .vt-rich-text.vt-desktop-center .vt-inner {
+    align-items: center;
+    text-align: center;
+    justify-content: center;  
+  }
+  .vt-rich-text.vt-mobile-right {
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;
+  }
+  .vt-rich-text.vt-desktop-right .vt-inner {
+    align-items: flex-end;
+    justify-content: flex-end;
+    text-align: right;    
+  }
+}
+
+/* Body paragraph style */
+
+.vt-paragraph {  
+  font-weight: var(--vt-font-body-weight);
+  max-width: var(--vt-paragraph-max-width);
+}
+
+/* Extra Small Paragraph */
+
+.vt-paragraph.vt-paragraph-extra-small {
+  font-size: var(--vt-font-extra-small-size);
+  font-weight: var(--vt-font-extra-small-weight);
+  line-height: var(--vt-font-extra-small-line-height);
+  letter-spacing: var(--vt-font-extra-small-letter-spacing);
+  text-transform: var(--vt-font-extra-small-text-transform, none);
+}
+
+/* Small Paragraph */
+
+.vt-paragraph.vt-paragraph-small {
+  font-size: var(--vt-font-small-size);
+  font-weight: var(--vt-font-small-weight);
+  line-height: var(--vt-font-small-line-height);
+  letter-spacing: var(--vt-font-small-letter-spacing);
+  text-transform: var(--vt-font-small-text-transform, none);
+}
+
+/* Body Paragraph */
+
+.vt-paragraph.vt-paragraph-medium {
+  font-size: var(--vt-font-body-size);
+  font-weight: var(--vt-font-body-weight);
+  line-height: var(--vt-font-body-line-height);
+  letter-spacing: var(--vt-font-body-letter-spacing);
+  text-transform: var(--vt-font-body-text-transform, none);
+}
+
+/* Large Paragraph */
+
+.vt-paragraph.vt-paragraph-large {
+  font-size: var(--vt-font-large-size);
+  font-weight: var(--vt-font-large-weight);
+  line-height: var(--vt-font-large-line-height);
+  letter-spacing: var(--vt-font-large-letter-spacing);
+  text-transform: var(--vt-font-large-text-transform, none);
+}
+
+/* Sub heading */
+
+.vt-subheading{
+  font-size: var(--vt-sub-heading-size);
+  font-weight: var(--vt-sub-heading-font-weight);
+  line-height: var(--vt-sub-heading-line-height);
+  letter-spacing: var(--vt-sub-heading-letter-spacing);
+  text-transform: var(--vt-sub-heading-text-transform, none);
+}

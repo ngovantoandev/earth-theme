@@ -1,0 +1,187 @@
+{% doc %}
+  Renders an icon block with optional icon box and fluid clamp sizing.
+
+  @example
+  {% content_for 'block', type: 'icons', id: 'icons' %}
+{% enddoc %}
+
+{%- assign icon = block.settings.icon -%}
+
+{%- assign icon_size_mobile_rem = block.settings.icon_size_mobile | times: 1.0 | divided_by: 16 -%}
+{%- assign icon_size_desktop_rem = block.settings.icon_size_desktop | times: 1.0 | divided_by: 16 -%}
+
+{%- if block.settings.show_box -%}
+  {%- assign box_size_mobile_rem = block.settings.box_size_mobile | times: 1.0 | divided_by: 16 -%}
+  {%- assign box_size_desktop_rem = block.settings.box_size_desktop | times: 1.0 | divided_by: 16 -%}
+{%- endif -%}
+
+<div
+  class="vt-icon vt-icon--{{ block.settings.icon }}{% if block.settings.show_box %} has-box{% endif %}"
+  style="
+    --vt-icon-size-mobile: {{ icon_size_mobile_rem }}rem;
+    --vt-icon-size-desktop: {{ icon_size_desktop_rem }}rem;
+    --vt-icon-color: {{ block.settings.icon_color }};
+    {% if block.settings.show_box %}
+      --vt-box-size-mobile: {{ box_size_mobile_rem }}rem;
+      --vt-box-size-desktop: {{ box_size_desktop_rem }}rem;
+      --vt-box-bg-color: {{ block.settings.box_bg_color }};
+      --vt-box-radius: {{ block.settings.box_radius }};
+    {% endif %}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- case icon -%}
+    {%- when 'leaf' -%}
+      <svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.31 37">
+        <path d="M36.51,0c-5.17,8.61-12.89,8.26-17.78,16.54-.57,.97-1,1.93-1.32,2.87,.52,.58,1.02,1.21,1.49,1.9,3.01,4.38,3.12,8.28,2.58,10.93,6.77-8.32,12.2-17.8,14.91-28.21-2.52,11.16-8.15,21.39-15.25,30.36,2.9,.38,10.76,.46,16.05-8.62,7.41-12.74-.68-25.76-.68-25.76Z" fill="#71cc3b"/><path d="M18.16,21.81C12.49,13.58,2.73,13.34,0,13.45c2,3.28,2.37,6.29,2.73,9.21,.38,3.06,.74,5.95,2.88,9.1,4.12,6.08,11.22,5.33,12.74,5.09C14.55,28.4,9.27,20.54,2.16,14.55c7.25,5.63,12.81,13.17,16.96,21.35,1.31-2.16,3.56-7.51-.97-14.09Z" fill="currentColor"/>
+      </svg>
+    {%- when 'recycle' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5"/>
+        <path d="m10 9-3 5.196"/>
+        <path d="M13.196 22h-1.984a1.83 1.83 0 0 1-1.564-.9 1.79 1.79 0 0 1 0-1.8l1.984-3.4"/>
+      </svg>
+    {%- when 'truck' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <rect x="1" y="6" width="14" height="11" rx="1"/>
+        <path d="M15 9h4l3 3v5h-7z"/>
+        <circle cx="6" cy="19" r="2"/>
+        <circle cx="17" cy="19" r="2"/>
+      </svg>
+    {%- when 'heart' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M12 20s-7-4.5-9.5-9C.7 7.3 3 3 7 3c2 0 4 1.5 5 3 1-1.5 3-3 5-3 4 0 6.3 4.3 4.5 8-2.5 4.5-9.5 9-9.5 9z"/>
+      </svg>
+    {%- when 'star' -%}
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M12 2l3.09 6.26 6.91 1-5 4.87 1.18 6.88L12 17.77l-6.18 3.24L7 14.13 2 9.26l6.91-1z"/>
+      </svg>
+  {%- endcase -%}
+</div>
+
+{% stylesheet %}
+  .vt-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;    
+    --vt-icon-size: clamp(var(--vt-icon-size-mobile), 3vw, var(--vt-icon-size-desktop));
+  }
+
+  .vt-icon svg {
+    width: var(--vt-icon-size);
+    height: var(--vt-icon-size);
+    color: var(--vt-icon-color);
+  }
+
+  /* Box Icon Styles */
+  .vt-icon.has-box {
+    --vt-box-size: clamp(var(--vt-box-size-mobile), 5vw, var(--vt-box-size-desktop));
+    width: var(--vt-box-size);
+    height: var(--vt-box-size);
+    background-color: var(--vt-box-bg-color);
+    border-radius: var(--vt-box-radius);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.icon.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "options": [
+        { "value": "leaf", "label": "t:blocks.icon.settings.icon.options__1.label" },
+        { "value": "recycle", "label": "t:blocks.icon.settings.icon.options__2.label" },
+        { "value": "truck", "label": "t:blocks.icon.settings.icon.options__3.label" },
+        { "value": "heart", "label": "t:blocks.icon.settings.icon.options__4.label" },
+        { "value": "star", "label": "t:blocks.icon.settings.icon.options__5.label" }
+      ],
+      "default": "leaf",
+      "label": "t:blocks.icon.settings.icon.label"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "default": "#003225",
+      "label": "t:blocks.icon.settings.icon_color.label"
+    },
+    {
+      "type": "range",
+      "id": "icon_size_desktop",
+      "min": 12,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 32,
+      "label": "t:blocks.icon.settings.icon_size_desktop.label"
+    },
+    {
+      "type": "range",
+      "id": "icon_size_mobile",
+      "min": 12,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 24,
+      "label": "t:blocks.icon.settings.icon_size_mobile.label"
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.icon.settings.header_box.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_box",
+      "default": false,
+      "label": "t:blocks.icon.settings.show_box.label"
+    },
+    {
+      "type": "color",
+      "id": "box_bg_color",
+      "default": "#F8F9DC",
+      "label": "t:blocks.icon.settings.box_bg_color.label",      
+      "visible_if": "{{ block.settings.show_box == true }}"
+    },
+    {
+      "type": "range",
+      "id": "box_size_desktop",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 56,
+      "label": "t:blocks.icon.settings.box_size_desktop.label",
+      "visible_if": "{{ block.settings.show_box == true }}"
+    },
+    {
+      "type": "range",
+      "id": "box_size_mobile",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 44,
+      "label": "t:blocks.icon.settings.box_size_mobile.label",
+      "visible_if": "{{ block.settings.show_box == true }}"
+    },
+    {
+      "type": "select",
+      "id": "box_radius",
+      "options": [
+        { "value": "50%", "label": "t:blocks.icon.settings.box_radius.options__1.label" },
+        { "value": "0", "label": "t:blocks.icon.settings.box_radius.options__2.label" },
+        { "value": "0.5rem", "label": "t:blocks.icon.settings.box_radius.options__3.label" }
+      ],
+      "default": "50%",
+      "label": "t:blocks.icon.settings.box_radius.label",
+      "visible_if": "{{ block.settings.show_box == true }}"
+    }
+  ],
+  "presets": [
+    { "name": "t:blocks.icon.presets.name" }
+  ]
+}
+{% endschema %}
