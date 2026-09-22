@@ -1,8 +1,51 @@
 {
     "sections": {
         "hero_slider_section": {
-            "type": "hero-slider",
-            "settings": {}
+            "type": "slideshow",
+            "settings": {
+                "auto_rotate": false,
+                "change_every": 7,
+                "show_navigation": true,
+                "desktop_height": "435px",
+                "mobile_height": "350px",
+                "slide_gap": 0,
+                "bg_color": "#003225",
+                "top_padding": 0,
+                "bottom_padding": 0,
+                "full_width": true
+            },
+            "blocks": {
+                "slide_1": {
+                    "type": "slide",
+                    "settings": {
+                        "alt": "Earth collection 1"
+                    }
+                },
+                "slide_2": {
+                    "type": "slide",
+                    "settings": {
+                        "alt": "Earth collection 2"
+                    }
+                },
+                "slide_3": {
+                    "type": "slide",
+                    "settings": {
+                        "alt": "Earth collection 3"
+                    }
+                },
+                "slide_4": {
+                    "type": "slide",
+                    "settings": {
+                        "alt": "Earth collection 4"
+                    }
+                }
+            },
+            "block_order": [
+                "slide_1",
+                "slide_2",
+                "slide_3",
+                "slide_4"
+            ]
         },
         "rich_text_section": {
             "type": "rich-text",
@@ -14,6 +57,7 @@
                 "gap_mobile": 32,
                 "background_color": "#F8F9DC",
                 "text_color": "#003225",
+                "subtitle_color": "#224E09",
                 "padding_top": 36,
                 "padding_bottom": 36,
                 "enable_custom_mobile_padding": true,
@@ -58,7 +102,6 @@
                     "type": "button",
                     "settings": {
                         "button_label": "shop now",
-                        // "button_link": "/collections/all",
                         "button_link": "shopify://collections/all",
                         "open_in_new_tab": false,
                         "button_style": "primary",
@@ -79,62 +122,399 @@
         },
         "impact_metrics_section": {
             "type": "impact-metrics",
-            "settings": {},
+            "settings": {
+                "bg_color": "#F8F9DC",
+                "heading_color": "#003225",
+                "subtitle_color": "#224E09",
+                "padding_top": 80,
+                "padding_bottom": 80,
+                "cards_margin_top": 64,
+                "full_width": true
+            },
             "blocks": {
-                "heading_group_block": {
-                    "type": "heading-group",
+                "header_group": {
+                    "type": "group",
                     "settings": {
-                        "direction": "horizontal",
+                        "layout_direction": "group--vertical",
                         "alignment": "center",
-                        "vertical_alignment": "center",
-                        "gap_desktop": 20,
-                        "gap_mobile": 14,
-                        "width": "fit",
-                        "width_custom": 100,
-                        "max_width": 420,
-                        "hide_icon_mobile": true
+                        "padding": 0
                     },
                     "blocks": {
-                        "heading_block": {
-                            "type": "heading",
+                        "heading_group_block": {
+                            "type": "heading-group",
                             "settings": {
-                                "heading": "<span>Our Real Impact</span>",
-                                "heading_size": "vt-heading-h2",
-                                "heading_alignment": "text-center",
-                                "heading_tag": "h2",
+                                "direction": "horizontal",
+                                "alignment": "center",
+                                "vertical_alignment": "center",
+                                "gap_desktop": 16,
+                                "gap_mobile": 12,
+                                "width": "fit",
+                                "max_width": 1000,
+                                "hide_icon_mobile": false
+                            },
+                            "blocks": {
+                                "icon_block_left": {
+                                    "type": "icons",
+                                    "settings": {
+                                        "icon": "leaf",
+                                        "icon_color": "#71CC3B",
+                                        "icon_size_desktop": 36,
+                                        "icon_size_mobile": 28
+                                    }
+                                },
+                                "heading_block": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "Our Real Impact",
+                                        "heading_size": "vt-heading-h1",
+                                        "heading_alignment": "text-center",
+                                        "heading_tag": "h2",
+                                        "text_color": "#003225",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.2,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "icon_block_right": {
+                                    "type": "icons",
+                                    "settings": {
+                                        "icon": "leaf",
+                                        "icon_color": "#71CC3B",
+                                        "icon_size_desktop": 36,
+                                        "icon_size_mobile": 28
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "icon_block_left",
+                                "heading_block",
+                                "icon_block_right"
+                            ]
+                        },
+                        "paragraph_subtitle": {
+                            "type": "paragraph",
+                            "settings": {
+                                "text": "<p>Transparency is at the heart of everything we do. Track our environmental and social impact in real-time.</p>",
+                                "paragraph_size": "vt-paragraph-large",
+                                "paragraph_alignment": "text-center",
+                                "paragraph_max_width": 680,
+                                "text_color": "#224E09",
                                 "animation_type": "slide",
                                 "animation_direction": "from-bottom",
                                 "animation_duration": 1,
-                                "animation_delay": 0.2,
+                                "animation_delay": 0.4,
                                 "animation_easing": "ease-out-sine",
                                 "animation_blur_intensity": 5
                             }
-                        },
-                        "icon_block_left": {
-                            "type": "icons",
-                            "settings": {
-                                "icon": "leaf",
-                                "icon_color": "#71CC3B",
-                                "icon_size_desktop": 40,
-                                "icon_size_mobile": 30,
-                                "show_box": false,
-                                "box_bg_color": "#003225",
-                                "box_size_desktop": 64,
-                                "box_size_mobile": 54,
-                                "box_radius": "50%"
-                            }
                         }
-                        
                     },
-                    "block_order": [                        
-                        "icon_block_left",
-                        "heading_block"
-                     
+                    "block_order": [
+                        "heading_group_block",
+                        "paragraph_subtitle"
+                    ]
+                },
+                "cards_row": {
+                    "type": "grid-group",
+                    "settings": {
+                        "type": "carousel",
+                        "desktop_columns": 4,
+                        "mobile_columns": "1",
+                        "enable_swipe_mobile": true,
+                        "gap_horizontal": 30,
+                        "gap_vertical": 28,
+                        "gap_horizontal_mobile": 16,
+                        "gap_vertical_mobile": 24
+                    },
+                    "blocks": {
+                        "card_trees": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#224E09",
+                                "text_color": "#F8F9DC",
+                                "note_color": "#F8F9DC",
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 24,
+                                "gap": 12,
+                                "watermark_icon": "ecology",
+                                "watermark_opacity": 7,
+                                "show_watermark": true
+                            },
+                            "blocks": {
+                                "icon_trees": {
+                                    "type": "icons",
+                                    "settings": {
+                                        "icon": "tree",
+                                        "icon_color": "#F8F9DC",
+                                        "icon_size_desktop": 36,
+                                        "icon_size_mobile": 32
+                                    }
+                                },
+                                "heading_trees": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "100000+",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h2",
+                                        "heading_alignment": "text-center",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_trees": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>Trees Planted</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "note_trees": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>80% of 2025 goal reached</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "animation_type": "none"
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "icon_trees",
+                                "heading_trees",
+                                "label_trees",
+                                "note_trees"
+                            ]
+                        },
+                        "card_co2": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#224E09",
+                                "text_color": "#F8F9DC",
+                                "note_color": "#F8F9DC",
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 24,
+                                "gap": 12,
+                                "watermark_icon": "ecology",
+                                "watermark_opacity": 7,
+                                "show_watermark": true
+                            },
+                            "blocks": {
+                                "icon_co2": {
+                                    "type": "icons",
+                                    "settings": {
+                                        "icon": "zero-emissions",
+                                        "icon_color": "#F8F9DC",
+                                        "icon_size_desktop": 36,
+                                        "icon_size_mobile": 32
+                                    }
+                                },
+                                "heading_co2": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "500T",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h2",
+                                        "heading_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_co2": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>CO₂ Saved</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "note_co2": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>≠ Equal to 2,500 cars off the road yearly</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "icon_co2",
+                                "heading_co2",
+                                "label_co2",
+                                "note_co2"
+                            ]
+                        },
+                        "card_fair_trade": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#224E09",
+                                "text_color": "#F8F9DC",
+                                "note_color": "#F8F9DC",
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 24,
+                                "gap": 12,
+                                "watermark_icon": "ecology",
+                                "watermark_opacity": 7,
+                                "show_watermark": true
+                            },
+                            "blocks": {
+                                "icon_cert": {
+                                    "type": "icons",
+                                    "settings": {
+                                        "icon": "quality",
+                                        "icon_color": "#F8F9DC",
+                                        "icon_size_desktop": 36,
+                                        "icon_size_mobile": 32
+                                    }
+                                },
+                                "heading_cert": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "100%",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h2",
+                                        "heading_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_cert": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>Fair Trade Certified</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "badges_group": {
+                                    "type": "group",
+                                    "settings": {
+                                        "layout_direction": "group--horizontal",
+                                        "alignment": "center",
+                                        "padding": 0
+                                    },
+                                    "blocks": {
+                                        "badge_gots": {
+                                             "type": "badge",
+                                             "settings": {
+                                                 "text": "GOTS",
+                                                 "badge_size": "vt-paragraph-extra-small",
+                                                 "bg_color": "#EAE060",
+                                                 "text_color": "#003225",
+                                                 "font_size": 0
+                                             }
+                                         },
+                                         "badge_bcorp": {
+                                             "type": "badge",
+                                             "settings": {
+                                                 "text": "B Corp",
+                                                 "badge_size": "vt-paragraph-extra-small",
+                                                 "bg_color": "#EAE060",
+                                                 "text_color": "#003225",
+                                                 "font_size": 0
+                                             }
+                                         }
+                                     },
+                                     "block_order": [
+                                         "badge_gots",
+                                         "badge_bcorp"
+                                     ]
+                                 }
+                            },
+                            "block_order": [
+                                "icon_cert",
+                                "heading_cert",
+                                "label_cert",
+                                "badges_group"
+                            ]
+                        },
+                        "card_water": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#224E09",
+                                "text_color": "#F8F9DC",
+                                "note_color": "#F8F9DC",
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 24,
+                                "gap": 12,
+                                "watermark_icon": "ecology",
+                                "watermark_opacity": 7,
+                                "show_watermark": true
+                            },
+                            "blocks": {
+                                "icon_water": {
+                                    "type": "icons",
+                                    "settings": {
+                                        "icon": "drop",
+                                        "icon_color": "#F8F9DC",
+                                        "icon_size_desktop": 36,
+                                        "icon_size_mobile": 32
+                                    }
+                                },
+                                "heading_water": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "1,000,159",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h2",
+                                        "heading_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_water": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>Liters Water Saved</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "note_water": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>● Live update</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#F8F9DC",
+                                        "animation_type": "none"
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "icon_water",
+                                "heading_water",
+                                "label_water",
+                                "note_water"
+                            ]
+                        }
+                    },
+                    "block_order": [
+                        "card_trees",
+                        "card_co2",
+                        "card_fair_trade",
+                        "card_water"
                     ]
                 }
             },
             "block_order": [
-                "heading_group_block"
+                "header_group",
+                "cards_row"
             ]
         }
     },

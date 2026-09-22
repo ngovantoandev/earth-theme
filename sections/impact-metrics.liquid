@@ -1,30 +1,717 @@
-<div class="vt-metrics-impact full-width">
-  {% content_for 'blocks' %}
+<div
+  class="vt-impact-metrics{% if section.settings.full_width %} full-width{% endif %}"
+  id="vtImpactMetrics-{{ section.id }}"
+  style="
+    --bg-color: {{ section.settings.bg_color | default: '#F8F9DC' }};
+    --heading-color: {{ section.settings.heading_color | default: '#003225' }};
+    --subtitle-color: {{ section.settings.subtitle_color | default: '#224E09' }};
+    --padding-top: {{ section.settings.padding_top | default: 80 }}px;
+    --padding-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+    --cards-margin-top: {{ section.settings.cards_margin_top | default: 64 }}px;
+  "
+>
+  <div class="vt-impact-metrics__container">
+    {% content_for 'blocks' %}
+  </div>
 </div>
 
 {% stylesheet %}
+  .vt-impact-metrics {
+    width: 100%;
+    background-color: var(--bg-color, #F8F9DC);
+    color: var(--subtitle-color, #224E09);
+    padding-top: var(--padding-top, 80px);
+    padding-bottom: var(--padding-bottom, 80px);
+    box-sizing: border-box;
+  }
 
+  .vt-impact-metrics__container {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding-left: 34px;
+    padding-right: 34px;
+  }
 
+  .vt-impact-metrics:not(.full-width) .vt-impact-metrics__container {
+    max-width: 1200px;
+  }
+
+  .vt-impact-metrics.full-width .vt-impact-metrics__container {
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-impact-metrics__container {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  /* Ensure shopify-block wrappers stretch full width */
+  .vt-impact-metrics__container > .shopify-block,
+  .vt-impact-metrics .group > .shopify-block {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Header heading group styling - keep on 1 line */
+  .vt-impact-metrics .vt-heading-group {
+    max-width: none !important;
+    width: auto !important;
+    flex-wrap: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 16px !important;
+    margin: 0 auto !important;
+  }
+
+  .vt-impact-metrics .vt-heading-wrapper {
+    width: auto !important;
+  }
+
+  /* Header heading default color and styles */
+  .vt-impact-metrics .vt-heading-group {
+    color: var(--heading-color, #003225);
+  }
+
+  .vt-impact-metrics .vt-heading-group .vt-heading {
+    color: inherit;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  /* Header subtitle styling - consistent with rich-text */
+  .vt-impact-metrics .vt-paragraph:not(.vt-stat-card .vt-paragraph) {
+    color: var(--subtitle-color, #224E09);
+    margin-top: clamp(16px, 2vw, 24px);
+  }
+
+  .vt-impact-metrics .vt-paragraph:not(.vt-stat-card .vt-paragraph) p {
+    color: inherit;
+  }
+
+  /* Cards group spacing from header */
+  .vt-impact-metrics__container > .group:not(:first-child),
+  .vt-impact-metrics__container > .grid-group:not(:first-child),
+  .vt-impact-metrics__container > .shopify-block:not(:first-child) > .group,
+  .vt-impact-metrics__container > .shopify-block:not(:first-child) > .grid-group {
+    margin-top: var(--cards-margin-top, 64px) !important;
+  }
+
+  /* Desktop swiper-wrapper transparent behavior */
+  @media screen and (min-width: 769px) {
+    .vt-impact-metrics .group > .swiper-wrapper,
+    .vt-impact-metrics .grid-group > .swiper-wrapper {
+      display: contents !important;
+    }
+    .vt-impact-metrics .vt-metrics-swiper-pagination {
+      display: none !important;
+    }
+  }
+
+  /* Mobile Swiper horizontal scroll */
+  @media screen and (max-width: 768px) {
+    .vt-impact-metrics {
+      padding-top: calc(var(--padding-top, 80px) * 0.6);
+      padding-bottom: calc(var(--padding-bottom, 80px) * 0.6);
+      overflow-x: clip;
+    }
+
+    .vt-impact-metrics__container {
+      padding-left: 20px;
+      padding-right: 20px;
+      overflow: visible;
+    }
+
+    .vt-impact-metrics__container > .group:not(:first-child),
+    .vt-impact-metrics__container > .grid-group:not(:first-child),
+    .vt-impact-metrics__container > .shopify-block:not(:first-child) > .group,
+    .vt-impact-metrics__container > .shopify-block:not(:first-child) > .grid-group {
+      margin-top: calc(var(--cards-margin-top, 64px) * 0.6) !important;
+    }
+
+    .vt-impact-metrics .swiper.vt-impact-metrics-swiper {
+      overflow: visible !important;
+      width: 100% !important;
+      touch-action: pan-y;
+      display: block !important;
+    }
+
+    .vt-impact-metrics .swiper-wrapper {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: stretch !important;
+      box-sizing: border-box !important;
+    }
+
+    .vt-impact-metrics .swiper-slide {
+      flex: 0 0 82% !important;
+      flex-shrink: 0 !important;
+      flex-grow: 0 !important;
+      height: auto !important;
+      align-self: stretch !important;
+      box-sizing: border-box !important;
+      display: flex !important;
+      flex-direction: column !important;
+      width: 82% !important;
+      max-width: 320px !important;
+    }
+
+    .vt-impact-metrics .swiper-slide > .vt-stat-card,
+    .vt-impact-metrics .swiper-slide.vt-stat-card {
+      width: 82% !important;
+      max-width: 320px !important;
+      flex: 0 0 82% !important;
+      height: auto !important;
+      align-self: stretch !important;
+    }
+
+    .vt-impact-metrics [data-mobile-columns="2"] .swiper-slide,
+    .vt-impact-metrics [data-mobile-columns="2"] .swiper-slide.vt-stat-card {
+      width: calc((100% - 12px) / 2) !important;
+      max-width: none !important;
+      flex: 0 0 calc((100% - 12px) / 2) !important;
+    }
+
+    /* Hide Swiper Pagination dots completely on mobile (as requested) */
+    .vt-impact-metrics .vt-metrics-swiper-pagination {
+      display: none !important;
+    }
+  }
 {% endstylesheet %}
+
+<script>
+  (function() {
+    function setupMetricsSwiper() {
+      var sectionEl = document.getElementById('vtImpactMetrics-{{ section.id }}');
+      if (!sectionEl) return;
+
+      var firstCard = sectionEl.querySelector('.vt-stat-card');
+      if (!firstCard) return;
+
+      var cardsGroup = firstCard.closest('.grid-group, .group');
+      if (!cardsGroup) return;
+
+      var enableSwipeMobile = cardsGroup.getAttribute('data-enable-swipe-mobile') !== 'false';
+      if (!enableSwipeMobile) return;
+
+      function wrapSlidesIfNeeded() {
+        var wrapper = cardsGroup.querySelector(':scope > .swiper-wrapper');
+        if (!wrapper) {
+          wrapper = document.createElement('div');
+          wrapper.className = 'swiper-wrapper';
+
+          var children = Array.from(cardsGroup.children);
+          children.forEach(function(child) {
+            child.classList.add('swiper-slide');
+            wrapper.appendChild(child);
+          });
+          cardsGroup.appendChild(wrapper);
+          cardsGroup.classList.add('swiper', 'vt-impact-metrics-swiper');
+        }
+      }
+
+      function handleResizeOrInit() {
+        var isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+          wrapSlidesIfNeeded();
+
+          if (typeof Swiper === 'undefined') {
+            setTimeout(setupMetricsSwiper, 50);
+            return;
+          }
+
+          if (cardsGroup.swiper) {
+            cardsGroup.swiper.update();
+            return;
+          }
+
+          var spaceBetween = 16;
+          var groupGapMobile = cardsGroup.style.getPropertyValue('--grid-gap-h-m') || cardsGroup.style.getPropertyValue('--group-gap-h-m');
+          if (groupGapMobile) {
+            var parsed = parseInt(groupGapMobile, 10);
+            if (!isNaN(parsed)) spaceBetween = parsed;
+          }
+
+          new Swiper(cardsGroup, {
+            slidesPerView: 'auto',
+            spaceBetween: spaceBetween,
+            centeredSlides: false,
+            grabCursor: true,
+            watchSlidesProgress: true,
+            speed: 400,
+            touchEventsTarget: 'wrapper'
+          });
+        } else {
+          if (cardsGroup.swiper) {
+            cardsGroup.swiper.destroy(true, true);
+            cardsGroup.swiper = null;
+          }
+        }
+      }
+
+      handleResizeOrInit();
+
+      if (!cardsGroup._hasResizeListener) {
+        cardsGroup._hasResizeListener = true;
+        var resizeTimer;
+        window.addEventListener('resize', function() {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(handleResizeOrInit, 150);
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupMetricsSwiper);
+    } else {
+      setupMetricsSwiper();
+    }
+
+    document.addEventListener('shopify:section:load', function(e) {
+      if (e.detail && e.detail.sectionId === '{{ section.id }}') {
+        setupMetricsSwiper();
+      }
+    });
+
+    document.addEventListener('shopify:block:select', function(e) {
+      if (e.detail && e.detail.sectionId === '{{ section.id }}') {
+        var sectionEl = document.getElementById('vtImpactMetrics-{{ section.id }}');
+        if (sectionEl) {
+          var swiperEl = sectionEl.querySelector('.swiper');
+          if (swiperEl && swiperEl.swiper) {
+            swiperEl.swiper.update();
+          }
+        }
+      }
+    });
+  })();
+</script>
 
 {% schema %}
 {
   "name": "Impact Metrics",
-  "tag": "section",  
-  "class": "impact-metrics-section",  
-  "settings": [
-    
-    
-  ],  
+  "tag": "section",
+  "class": "impact-metrics-section",
   "blocks": [
-    { "type": "heading-group" },    
-    { "type": "icons" },
-    { "type": "heading" }
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background color",
+      "default": "#F8F9DC"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#003225"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#224E09"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Section top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Section bottom padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "cards_margin_top",
+      "min": 16,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap between header & cards",
+      "default": 64
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": true
+    }
   ],
   "presets": [
     {
       "name": "Impact Metrics",
-      "blocks": [{ "type": "heading-group" }]
+      "blocks": [
+        {
+          "type": "group",
+          "settings": {
+            "layout_direction": "group--vertical",
+            "alignment": "center",
+            "padding": 0
+          },
+          "blocks": [
+            {
+              "type": "heading-group",
+              "settings": {
+                "direction": "horizontal",
+                "alignment": "center",
+                "vertical_alignment": "center",
+                "gap_desktop": 16,
+                "gap_mobile": 12,
+                "width": "fit",
+                "hide_icon_mobile": false
+              },
+              "blocks": [
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "leaf",
+                    "icon_color": "#71CC3B",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 28
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "Our Real Impact",
+                    "heading_size": "vt-heading-h1",
+                    "heading_alignment": "text-center",
+                    "heading_tag": "h2",
+                    "text_color": "#003225",
+                    "animation_type": "slide",
+                    "animation_direction": "from-bottom",
+                    "animation_duration": 1,
+                    "animation_delay": 0.2,
+                    "animation_easing": "ease-out-sine",
+                    "animation_blur_intensity": 5
+                  }
+                },
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "leaf",
+                    "icon_color": "#71CC3B",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 28
+                  }
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "settings": {
+                "text": "<p>Transparency is at the heart of everything we do. Track our environmental and social impact in real-time.</p>",
+                "paragraph_size": "vt-paragraph-large",
+                "paragraph_alignment": "text-center",
+                "paragraph_max_width": 680,
+                "text_color": "#224E09",
+                "animation_type": "slide",
+                "animation_direction": "from-bottom",
+                "animation_duration": 1,
+                "animation_delay": 0.4,
+                "animation_easing": "ease-out-sine",
+                "animation_blur_intensity": 5
+              }
+            }
+          ]
+        },
+        {
+          "type": "grid-group",
+          "settings": {
+            "type": "carousel",
+            "desktop_columns": 4,
+            "mobile_columns": "1",
+            "enable_swipe_mobile": true,
+            "gap_horizontal": 30,
+            "gap_vertical": 28,
+            "gap_horizontal_mobile": 16,
+            "gap_vertical_mobile": 24
+          },
+          "blocks": [
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#224E09",
+                "text_color": "#F8F9DC",
+                "note_color": "#F8F9DC",
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 24,
+                "gap": 12,
+                "watermark_icon": "ecology",
+                "watermark_opacity": 7,
+                "show_watermark": true
+              },
+              "blocks": [
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "tree",
+                    "icon_color": "#F8F9DC",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 32
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "100000+",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h2",
+                    "heading_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Trees Planted</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>80% of 2025 goal reached</p>",
+                    "paragraph_size": "vt-paragraph-extra-small",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#224E09",
+                "text_color": "#F8F9DC",
+                "note_color": "#F8F9DC",
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 24,
+                "gap": 12,
+                "watermark_icon": "ecology",
+                "watermark_opacity": 7,
+                "show_watermark": true
+              },
+              "blocks": [
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "zero-emissions",
+                    "icon_color": "#F8F9DC",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 32
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "500T",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h2",
+                    "heading_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>CO₂ Saved</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>≠ Equal to 2,500 cars off the road yearly</p>",
+                    "paragraph_size": "vt-paragraph-extra-small",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#224E09",
+                "text_color": "#F8F9DC",
+                "note_color": "#F8F9DC",
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 24,
+                "gap": 12,
+                "watermark_icon": "ecology",
+                "watermark_opacity": 7,
+                "show_watermark": true
+              },
+              "blocks": [
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "quality",
+                    "icon_color": "#F8F9DC",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 32
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "100%",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h2",
+                    "heading_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Fair Trade Certified</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "group",
+                  "settings": {
+                    "layout_direction": "group--horizontal",
+                    "alignment": "center",
+                    "padding": 0
+                  },
+                  "blocks": [
+                    {
+                      "type": "badge",
+                      "settings": {
+                        "text": "GOTS",
+                        "badge_size": "vt-paragraph-extra-small",
+                        "bg_color": "#EAE060",
+                        "text_color": "#003225",
+                        "font_size": 0
+                      }
+                    },
+                    {
+                      "type": "badge",
+                      "settings": {
+                        "text": "B Corp",
+                        "badge_size": "vt-paragraph-extra-small",
+                        "bg_color": "#EAE060",
+                        "text_color": "#003225",
+                        "font_size": 0
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#224E09",
+                "text_color": "#F8F9DC",
+                "note_color": "#F8F9DC",
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 24,
+                "gap": 12,
+                "watermark_icon": "ecology",
+                "watermark_opacity": 7,
+                "show_watermark": true
+              },
+              "blocks": [
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "drop",
+                    "icon_color": "#F8F9DC",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 32
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "1,000,159",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h2",
+                    "heading_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Liters Water Saved</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>● Live update</p>",
+                    "paragraph_size": "vt-paragraph-extra-small",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#F8F9DC",
+                    "animation_type": "none"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

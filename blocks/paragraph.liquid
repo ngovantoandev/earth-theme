@@ -71,6 +71,10 @@
     {%- endif -%}
   {%- endunless -%}
 
+  {%- if block.settings.text_color != blank -%}
+    {%- assign vt_style = vt_style | append: ' color: ' | append: block.settings.text_color | append: ' !important;' -%}
+  {%- endif -%}
+
   <div
     class="{{ paragraph_class }}"
     style="--vt-paragraph-max-width: {{ block.settings.paragraph_max_width }}px;{% if vt_style != '' %}{{ vt_style | strip }}{% endif %}"
@@ -171,6 +175,11 @@
             "unit": "px",
             "default": 600,
             "label": "t:blocks.paragraph.settings.paragraph_max_width.label"
+        },
+        {
+            "type": "color",
+            "id": "text_color",
+            "label": "Text color"
         },
         {
             "type": "header",

@@ -1221,67 +1221,200 @@
 				"name": "Button"
 			}
 		},
-		"icon": {
-			"name": "Icon",
-			"settings": {
-				"icon": {
-					"label": "Icon",
-					"options__1": {
-						"label": "Leaf"
-					},
-					"options__2": {
-						"label": "Recycle"
-					},
-					"options__3": {
-						"label": "Truck"
-					},
-					"options__4": {
-						"label": "Heart"
-					},
-					"options__5": {
-						"label": "Star"
-					}
-				},
-				"icon_size_desktop": {
-					"label": "Icon size desktop"
-				},
-				"icon_size_mobile": {
-					"label": "Icon size mobile"
-				},
-				"icon_color": {
-					"label": "Icon color"
-				},
-				"header_box": {
-					"content": "Icon box"
-				},
-				"show_box": {
-					"label": "Show box icon"
-				},
-				"box_bg_color": {
-					"label": "Background color"
-				},
-				"box_size_desktop": {
-					"label": "Box size desktop"
-				},
-				"box_size_mobile": {
-					"label": "Box size mobile"
-				},
-				"box_radius": {
-					"label": "Box style",
-					"options__1": {
-						"label": "Circle"
-					},
-					"options__2": {
-						"label": "Square"
-					},
-					"options__3": {
-						"label": "Rounded square"
-					}
-				}
-			},
-			"presets": {
-				"name": "Icon"
-			}
-		}
+		"icon":
+{
+    "name": "Icon",
+    "settings":
+    {
+        "icon":
+        {
+            "label": "Icon",
+            "options__1":
+            {
+                "label": "Leaf"
+            },
+            "options__2":
+            {
+                "label": "Carbon"
+            },
+            "options__3":
+            {
+                "label": "Tree"
+            },
+            "options__4":
+            {
+                "label": "Zero emissions"
+            },
+            "options__5":
+            {
+                "label": "Quality"
+            },
+            "options__6":
+            {
+                "label": "Drop"
+            },
+            "options__7":
+            {
+                "label": "Ecology"
+            },
+            "options__8":
+            {
+                "label": "Arrow left"
+            },
+            "options__9":
+            {
+                "label": "Arrow right"
+            },
+            "options__10":
+            {
+                "label": "Close"
+            }
+        },
+        "icon_size_desktop":
+        {
+            "label": "Icon size desktop"
+        },
+        "icon_size_mobile":
+        {
+            "label": "Icon size mobile"
+        },
+        "icon_color":
+        {
+            "label": "Icon color"
+        },
+        "header_box":
+        {
+            "content": "Icon box"
+        },
+        "show_box":
+        {
+            "label": "Show box icon"
+        },
+        "box_bg_color":
+        {
+            "label": "Background color"
+        },
+        "box_size_desktop":
+        {
+            "label": "Box size desktop"
+        },
+        "box_size_mobile":
+        {
+            "label": "Box size mobile"
+        },
+        "box_radius":
+        {
+            "label": "Box style",
+            "options__1":
+            {
+                "label": "Circle"
+            },
+            "options__2":
+            {
+                "label": "Square"
+            },
+            "options__3":
+            {
+                "label": "Rounded square"
+            }
+        },
+        "icon_animation":
+        {
+            "content": "Animations"
+        },
+        "animation_type":
+        {
+            "label": "Type",
+            "options__1":
+            {
+                "label": "None"
+            },
+            "options__2":
+            {
+                "label": "Fade"
+            },
+            "options__3":
+            {
+                "label": "Slide"
+            },
+            "options__4":
+            {
+                "label": "Float"
+            },
+            "options__5":
+            {
+                "label": "Blur"
+            }
+        },
+        "animation_direction":
+        {
+            "label": "Direction",
+            "options__1":
+            {
+                "label": "From left"
+            },
+            "options__2":
+            {
+                "label": "From right"
+            },
+            "options__3":
+            {
+                "label": "From top"
+            },
+            "options__4":
+            {
+                "label": "From bottom"
+            }
+        },
+        "animation_duration":
+        {
+            "label": "Duration"
+        },
+        "animation_delay":
+        {
+            "label": "Delay"
+        },
+        "animation_easing":
+        {
+            "label": "Easing",
+            "options__1":
+            {
+                "label": "Linear"
+            },
+            "options__2":
+            {
+                "label": "Ease-out sine"
+            },
+            "options__3":
+            {
+                "label": "Ease-in sine"
+            },
+            "options__4":
+            {
+                "label": "Ease-in-out sine"
+            },
+            "options__5":
+            {
+                "label": "Ease-in cubic"
+            },
+            "options__6":
+            {
+                "label": "Ease-out cubic"
+            },
+            "options__7":
+            {
+                "label": "Ease-in-out cubic"
+            }
+        },
+        "animation_blur_intensity":
+        {
+            "label": "Blur intensity"
+        }
+    },
+    "presets":
+    {
+        "name": "Icon"
+    }
+}
 	}
 }

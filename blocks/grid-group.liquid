@@ -1,0 +1,229 @@
+{% doc %}
+  Renders a flexible grid or carousel group block with responsive column controls,
+  mobile swipe capability, and horizontal/vertical gap controls for desktop and mobile.
+
+  @example
+  {% content_for 'block', type: 'grid-group', id: 'grid-group' %}
+{% enddoc %}
+
+{%- liquid
+  assign layout_type = block.settings.type | default: 'grid'
+  assign desktop_cols = block.settings.desktop_columns | default: 4
+  assign mobile_cols = block.settings.mobile_columns | default: 1
+  assign gap_h = block.settings.gap_horizontal | default: 30
+  assign gap_v = block.settings.gap_vertical | default: 28
+  assign gap_h_m = block.settings.gap_horizontal_mobile | default: 16
+  assign gap_v_m = block.settings.gap_vertical_mobile | default: 24
+-%}
+
+<div
+  class="grid-group grid-group--{{ layout_type }}"
+  data-grid-type="{{ layout_type }}"
+  data-desktop-columns="{{ desktop_cols }}"
+  data-mobile-columns="{{ mobile_cols }}"
+  data-enable-swipe-mobile="{{ block.settings.enable_swipe_mobile | default: true }}"
+  style="
+    --grid-desktop-columns: {{ desktop_cols }};
+    --grid-mobile-columns: {{ mobile_cols }};
+    --grid-gap-h: {{ gap_h }}px;
+    --grid-gap-v: {{ gap_v }}px;
+    --grid-gap-h-m: {{ gap_h_m }}px;
+    --grid-gap-v-m: {{ gap_v_m }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .grid-group {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Grid layout matching standard responsive design */
+  .grid-group--grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-desktop-columns, 4), minmax(0, 1fr));
+    column-gap: var(--grid-gap-h, 12px);
+    row-gap: var(--grid-gap-v, 28px);
+    align-items: stretch;
+  }
+
+  .grid-group--grid > * {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    height: 100%;
+  }
+
+  .grid-group--grid > * > *,
+  .grid-group--grid > .vt-stat-card {
+    height: 100% !important;
+    width: 100% !important;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 768px) {
+    .grid-group--grid {
+      grid-template-columns: repeat(var(--grid-mobile-columns, 1), minmax(0, 1fr));
+      column-gap: var(--grid-gap-h-m, 16px);
+      row-gap: var(--grid-gap-v-m, 24px);
+    }
+  }
+
+  /* Carousel layout */
+  .grid-group--carousel {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - (var(--grid-desktop-columns, 4) - 1) * var(--grid-gap-h, 12px)) / var(--grid-desktop-columns, 4));
+    column-gap: var(--grid-gap-h, 12px);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    align-items: stretch;
+  }
+
+  .grid-group--carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .grid-group--carousel > * {
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 768px) {
+    .grid-group--carousel {
+      column-gap: var(--grid-gap-h-m, 16px);
+      grid-auto-columns: calc((100% - (var(--grid-mobile-columns, 1) - 1) * var(--grid-gap-h-m, 16px)) / var(--grid-mobile-columns, 1));
+    }
+  }
+
+  .grid-group--carousel > * > *,
+  .grid-group--carousel > .vt-stat-card {
+    height: 100% !important;
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Grid group",
+  "tag": null,
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "type",
+      "label": "Type",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "carousel", "label": "Carousel" }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "range",
+      "id": "desktop_columns",
+      "label": "Desktop columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_swipe_mobile",
+      "label": "Enable swipe on mobile",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Gap"
+    },
+    {
+      "type": "range",
+      "id": "gap_horizontal",
+      "label": "Horizontal",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "gap_vertical",
+      "label": "Vertical",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "gap_horizontal_mobile",
+      "label": "Horizontal (mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "gap_vertical_mobile",
+      "label": "Vertical (mobile)",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Grid group",
+      "settings": {
+        "type": "grid",
+        "desktop_columns": 4,
+        "mobile_columns": "1",
+        "enable_swipe_mobile": true,
+        "gap_horizontal": 30,
+        "gap_vertical": 28,
+        "gap_horizontal_mobile": 16,
+        "gap_vertical_mobile": 24
+      }
+    }
+  ]
+}
+{% endschema %}
