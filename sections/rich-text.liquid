@@ -1,53 +1,15 @@
-{%- assign vw_mobile = 375 -%}
-{%- assign vw_desktop = 1440 -%}
-{%- assign vw_range = vw_desktop | minus: vw_mobile -%}
+{%- liquid
+  if section.settings.enable_custom_mobile_padding
+    assign px_padding_top_mobile = section.settings.padding_top_mobile | default: 0
+    assign px_padding_bottom_mobile = section.settings.padding_bottom_mobile | default: 0
+  else
+    assign px_padding_top_mobile = section.settings.padding_top | times: 0.75
+    assign px_padding_bottom_mobile = section.settings.padding_bottom | times: 0.75
+  endif
 
-{%- if section.settings.enable_custom_mobile_padding -%}
-  {%- assign px_padding_top_mobile = section.settings.padding_top_mobile | times: 1.0 -%}
-  {%- assign px_padding_bottom_mobile = section.settings.padding_bottom_mobile | times: 1.0 -%}
-{%- else -%}
-  {%- assign px_padding_top_mobile = section.settings.padding_top | times: 0.75 -%}
-  {%- assign px_padding_bottom_mobile = section.settings.padding_bottom | times: 0.75 -%}
-{%- endif -%}
-
-{%- assign px_padding_top_desktop = section.settings.padding_top | times: 1.0 -%}
-{%- assign px_padding_bottom_desktop = section.settings.padding_bottom | times: 1.0 -%}
-
-{%- comment -%} ===== TOP ===== {%- endcomment -%}
-{%- assign diff_top_px = px_padding_top_desktop | minus: px_padding_top_mobile -%}
-{%- assign slope_top = diff_top_px | divided_by: vw_range | round: 8 -%}
-{%- assign offset_top_px = vw_mobile | times: slope_top -%}
-{%- assign y_intersect_top_px = px_padding_top_mobile | minus: offset_top_px -%}
-{%- assign y_intersect_top_rem = y_intersect_top_px | divided_by: 16.0 | round: 4 -%}
-{%- assign vw_coefficient_top = slope_top | times: 100 | round: 4 -%}
-
-{%- comment -%} ===== BOTTOM ===== {%- endcomment -%}
-{%- assign diff_bottom_px = px_padding_bottom_desktop | minus: px_padding_bottom_mobile -%}
-{%- assign slope_bottom = diff_bottom_px | divided_by: vw_range | round: 8 -%}
-{%- assign offset_bottom_px = vw_mobile | times: slope_bottom -%}
-{%- assign y_intersect_bottom_px = px_padding_bottom_mobile | minus: offset_bottom_px -%}
-{%- assign y_intersect_bottom_rem = y_intersect_bottom_px | divided_by: 16.0 | round: 4 -%}
-{%- assign vw_coefficient_bottom = slope_bottom | times: 100 | round: 4 -%}
-
-{%- comment -%} REM clamp() {%- endcomment -%}
-{%- assign rem_padding_top_mobile = px_padding_top_mobile | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_padding_top_desktop = px_padding_top_desktop | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_padding_bottom_mobile = px_padding_bottom_mobile | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_padding_bottom_desktop = px_padding_bottom_desktop | divided_by: 16.0 | round: 4 -%}
-
-{%- comment -%} ===== GAP ===== {%- endcomment -%}
-{%- assign px_gap_mobile = section.settings.gap_mobile | times: 1.0 -%}
-{%- assign px_gap_desktop = section.settings.gap | times: 1.0 -%}
-
-{%- assign diff_gap_px = px_gap_desktop | minus: px_gap_mobile -%}
-{%- assign slope_gap = diff_gap_px | divided_by: vw_range | round: 8 -%}
-{%- assign offset_gap_px = vw_mobile | times: slope_gap -%}
-{%- assign y_intersect_gap_px = px_gap_mobile | minus: offset_gap_px -%}
-{%- assign y_intersect_gap_rem = y_intersect_gap_px | divided_by: 16.0 | round: 4 -%}
-{%- assign vw_coefficient_gap = slope_gap | times: 100 | round: 4 -%}
-
-{%- assign rem_gap_mobile = px_gap_mobile | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_gap_desktop = px_gap_desktop | divided_by: 16.0 | round: 4 -%}
+  assign px_padding_top_desktop = section.settings.padding_top | default: 0
+  assign px_padding_bottom_desktop = section.settings.padding_bottom | default: 0
+-%}
 
 <div
   id="RichTtextSection-{{ section.id }}"
@@ -64,9 +26,9 @@
     --vt-color: {{ section.settings.text_color }};
     --vt-subtitle-color: {{ section.settings.subtitle_color | default: '#224E09' }};
     --vt-divider-color: {{ section.settings.divider_color | default: section.settings.background_color }};
-    --vt-gap: clamp({{ rem_gap_mobile }}rem, calc({{ y_intersect_gap_rem }}rem + {{ vw_coefficient_gap }}vw), {{ rem_gap_desktop }}rem );
-    --vt-padding-top: clamp({{ rem_padding_top_mobile }}rem, calc({{ y_intersect_top_rem }}rem + {{ vw_coefficient_top }}vw), {{ rem_padding_top_desktop }}rem );
-    --vt-padding-bottom: clamp({{ rem_padding_bottom_mobile }}rem, calc({{ y_intersect_bottom_rem }}rem + {{ vw_coefficient_bottom }}vw), {{ rem_padding_bottom_desktop }}rem );
+    --vt-gap: {% render 'fluid-clamp', min_px: section.settings.gap_mobile, max_px: section.settings.gap %};
+    --vt-padding-top: {% render 'fluid-clamp', min_px: px_padding_top_mobile, max_px: px_padding_top_desktop %};
+    --vt-padding-bottom: {% render 'fluid-clamp', min_px: px_padding_bottom_mobile, max_px: px_padding_bottom_desktop %};
   "
 >
   <div class="vt-inner">
@@ -88,6 +50,10 @@
 
   .vt-rich-text .vt-paragraph {
     color: var(--vt-subtitle-color, #224E09);
+  }
+
+  .vt-rich-text .vt-paragraph p {
+    margin: 0;
   }
 
   .vt-rich-text.vt-divider {

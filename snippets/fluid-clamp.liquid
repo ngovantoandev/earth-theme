@@ -4,26 +4,26 @@
   assign min_px = min_px | default: 0
   assign max_px = max_px | default: 0
 
-  assign bp_diff = max_bp | minus: min_bp
-  if bp_diff == 0
-    assign bp_diff = 1
-  endif
+    assign bp_diff = max_bp | minus: min_bp
+    if bp_diff == 0
+      assign bp_diff = 1
+    endif
 
-  assign px_diff = max_px | minus: min_px
-  assign slope = px_diff | times: 1.0 | divided_by: bp_diff
-  assign slope_vw = slope | times: 100 | round: 4
+    assign px_diff = max_px | minus: min_px
+    assign slope = px_diff | times: 1.0 | divided_by: bp_diff
+    assign slope_vw = slope | times: 100 | round: 4
 
-  assign slope_times_min_bp = slope | times: min_bp
-  assign intercept_px = min_px | minus: slope_times_min_bp
-  assign intercept_rem = intercept_px | divided_by: 16.0 | round: 4
+    assign slope_times_min_bp = slope | times: min_bp
+    assign intercept_px = min_px | minus: slope_times_min_bp
+    assign intercept_rem = intercept_px | divided_by: 16.0 | round: 4
 
-  assign min_rem = min_px | divided_by: 16.0 | round: 4
-  assign max_rem = max_px | divided_by: 16.0 | round: 4
+    assign min_rem = min_px | divided_by: 16.0 | round: 4
+    assign max_rem = max_px | divided_by: 16.0 | round: 4
 
-  if min_rem > max_rem
-    assign swap_rem = min_rem
-    assign min_rem = max_rem
-    assign max_rem = swap_rem
-  endif
+    if min_rem > max_rem
+      assign swap_rem = min_rem
+      assign min_rem = max_rem
+      assign max_rem = swap_rem
+    endif
 -%}
 clamp({{ min_rem }}rem, {{ intercept_rem }}rem + {{ slope_vw }}vw, {{ max_rem }}rem)

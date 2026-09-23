@@ -1,21 +1,27 @@
 {% doc %}
   Renders a group of blocks with configurable layout direction, gap and
-    alignment.
+  alignment.
 
-    All settings apply to only one dimension to reduce configuration complexity.
+  All settings apply to only one dimension to reduce configuration complexity.
 
-    This component is a wrapper concerned only with rendering its children in
-    the specified layout direction with appropriate padding and alignment.
+  This component is a wrapper concerned only with rendering its children in
+  the specified layout direction with appropriate padding and alignment.
 
   @example
   {% content_for 'block', type: 'group', id: 'group' %}
 {% enddoc %}
 
+{%- liquid
+  assign gap_mobile_px = block.settings.gap_mobile
+  assign gap_desktop_px = block.settings.gap_desktop
+-%}
+
 <div
   class="group {{ block.settings.layout_direction }}"
   style="
-    --padding: {{ block.settings.padding }}px;
-    --alignment: {{ block.settings.alignment }};
+    --vt-position: {{ block.settings.position }};
+    --vt-alignment: {{ block.settings.alignment }};
+    --vt-group-gap: {% render 'fluid-clamp', min_px: gap_mobile_px, max_px: gap_desktop_px %};
   "
   {{ block.shopify_attributes }}
 >
@@ -26,29 +32,30 @@
   .group {
     display: flex;
     flex-wrap: nowrap;
-    overflow: hidden;
     width: 100%;
   }
-
   .group--horizontal {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0 var(--padding);
   }
-
   .group--vertical {
+    gap: var(--vt-group-gap);
     flex-direction: column;
-    align-items: var(--alignment);
-    padding: var(--padding) 0;
+    align-items: var(--vt-position);
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.group",
+  "tag": null,
   "blocks": [{ "type": "@theme" }],
   "settings": [
+    {
+      "type": "header",
+      "content": "t:general.layout"
+    },
     {
       "type": "select",
       "id": "layout_direction",
@@ -60,26 +67,61 @@
       ]
     },
     {
-      "visible_if": "{{ block.settings.layout_direction == 'group--vertical' }}",
       "type": "select",
       "id": "alignment",
       "label": "t:labels.alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:options.alignment.left"
+        },
+        {
+          "value": "center",
+          "label": "t:options.alignment.center"
+        },
+        {
+          "value": "right",
+          "label": "t:options.alignment.right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "visible_if": "{{ block.settings.layout_direction == 'group--vertical' }}",
+      "type": "select",
+      "id": "position",
+      "label": "t:labels.position",
       "default": "flex-start",
       "options": [
-        { "value": "flex-start", "label": "t:options.alignment.left" },
-        { "value": "center", "label": "t:options.alignment.center" },
-        { "value": "flex-end", "label": "t:options.alignment.right" }
+        { "value": "flex-start", "label": "t:options.position.top" },
+        { "value": "center", "label": "t:options.position.center" },
+        { "value": "flex-end", "label": "t:options.position.bottom" },
+        { "value": "stretch", "label": "t:options.position.stretch" }
       ]
     },
     {
+      "type": "header",
+      "content": "t:labels.spacing"
+    },
+    {
       "type": "range",
-      "id": "padding",
-      "label": "t:labels.padding",
-      "default": 0,
+      "id": "gap_desktop",
+      "label": "t:labels.gap_desktop",
       "min": 0,
-      "max": 200,
-      "step": 2,
-      "unit": "px"
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "t:labels.gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 16
     }
   ],
   "presets": [
@@ -88,16 +130,14 @@
       "category": "t:general.layout",
       "settings": {
         "layout_direction": "group--vertical",
-        "alignment": "flex-start",
-        "padding": 0
+        "position": "flex-start"
       }
     },
     {
       "name": "t:general.row",
       "category": "t:general.layout",
       "settings": {
-        "layout_direction": "group--horizontal",
-        "padding": 0
+        "layout_direction": "group--horizontal"
       }
     }
   ]

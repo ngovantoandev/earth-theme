@@ -91,11 +91,13 @@
   /* Header subtitle styling - consistent with rich-text */
   .vt-impact-metrics .vt-paragraph:not(.vt-stat-card .vt-paragraph) {
     color: var(--subtitle-color, #224E09);
-    margin-top: clamp(16px, 2vw, 24px);
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   .vt-impact-metrics .vt-paragraph:not(.vt-stat-card .vt-paragraph) p {
     color: inherit;
+    margin: 0;
   }
 
   /* Cards group spacing from header */
@@ -378,8 +380,7 @@
           "type": "group",
           "settings": {
             "layout_direction": "group--vertical",
-            "alignment": "center",
-            "padding": 0
+            "alignment": "center"
           },
           "blocks": [
             {
@@ -624,8 +625,7 @@
                   "type": "group",
                   "settings": {
                     "layout_direction": "group--horizontal",
-                    "alignment": "center",
-                    "padding": 0
+                    "alignment": "center"
                   },
                   "blocks": [
                     {

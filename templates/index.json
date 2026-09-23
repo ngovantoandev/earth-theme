@@ -127,7 +127,7 @@
                 "heading_color": "#003225",
                 "subtitle_color": "#224E09",
                 "padding_top": 80,
-                "padding_bottom": 80,
+                "padding_bottom": 0,
                 "cards_margin_top": 64,
                 "full_width": true
             },
@@ -137,6 +137,8 @@
                     "settings": {
                         "layout_direction": "group--vertical",
                         "alignment": "center",
+                        "gap_desktop": 28,
+                        "gap_mobile": 26,
                         "padding": 0
                     },
                     "blocks": {

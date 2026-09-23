@@ -555,6 +555,8 @@
 		"alignment": "Alignment",
 		"background": "Background",
 		"foreground": "Foreground",
+		"gap_desktop": "Gap (desktop)",
+		"gap_mobile": "Gap (mobile)",
 		"grid_gap": "Grid spacing",
 		"grid_item_width": "Grid item width",
 		"input_corner_radius": "Input corner radius",
@@ -565,7 +567,9 @@
 		"page_margin_desktop": "Page spacing (desktop)",
 		"page_margin_mobile": "Page spacing (mobile)",
 		"page_width": "Page width",
+		"position": "Position",
 		"show_payment_icons": "Show payment icons",
+		"spacing": "Spacing",
 		"text_style": "Text style",
 		"text": "Text"
 	},
@@ -586,6 +590,12 @@
 		"page_width": {
 			"narrow": "Narrow",
 			"wide": "Wide"
+		},
+		"position": {
+			"top": "Top",
+			"center": "Center",
+			"bottom": "Bottom",
+			"stretch": "Stretch"
 		},
 		"size": {
 			"large": "Large",
@@ -1142,7 +1152,7 @@
 					},
 					"link_light": {
 						"label": "Link light"
-					},
+					}
 				},
 				"open_in_new_tab": {
 					"label": "Open link in new tab"
