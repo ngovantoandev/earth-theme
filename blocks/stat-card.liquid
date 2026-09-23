@@ -198,18 +198,19 @@
     opacity: 0.85;
   }
 
-  /* Badges row inside card */
-  .vt-stat-card .group,
-  .vt-stat-card .group--horizontal,
-  .vt-stat-card .group--row {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: center !important;
-    align-items: center !important;
-    gap: 8px !important;
-    padding: 0 !important;
-    width: auto !important;
-    margin-top: 4px !important;
+  /* Badges / group row inside card */
+  .vt-stat-card .group {
+    width: auto;
+    max-width: 100%;
+    margin-top: 4px;
+  }
+
+  .vt-stat-card .group--horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
   }
 {% endstylesheet %}
 
@@ -321,7 +322,53 @@
   ],
   "presets": [
     {
-      "name": "Stat card"
+      "name": "Stat card",
+      "settings": {
+        "background_color": "#224E09",
+        "text_color": "#F8F9DC",
+        "note_color": "#F8F9DC",
+        "border_radius": 0,
+        "padding_vertical": 36,
+        "padding_horizontal": 24,
+        "gap": 12,
+        "show_watermark": true,
+        "watermark_icon": "leaf",
+        "watermark_opacity": 7
+      },
+      "blocks": [
+        {
+          "type": "icons",
+          "settings": {
+            "icon": "leaf",
+            "icon_size_desktop": 36,
+            "icon_size_mobile": 32
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Heading",
+            "heading_size": "vt-heading-h2",
+            "heading_alignment": "text-center"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "paragraph_size": "vt-paragraph-medium",
+            "paragraph_alignment": "text-center"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "paragraph_size": "vt-paragraph-extra-small",
+            "paragraph_alignment": "text-center"
+          }
+        }
+      ]
     }
   ]
 }

@@ -41,11 +41,11 @@
     box-sizing: border-box;
   }
 
-  /* Grid layout matching standard responsive design */
+  /* Grid layout */
   .grid-group--grid {
     display: grid;
     grid-template-columns: repeat(var(--grid-desktop-columns, 4), minmax(0, 1fr));
-    column-gap: var(--grid-gap-h, 12px);
+    column-gap: var(--grid-gap-h, 30px);
     row-gap: var(--grid-gap-v, 28px);
     align-items: stretch;
   }
@@ -55,6 +55,7 @@
     flex-direction: column;
     align-self: stretch;
     height: 100%;
+    box-sizing: border-box;
   }
 
   .grid-group--grid > * > *,
@@ -80,8 +81,8 @@
   .grid-group--carousel {
     display: grid;
     grid-auto-flow: column;
-    grid-auto-columns: calc((100% - (var(--grid-desktop-columns, 4) - 1) * var(--grid-gap-h, 12px)) / var(--grid-desktop-columns, 4));
-    column-gap: var(--grid-gap-h, 12px);
+    grid-auto-columns: calc((100% - (var(--grid-desktop-columns, 4) - 1) * var(--grid-gap-h, 30px)) / var(--grid-desktop-columns, 4));
+    column-gap: var(--grid-gap-h, 30px);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;

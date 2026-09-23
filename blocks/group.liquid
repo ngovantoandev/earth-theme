@@ -36,13 +36,23 @@
   }
   .group--horizontal {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: var(--vt-alignment, center);
+    align-items: var(--vt-position, center);
+    gap: var(--vt-group-gap, 8px);
+  }
+  .group--horizontal[style*="--vt-alignment: left"] {
+    justify-content: flex-start;
+  }
+  .group--horizontal[style*="--vt-alignment: center"] {
+    justify-content: center;
+  }
+  .group--horizontal[style*="--vt-alignment: right"] {
+    justify-content: flex-end;
   }
   .group--vertical {
     gap: var(--vt-group-gap);
     flex-direction: column;
-    align-items: var(--vt-position);
+    align-items: var(--vt-position, flex-start);
   }
 {% endstylesheet %}
 
@@ -87,11 +97,10 @@
       "default": "left"
     },
     {
-      "visible_if": "{{ block.settings.layout_direction == 'group--vertical' }}",
       "type": "select",
       "id": "position",
       "label": "t:labels.position",
-      "default": "flex-start",
+      "default": "center",
       "options": [
         { "value": "flex-start", "label": "t:options.position.top" },
         { "value": "center", "label": "t:options.position.center" },
@@ -126,6 +135,15 @@
   ],
   "presets": [
     {
+      "name": "t:general.group",
+      "category": "t:general.layout",
+      "settings": {
+        "layout_direction": "group--horizontal",
+        "alignment": "center",
+        "position": "center"
+      }
+    },
+    {
       "name": "t:general.column",
       "category": "t:general.layout",
       "settings": {
@@ -137,7 +155,9 @@
       "name": "t:general.row",
       "category": "t:general.layout",
       "settings": {
-        "layout_direction": "group--horizontal"
+        "layout_direction": "group--horizontal",
+        "alignment": "center",
+        "position": "center"
       }
     }
   ]
