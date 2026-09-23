@@ -5,7 +5,7 @@
   {% content_for 'block', type: 'icons', id: 'icons' %}  
 {% enddoc %}
 
-{%- assign icon = block.settings.icon -%}
+{%- assign icon = block.settings.icon | default: 'leaf' -%}
 
 {%- assign icon_size_mobile_rem = block.settings.icon_size_mobile | times: 1.0 | divided_by: 16 -%}
 {%- assign icon_size_desktop_rem = block.settings.icon_size_desktop | times: 1.0 | divided_by: 16 -%}

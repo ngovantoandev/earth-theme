@@ -60,22 +60,6 @@
     align-items: center;
   }
 
-  /* Header heading group styling - keep on 1 line */
-  .vt-impact-metrics .vt-heading-group {
-    max-width: none !important;
-    width: auto !important;
-    flex-wrap: nowrap !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 16px !important;
-    margin: 0 auto !important;
-  }
-
-  .vt-impact-metrics .vt-heading-wrapper {
-    width: auto !important;
-  }
-
   /* Header heading default color and styles */
   .vt-impact-metrics .vt-heading-group {
     color: var(--heading-color, #003225);
@@ -85,7 +69,6 @@
     color: inherit;
     font-weight: 700;
     letter-spacing: -0.02em;
-    white-space: nowrap;
   }
 
   /* Header subtitle styling - consistent with rich-text */
@@ -340,20 +323,20 @@
       "id": "padding_top",
       "min": 0,
       "max": 160,
-      "step": 4,
+      "step": 2,
       "unit": "px",
       "label": "Section top padding",
-      "default": 80
+      "default": 110
     },
     {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
       "max": 160,
-      "step": 4,
+      "step": 2,
       "unit": "px",
       "label": "Section bottom padding",
-      "default": 80
+      "default": 110
     },
     {
       "type": "range",
@@ -392,7 +375,7 @@
                 "gap_desktop": 16,
                 "gap_mobile": 12,
                 "width": "fit",
-                "hide_icon_mobile": false
+                "hide_icon_mobile": true
               },
               "blocks": [
                 {

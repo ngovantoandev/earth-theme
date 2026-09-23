@@ -126,7 +126,7 @@
                 "bg_color": "#F8F9DC",
                 "heading_color": "#003225",
                 "subtitle_color": "#224E09",
-                "padding_top": 80,
+                "padding_top": 110,
                 "padding_bottom": 0,
                 "cards_margin_top": 64,
                 "full_width": true
@@ -152,7 +152,7 @@
                                 "gap_mobile": 12,
                                 "width": "fit",
                                 "max_width": 1000,
-                                "hide_icon_mobile": false
+                                "hide_icon_mobile": true
                             },
                             "blocks": {
                                 "icon_block_left": {
@@ -518,11 +518,336 @@
                 "header_group",
                 "cards_row"
             ]
+        },
+        "personal_sustainability_impact": {
+            "type": "rich-text",
+            "settings": {
+                "desktop_content_alignment": "vt-desktop-center",
+                "mobile_content_alignment": "vt-mobile-center",
+                "heading_width": "vt-width-medium",
+                "gap": 24,
+                "gap_mobile": 20,
+                "background_color": "#F8F9DC",
+                "text_color": "#003225",
+                "subtitle_color": "#224E09",
+                "padding_top": 64,
+                "padding_bottom": 64,
+                "enable_custom_mobile_padding": true,
+                "padding_top_mobile": 40,
+                "padding_bottom_mobile": 40,
+                "show_section_divider": false,
+                "make_section_full_width": true
+            },
+            "blocks": {
+                "impact_heading": {
+                    "type": "heading",
+                    "settings": {
+                        "heading": "Your Personal Sustainability Impact",
+                        "heading_size": "vt-heading-h2",
+                        "heading_alignment": "text-center",
+                        "heading_tag": "h2",
+                        "text_color": "#003225",
+                        "animation_type": "slide",
+                        "animation_direction": "from-bottom",
+                        "animation_duration": 1,
+                        "animation_delay": 0.2,
+                        "animation_easing": "ease-out-sine",
+                        "animation_blur_intensity": 5
+                    }
+                },
+                "impact_paragraph": {
+                    "type": "paragraph",
+                    "settings": {
+                        "text": "<p>Connect your account to see how you contribute to sustainability goals.</p>",
+                        "paragraph_size": "vt-paragraph-large",
+                        "paragraph_alignment": "text-center",
+                        "paragraph_max_width": 640,
+                        "text_color": "#224E09",
+                        "animation_type": "slide",
+                        "animation_direction": "from-bottom",
+                        "animation_duration": 1,
+                        "animation_delay": 0.4,
+                        "animation_easing": "ease-out-sine",
+                        "animation_blur_intensity": 5
+                    }
+                },
+                "impact_button": {
+                    "type": "button",
+                    "settings": {
+                        "button_label": "TRACK MY IMPACT",
+                        "button_link": "/account",
+                        "open_in_new_tab": false,
+                        "button_style": "primary",
+                        "animation_type": "slide",
+                        "animation_direction": "from-bottom",
+                        "animation_duration": 1,
+                        "animation_delay": 0.6,
+                        "animation_easing": "ease-out-sine",
+                        "animation_blur_intensity": 5
+                    }
+                }
+            },
+            "block_order": [
+                "impact_heading",
+                "impact_paragraph",
+                "impact_button"
+            ]
+        },
+        "sustainability_goals_section": {
+            "type": "sustainability-goals",
+            "settings": {
+                "bg_color": "#F8F9DC",
+                "heading_color": "#003225",
+                "subtitle_color": "#224E09",
+                "padding_top": 0,
+                "padding_bottom": 110,
+                "full_width": true
+            },
+            "blocks": {
+                "goals_cards_row": {
+                    "type": "grid-group",
+                    "settings": {
+                        "type": "grid",
+                        "desktop_columns": 4,
+                        "mobile_columns": "1",
+                        "enable_swipe_mobile": true,
+                        "gap_horizontal": 30,
+                        "gap_vertical": 28,
+                        "gap_horizontal_mobile": 16,
+                        "gap_vertical_mobile": 24
+                    },
+                    "blocks": {
+                        "card_organic_cotton": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "text_color": "#003225",
+                                "note_color": "#224E09",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 20,
+                                "gap": 8,
+                                "show_watermark": false
+                            },
+                            "blocks": {
+                                "heading_cotton": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "95%",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h3",
+                                        "heading_alignment": "text-center",
+                                        "text_color": "#003225",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_cotton": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>Organic Cotton</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "note_cotton": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>of materials used</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "heading_cotton",
+                                "label_cotton",
+                                "note_cotton"
+                            ]
+                        },
+                        "card_factory_workers": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "text_color": "#003225",
+                                "note_color": "#224E09",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 20,
+                                "gap": 8,
+                                "show_watermark": false
+                            },
+                            "blocks": {
+                                "heading_workers": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "2,500+",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h3",
+                                        "heading_alignment": "text-center",
+                                        "text_color": "#003225",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_workers": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>Factory Workers</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "note_workers": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>earning fair wages</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "heading_workers",
+                                "label_workers",
+                                "note_workers"
+                            ]
+                        },
+                        "card_recycled_materials": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "text_color": "#003225",
+                                "note_color": "#224E09",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 20,
+                                "gap": 8,
+                                "show_watermark": false
+                            },
+                            "blocks": {
+                                "heading_recycled": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "40%",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h3",
+                                        "heading_alignment": "text-center",
+                                        "text_color": "#003225",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_recycled": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>Recycled Materials</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "note_recycled": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>in our products</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "heading_recycled",
+                                "label_recycled",
+                                "note_recycled"
+                            ]
+                        },
+                        "card_carbon_neutral": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "text_color": "#003225",
+                                "note_color": "#224E09",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_radius": 0,
+                                "padding_vertical": 36,
+                                "padding_horizontal": 20,
+                                "gap": 8,
+                                "show_watermark": false
+                            },
+                            "blocks": {
+                                "heading_neutral": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "2026",
+                                        "heading_size": "vt-heading-h2",
+                                        "heading_tag": "h3",
+                                        "heading_alignment": "text-center",
+                                        "text_color": "#003225",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "label_neutral": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>Carbon Neutral</p>",
+                                        "paragraph_size": "vt-paragraph-medium",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                },
+                                "note_neutral": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>achieved</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "text_color": "#224E09",
+                                        "animation_type": "none"
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "heading_neutral",
+                                "label_neutral",
+                                "note_neutral"
+                            ]
+                        }
+                    },
+                    "block_order": [
+                        "card_organic_cotton",
+                        "card_factory_workers",
+                        "card_recycled_materials",
+                        "card_carbon_neutral"
+                    ]
+                }
+            },
+            "block_order": [
+                "goals_cards_row"
+            ]
         }
     },
     "order": [
         "hero_slider_section",
         "rich_text_section",
-        "impact_metrics_section"
+        "impact_metrics_section",
+        "personal_sustainability_impact",
+        "sustainability_goals_section"
     ]
 }

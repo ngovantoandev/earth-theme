@@ -26,11 +26,16 @@
   endif
 
   assign border_radius_px = block.settings.border_radius | default: 8
+  assign border_width_px = block.settings.border_width | default: 0
+  assign border_color = block.settings.border_color | default: 'transparent'
   assign padding_v_px = block.settings.padding_vertical | default: 36
   assign padding_h_px = block.settings.padding_horizontal | default: 24
   assign gap_px = block.settings.gap | default: 12
   assign watermark_opacity = block.settings.watermark_opacity | default: 7 | times: 1.0 | divided_by: 100.0
   assign watermark_icon = block.settings.watermark_icon | default: 'ecology'
+  assign watermark_color = block.settings.watermark_color | default: text_color | default: '#F8F9DC'
+  assign watermark_size_desktop_px = block.settings.watermark_size_desktop | default: 240
+  assign watermark_size_mobile_px = block.settings.watermark_size_mobile | default: 180
 -%}
 
 <div
@@ -39,11 +44,16 @@
     --vt-stat-card-bg: {{ bg_color }};
     --vt-stat-card-text: {{ text_color }};
     --vt-stat-card-note: {{ note_color }};
+    --vt-stat-card-border-width: {{ border_width_px }}px;
+    --vt-stat-card-border-color: {{ border_color }};
     --vt-stat-card-radius: {{ border_radius_px }}px;
     --vt-stat-card-padding-v: {{ padding_v_px }}px;
     --vt-stat-card-padding-h: {{ padding_h_px }}px;
     --vt-stat-card-gap: {{ gap_px }}px;
     --vt-stat-card-watermark-opacity: {{ watermark_opacity }};
+    --vt-stat-card-watermark-color: {{ watermark_color }};
+    --vt-stat-card-watermark-size-desktop: {{ watermark_size_desktop_px }}px;
+    --vt-stat-card-watermark-size-mobile: {{ watermark_size_mobile_px }}px;
   "
   {{ block.shopify_attributes }}
 >
@@ -107,6 +117,7 @@
     min-height: auto;
     background-color: var(--vt-stat-card-bg, #224E09);
     color: var(--vt-stat-card-text, #F8F9DC);
+    border: var(--vt-stat-card-border-width, 0px) solid var(--vt-stat-card-border-color, transparent);
     border-radius: var(--vt-stat-card-radius, 8px);
     padding: var(--vt-stat-card-padding-v, 36px) var(--vt-stat-card-padding-h, 24px);
     overflow: hidden;
@@ -130,12 +141,19 @@
   }
 
   .vt-stat-card__watermark svg {
-    width: 82%;
-    height: 82%;
-    max-width: 240px;
-    max-height: 240px;
+    width: var(--vt-stat-card-watermark-size-desktop, 240px);
+    height: var(--vt-stat-card-watermark-size-desktop, 240px);
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
-    color: var(--vt-stat-card-text, #F8F9DC);
+    color: var(--vt-stat-card-watermark-color, var(--vt-stat-card-text, #F8F9DC));
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-stat-card__watermark svg {
+      width: var(--vt-stat-card-watermark-size-mobile, 180px);
+      height: var(--vt-stat-card-watermark-size-mobile, 180px);
+    }
   }
 
   .vt-stat-card__content {
@@ -195,7 +213,6 @@
 
   .vt-stat-card .vt-paragraph.vt-paragraph-extra-small p {
     color: var(--vt-stat-card-note, #F8F9DC);
-    opacity: 0.85;
   }
 
   /* Badges / group row inside card */
@@ -240,6 +257,22 @@
       "id": "note_color",
       "label": "Note text color",
       "default": "#F8F9DC"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#003225"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 0
     },
     {
       "type": "range",
@@ -310,6 +343,32 @@
       "default": "ecology"
     },
     {
+      "type": "color",
+      "id": "watermark_color",
+      "label": "Icon color",
+      "default": "#F8F9DC"
+    },
+    {
+      "type": "range",
+      "id": "watermark_size_desktop",
+      "min": 40,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size desktop",
+      "default": 240
+    },
+    {
+      "type": "range",
+      "id": "watermark_size_mobile",
+      "min": 40,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size mobile",
+      "default": 180
+    },
+    {
       "type": "range",
       "id": "watermark_opacity",
       "min": 0,
@@ -327,12 +386,17 @@
         "background_color": "#224E09",
         "text_color": "#F8F9DC",
         "note_color": "#F8F9DC",
+        "border_color": "#003225",
+        "border_width": 0,
         "border_radius": 0,
         "padding_vertical": 36,
         "padding_horizontal": 24,
         "gap": 12,
         "show_watermark": true,
         "watermark_icon": "leaf",
+        "watermark_color": "#F8F9DC",
+        "watermark_size_desktop": 240,
+        "watermark_size_mobile": 180,
         "watermark_opacity": 7
       },
       "blocks": [

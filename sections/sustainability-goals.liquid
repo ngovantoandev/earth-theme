@@ -1,0 +1,344 @@
+<!-- Sustainability Goals Section -->
+<div
+  class="vt-sustainability-goals{% if section.settings.full_width %} full-width{% endif %}"
+  id="vtSustainabilityGoals-{{ section.id }}"
+  style="
+    --bg-color: {{ section.settings.bg_color | default: '#F8F9DC' }};
+    --heading-color: {{ section.settings.heading_color | default: '#003225' }};
+    --subtitle-color: {{ section.settings.subtitle_color | default: '#224E09' }};
+    --padding-top: {{ section.settings.padding_top | default: 0 }}px;
+    --padding-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
+  "
+>
+  <div class="vt-sustainability-goals__container">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .vt-sustainability-goals {
+    width: 100%;
+    background-color: var(--bg-color, #F8F9DC);
+    color: var(--subtitle-color, #224E09);
+    padding-top: var(--padding-top, 0px);
+    padding-bottom: var(--padding-bottom, 80px);
+    box-sizing: border-box;
+  }
+
+  .vt-sustainability-goals__container {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding-left: 34px;
+    padding-right: 34px;
+  }
+
+  .vt-sustainability-goals:not(.full-width) .vt-sustainability-goals__container {
+    max-width: 1200px;
+  }
+
+  .vt-sustainability-goals.full-width .vt-sustainability-goals__container {
+    max-width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-sustainability-goals__container {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+  .vt-sustainability-goals__container > .shopify-block {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .vt-sustainability-goals .grid-group {
+    width: 100%;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sustainability Goals",
+  "tag": "section",
+  "class": "sustainability-goals-section",
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section background color",
+      "default": "#F8F9DC"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#003225"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#224E09"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Section top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "label": "Section bottom padding",
+      "default": 80
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sustainability Goals",
+      "blocks": [
+        {
+          "type": "grid-group",
+          "settings": {
+            "type": "grid",
+            "desktop_columns": 4,
+            "mobile_columns": "1",
+            "enable_swipe_mobile": true,
+            "gap_horizontal": 30,
+            "gap_vertical": 28,
+            "gap_horizontal_mobile": 16,
+            "gap_vertical_mobile": 24
+          },
+          "blocks": [
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#F8F9DC",
+                "text_color": "#003225",
+                "note_color": "#224E09",
+                "border_color": "#003225",
+                "border_width": 1,
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 20,
+                "gap": 8,
+                "show_watermark": false
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "95%",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h3",
+                    "heading_alignment": "text-center",
+                    "text_color": "#003225",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Organic Cotton</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>of materials used</p>",
+                    "paragraph_size": "vt-paragraph-extra-small",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#F8F9DC",
+                "text_color": "#003225",
+                "note_color": "#224E09",
+                "border_color": "#003225",
+                "border_width": 1,
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 20,
+                "gap": 8,
+                "show_watermark": false
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "2,500+",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h3",
+                    "heading_alignment": "text-center",
+                    "text_color": "#003225",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Factory Workers</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>earning fair wages</p>",
+                    "paragraph_size": "vt-paragraph-extra-small",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#F8F9DC",
+                "text_color": "#003225",
+                "note_color": "#224E09",
+                "border_color": "#003225",
+                "border_width": 1,
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 20,
+                "gap": 8,
+                "show_watermark": false
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "40%",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h3",
+                    "heading_alignment": "text-center",
+                    "text_color": "#003225",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Recycled Materials</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>in our products</p>",
+                    "paragraph_size": "vt-paragraph-extra-small",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "stat-card",
+              "settings": {
+                "background_color": "#F8F9DC",
+                "text_color": "#003225",
+                "note_color": "#224E09",
+                "border_color": "#003225",
+                "border_width": 1,
+                "border_radius": 0,
+                "padding_vertical": 36,
+                "padding_horizontal": 20,
+                "gap": 8,
+                "show_watermark": false
+              },
+              "blocks": [
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "2026",
+                    "heading_size": "vt-heading-h2",
+                    "heading_tag": "h3",
+                    "heading_alignment": "text-center",
+                    "text_color": "#003225",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Carbon Neutral</p>",
+                    "paragraph_size": "vt-paragraph-medium",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>achieved</p>",
+                    "paragraph_size": "vt-paragraph-extra-small",
+                    "paragraph_alignment": "text-center",
+                    "text_color": "#224E09",
+                    "animation_type": "none"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
