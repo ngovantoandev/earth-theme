@@ -128,7 +128,12 @@
                 "subtitle_color": "#224E09",
                 "padding_top": 110,
                 "padding_bottom": 0,
-                "cards_margin_top": 64,
+                "padding_horizontal": 34,
+                "block_gap": 64,
+                "padding_top_mobile": 48,
+                "padding_bottom_mobile": 48,
+                "padding_horizontal_mobile": 20,
+                "block_gap_mobile": 40,
                 "full_width": true
             },
             "blocks": {
@@ -138,8 +143,7 @@
                         "layout_direction": "group--vertical",
                         "alignment": "center",
                         "gap_desktop": 28,
-                        "gap_mobile": 26,
-                        "padding": 0
+                        "gap_mobile": 26
                     },
                     "blocks": {
                         "heading_group_block": {
@@ -171,7 +175,6 @@
                                         "heading_size": "vt-heading-h1",
                                         "heading_alignment": "text-center",
                                         "heading_tag": "h2",
-                                        "text_color": "#003225",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
                                         "animation_duration": 1,
@@ -203,7 +206,6 @@
                                 "paragraph_size": "vt-paragraph-large",
                                 "paragraph_alignment": "text-center",
                                 "paragraph_max_width": 680,
-                                "text_color": "#224E09",
                                 "animation_type": "slide",
                                 "animation_direction": "from-bottom",
                                 "animation_duration": 1,
@@ -221,296 +223,522 @@
                 "cards_row": {
                     "type": "grid-group",
                     "settings": {
-                        "type": "carousel",
+                        "type": "grid",
                         "desktop_columns": 4,
                         "mobile_columns": "1",
                         "enable_swipe_mobile": true,
-                        "gap_horizontal": 30,
-                        "gap_vertical": 28,
-                        "gap_horizontal_mobile": 16,
-                        "gap_vertical_mobile": 24
+                        "show_navigation_desktop": false,
+                        "gap_desktop": 30,
+                        "gap_mobile": 26,
+                        "padding_vertical": 0,
+                        "padding_horizontal": 0,
+                        "padding_vertical_mobile": 0,
+                        "padding_horizontal_mobile": 0
                     },
                     "blocks": {
-                        "card_trees": {
+                        "card_block_1": {
                             "type": "stat-card",
                             "settings": {
                                 "background_color": "#224E09",
+                                "heading_color": "#F8F9DC",
                                 "text_color": "#F8F9DC",
-                                "note_color": "#F8F9DC",
+                                "position": "top",
+                                "alignment": "center",
+                                "enable_decorative_icon": true,
+                                "decorative_icon": "ecology",
+                                "decorative_icon_position": "middle",
+                                "decorative_icon_alignment": "center",
+                                "decorative_icon_color": "#F8F9DC",
+                                "decorative_icon_size_desktop": 226,
+                                "decorative_icon_size_mobile": 212,
+                                "decorative_icon_opacity": 5,
+                                "padding_vertical": 40,
+                                "padding_horizontal": 26,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 30,
+                                "padding_horizontal_mobile": 24,
+                                "width": "fit",
+                                "width_custom": 50,
+                                "height": "fit",
+                                "height_custom": 100,
+                                "gap": 6,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 5,
+                                "border": "none",
+                                "border_color": "#003225",
+                                "border_width": 0,
+                                "border_opacity": 100,
                                 "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 24,
-                                "gap": 12,
-                                "watermark_icon": "ecology",
-                                "watermark_opacity": 7,
-                                "show_watermark": true
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.1,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
                             },
                             "blocks": {
-                                "icon_trees": {
+                                "icon_block": {
                                     "type": "icons",
                                     "settings": {
-                                        "icon": "tree",
+                                        "icon": "cotton-plant",
                                         "icon_color": "#F8F9DC",
                                         "icon_size_desktop": 36,
-                                        "icon_size_mobile": 32
+                                        "icon_size_mobile": 28,
+                                        "show_box": false,
+                                        "box_bg_color": "#003225",
+                                        "box_size_desktop": 60,
+                                        "box_size_mobile": 42,
+                                        "box_radius": "50%",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.3,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "heading_trees": {
+                                "heading_block": {
                                     "type": "heading",
                                     "settings": {
                                         "heading": "100000+",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h2",
                                         "heading_alignment": "text-center",
-                                        "animation_type": "none"
+                                        "heading_tag": "h2",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.4,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "label_trees": {
+                                "paragraph_block": {
                                     "type": "paragraph",
                                     "settings": {
                                         "text": "<p>Trees Planted</p>",
                                         "paragraph_size": "vt-paragraph-medium",
                                         "paragraph_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "paragraph_width": "fit",
+                                        "width_custom": 100,
+                                        "enable_max_width": false,
+                                        "paragraph_max_width": 180,
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.5,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "note_trees": {
+                                "paragraph_small_block": {
                                     "type": "paragraph",
                                     "settings": {
                                         "text": "<p>80% of 2025 goal reached</p>",
-                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_size": "vt-paragraph-small",
                                         "paragraph_alignment": "text-center",
-                                        "animation_type": "none"
+                                        "paragraph_width": "fit",
+                                        "width_custom": 100,
+                                        "enable_max_width": false,
+                                        "paragraph_max_width": 200,
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.6,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 }
                             },
                             "block_order": [
-                                "icon_trees",
-                                "heading_trees",
-                                "label_trees",
-                                "note_trees"
+                                "icon_block",
+                                "heading_block",
+                                "paragraph_block",
+                                "paragraph_small_block"
                             ]
                         },
-                        "card_co2": {
+                        "card_block_2": {
                             "type": "stat-card",
                             "settings": {
                                 "background_color": "#224E09",
+                                "heading_color": "#F8F9DC",
                                 "text_color": "#F8F9DC",
-                                "note_color": "#F8F9DC",
+                                "position": "top",
+                                "alignment": "center",
+                                "enable_decorative_icon": true,
+                                "decorative_icon": "ecology",
+                                "decorative_icon_position": "middle",
+                                "decorative_icon_alignment": "center",
+                                "decorative_icon_color": "#F8F9DC",
+                                "decorative_icon_size_desktop": 226,
+                                "decorative_icon_size_mobile": 212,
+                                "decorative_icon_opacity": 5,
+                                "padding_vertical": 40,
+                                "padding_horizontal": 26,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 30,
+                                "padding_horizontal_mobile": 24,
+                                "width": "fit",
+                                "width_custom": 50,
+                                "height": "fit",
+                                "height_custom": 100,
+                                "gap": 6,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 5,
+                                "border": "none",
+                                "border_color": "#003225",
+                                "border_width": 0,
+                                "border_opacity": 100,
                                 "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 24,
-                                "gap": 12,
-                                "watermark_icon": "ecology",
-                                "watermark_opacity": 7,
-                                "show_watermark": true
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.2,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
                             },
                             "blocks": {
-                                "icon_co2": {
+                                "icon_block": {
                                     "type": "icons",
                                     "settings": {
                                         "icon": "zero-emissions",
                                         "icon_color": "#F8F9DC",
                                         "icon_size_desktop": 36,
-                                        "icon_size_mobile": 32
+                                        "icon_size_mobile": 28,
+                                        "show_box": false,
+                                        "box_bg_color": "#003225",
+                                        "box_size_desktop": 60,
+                                        "box_size_mobile": 42,
+                                        "box_radius": "50%",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.3,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "heading_co2": {
+                                "heading_block": {
                                     "type": "heading",
                                     "settings": {
                                         "heading": "500T",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h2",
                                         "heading_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "heading_tag": "h2",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.4,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "label_co2": {
+                                "paragraph_block": {
                                     "type": "paragraph",
                                     "settings": {
                                         "text": "<p>CO₂ Saved</p>",
                                         "paragraph_size": "vt-paragraph-medium",
                                         "paragraph_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "paragraph_width": "fit",
+                                        "width_custom": 100,
+                                        "enable_max_width": false,
+                                        "paragraph_max_width": 180,
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.5,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "note_co2": {
+                                "paragraph_small_block": {
                                     "type": "paragraph",
                                     "settings": {
                                         "text": "<p>≠ Equal to 2,500 cars off the road yearly</p>",
-                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_size": "vt-paragraph-small",
                                         "paragraph_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "paragraph_width": "fit",
+                                        "width_custom": 100,
+                                        "enable_max_width": false,
+                                        "paragraph_max_width": 200,
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.6,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 }
                             },
                             "block_order": [
-                                "icon_co2",
-                                "heading_co2",
-                                "label_co2",
-                                "note_co2"
+                                "icon_block",
+                                "heading_block",
+                                "paragraph_block",
+                                "paragraph_small_block"
                             ]
                         },
-                        "card_fair_trade": {
+                        "card_block_3": {
                             "type": "stat-card",
                             "settings": {
                                 "background_color": "#224E09",
+                                "heading_color": "#F8F9DC",
                                 "text_color": "#F8F9DC",
-                                "note_color": "#F8F9DC",
+                                "position": "top",
+                                "alignment": "center",
+                                "enable_decorative_icon": true,
+                                "decorative_icon": "ecology",
+                                "decorative_icon_position": "middle",
+                                "decorative_icon_alignment": "center",
+                                "decorative_icon_color": "#F8F9DC",
+                                "decorative_icon_size_desktop": 226,
+                                "decorative_icon_size_mobile": 212,
+                                "decorative_icon_opacity": 5,
+                                "padding_vertical": 40,
+                                "padding_horizontal": 26,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 30,
+                                "padding_horizontal_mobile": 24,
+                                "width": "fit",
+                                "width_custom": 50,
+                                "height": "fit",
+                                "height_custom": 100,
+                                "gap": 6,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 5,
+                                "border": "none",
+                                "border_color": "#003225",
+                                "border_width": 0,
+                                "border_opacity": 100,
                                 "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 24,
-                                "gap": 12,
-                                "watermark_icon": "ecology",
-                                "watermark_opacity": 7,
-                                "show_watermark": true
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.3,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
                             },
                             "blocks": {
-                                "icon_cert": {
+                                "icon_block": {
                                     "type": "icons",
                                     "settings": {
                                         "icon": "quality",
                                         "icon_color": "#F8F9DC",
                                         "icon_size_desktop": 36,
-                                        "icon_size_mobile": 32
+                                        "icon_size_mobile": 28,
+                                        "show_box": false,
+                                        "box_bg_color": "#003225",
+                                        "box_size_desktop": 60,
+                                        "box_size_mobile": 42,
+                                        "box_radius": "50%",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.3,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "heading_cert": {
+                                "heading_block": {
                                     "type": "heading",
                                     "settings": {
                                         "heading": "100%",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h2",
                                         "heading_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "heading_tag": "h2",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.4,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "label_cert": {
+                                "paragraph_block": {
                                     "type": "paragraph",
                                     "settings": {
                                         "text": "<p>Fair Trade Certified</p>",
                                         "paragraph_size": "vt-paragraph-medium",
                                         "paragraph_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "paragraph_width": "fit",
+                                        "width_custom": 100,
+                                        "enable_max_width": false,
+                                        "paragraph_max_width": 180,
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.5,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "badges_group": {
+                                "group_badges": {
                                     "type": "group",
                                     "settings": {
                                         "layout_direction": "group--horizontal",
                                         "alignment": "center",
-                                        "padding": 0
+                                        "gap_desktop": 8,
+                                        "gap_mobile": 6
                                     },
                                     "blocks": {
                                         "badge_gots": {
-                                             "type": "badge",
-                                             "settings": {
-                                                 "text": "GOTS",
-                                                 "badge_size": "vt-paragraph-extra-small",
-                                                 "bg_color": "#EAE060",
-                                                 "text_color": "#003225",
-                                                 "font_size": 0
-                                             }
-                                         },
-                                         "badge_bcorp": {
-                                             "type": "badge",
-                                             "settings": {
-                                                 "text": "B Corp",
-                                                 "badge_size": "vt-paragraph-extra-small",
-                                                 "bg_color": "#EAE060",
-                                                 "text_color": "#003225",
-                                                 "font_size": 0
-                                             }
-                                         }
-                                     },
-                                     "block_order": [
-                                         "badge_gots",
-                                         "badge_bcorp"
-                                     ]
-                                 }
+                                            "type": "badge",
+                                            "settings": {
+                                                "text": "GOTS",
+                                                "badge_size": "vt-paragraph-extra-small",
+                                                "bg_color": "#EAE060",
+                                                "text_color": "#003225",
+                                                "radius": "3.125rem"
+                                            }
+                                        },
+                                        "badge_bcorp": {
+                                            "type": "badge",
+                                            "settings": {
+                                                "text": "B Corp",
+                                                "badge_size": "vt-paragraph-extra-small",
+                                                "bg_color": "#EAE060",
+                                                "text_color": "#003225",
+                                                "radius": "3.125rem"
+                                            }
+                                        }
+                                    },
+                                    "block_order": [
+                                        "badge_gots",
+                                        "badge_bcorp"
+                                    ]
+                                }
                             },
                             "block_order": [
-                                "icon_cert",
-                                "heading_cert",
-                                "label_cert",
-                                "badges_group"
+                                "icon_block",
+                                "heading_block",
+                                "paragraph_block",
+                                "group_badges"
                             ]
                         },
-                        "card_water": {
+                        "card_block_4": {
                             "type": "stat-card",
                             "settings": {
                                 "background_color": "#224E09",
+                                "heading_color": "#F8F9DC",
                                 "text_color": "#F8F9DC",
-                                "note_color": "#F8F9DC",
+                                "position": "top",
+                                "alignment": "center",
+                                "enable_decorative_icon": true,
+                                "decorative_icon": "ecology",
+                                "decorative_icon_position": "middle",
+                                "decorative_icon_alignment": "center",
+                                "decorative_icon_color": "#F8F9DC",
+                                "decorative_icon_size_desktop": 226,
+                                "decorative_icon_size_mobile": 212,
+                                "decorative_icon_opacity": 5,
+                                "padding_vertical": 40,
+                                "padding_horizontal": 26,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 30,
+                                "padding_horizontal_mobile": 24,
+                                "width": "fit",
+                                "width_custom": 50,
+                                "height": "fit",
+                                "height_custom": 100,
+                                "gap": 6,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 5,
+                                "border": "none",
+                                "border_color": "#003225",
+                                "border_width": 0,
+                                "border_opacity": 100,
                                 "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 24,
-                                "gap": 12,
-                                "watermark_icon": "ecology",
-                                "watermark_opacity": 7,
-                                "show_watermark": true
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.4,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
                             },
                             "blocks": {
-                                "icon_water": {
+                                "icon_block": {
                                     "type": "icons",
                                     "settings": {
                                         "icon": "drop",
                                         "icon_color": "#F8F9DC",
                                         "icon_size_desktop": 36,
-                                        "icon_size_mobile": 32
+                                        "icon_size_mobile": 28,
+                                        "show_box": false,
+                                        "box_bg_color": "#003225",
+                                        "box_size_desktop": 60,
+                                        "box_size_mobile": 42,
+                                        "box_radius": "50%",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.3,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "heading_water": {
+                                "heading_block": {
                                     "type": "heading",
                                     "settings": {
                                         "heading": "1,000,159",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h2",
                                         "heading_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "heading_tag": "h2",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.4,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "label_water": {
+                                "paragraph_block": {
                                     "type": "paragraph",
                                     "settings": {
                                         "text": "<p>Liters Water Saved</p>",
                                         "paragraph_size": "vt-paragraph-medium",
                                         "paragraph_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "paragraph_width": "fit",
+                                        "width_custom": 100,
+                                        "enable_max_width": false,
+                                        "paragraph_max_width": 180,
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.5,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
-                                "note_water": {
+                                "paragraph_small_block": {
                                     "type": "paragraph",
                                     "settings": {
                                         "text": "<p>● Live update</p>",
-                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_size": "vt-paragraph-small",
                                         "paragraph_alignment": "text-center",
-                                        "text_color": "#F8F9DC",
-                                        "animation_type": "none"
+                                        "paragraph_width": "fit",
+                                        "width_custom": 100,
+                                        "enable_max_width": false,
+                                        "paragraph_max_width": 200,
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.6,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 }
                             },
                             "block_order": [
-                                "icon_water",
-                                "heading_water",
-                                "label_water",
-                                "note_water"
+                                "icon_block",
+                                "heading_block",
+                                "paragraph_block",
+                                "paragraph_small_block"
                             ]
                         }
                     },
                     "block_order": [
-                        "card_trees",
-                        "card_co2",
-                        "card_fair_trade",
-                        "card_water"
+                        "card_block_1",
+                        "card_block_2",
+                        "card_block_3",
+                        "card_block_4"
                     ]
                 }
             },
@@ -546,7 +774,6 @@
                         "heading_size": "vt-heading-h2",
                         "heading_alignment": "text-center",
                         "heading_tag": "h2",
-                        "text_color": "#003225",
                         "animation_type": "slide",
                         "animation_direction": "from-bottom",
                         "animation_duration": 1,
@@ -562,7 +789,6 @@
                         "paragraph_size": "vt-paragraph-large",
                         "paragraph_alignment": "text-center",
                         "paragraph_max_width": 640,
-                        "text_color": "#224E09",
                         "animation_type": "slide",
                         "animation_direction": "from-bottom",
                         "animation_duration": 1,
@@ -592,255 +818,6 @@
                 "impact_paragraph",
                 "impact_button"
             ]
-        },
-        "sustainability_goals_section": {
-            "type": "sustainability-goals",
-            "settings": {
-                "bg_color": "#F8F9DC",
-                "heading_color": "#003225",
-                "subtitle_color": "#224E09",
-                "padding_top": 0,
-                "padding_bottom": 110,
-                "full_width": true
-            },
-            "blocks": {
-                "goals_cards_row": {
-                    "type": "grid-group",
-                    "settings": {
-                        "type": "grid",
-                        "desktop_columns": 4,
-                        "mobile_columns": "1",
-                        "enable_swipe_mobile": true,
-                        "gap_horizontal": 30,
-                        "gap_vertical": 28,
-                        "gap_horizontal_mobile": 16,
-                        "gap_vertical_mobile": 24
-                    },
-                    "blocks": {
-                        "card_organic_cotton": {
-                            "type": "stat-card",
-                            "settings": {
-                                "background_color": "#F8F9DC",
-                                "text_color": "#003225",
-                                "note_color": "#224E09",
-                                "border_color": "#003225",
-                                "border_width": 1,
-                                "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 20,
-                                "gap": 8,
-                                "show_watermark": false
-                            },
-                            "blocks": {
-                                "heading_cotton": {
-                                    "type": "heading",
-                                    "settings": {
-                                        "heading": "95%",
-                                        "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h3",
-                                        "heading_alignment": "text-center",
-                                        "text_color": "#003225",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "label_cotton": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>Organic Cotton</p>",
-                                        "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "note_cotton": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>of materials used</p>",
-                                        "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                }
-                            },
-                            "block_order": [
-                                "heading_cotton",
-                                "label_cotton",
-                                "note_cotton"
-                            ]
-                        },
-                        "card_factory_workers": {
-                            "type": "stat-card",
-                            "settings": {
-                                "background_color": "#F8F9DC",
-                                "text_color": "#003225",
-                                "note_color": "#224E09",
-                                "border_color": "#003225",
-                                "border_width": 1,
-                                "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 20,
-                                "gap": 8,
-                                "show_watermark": false
-                            },
-                            "blocks": {
-                                "heading_workers": {
-                                    "type": "heading",
-                                    "settings": {
-                                        "heading": "2,500+",
-                                        "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h3",
-                                        "heading_alignment": "text-center",
-                                        "text_color": "#003225",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "label_workers": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>Factory Workers</p>",
-                                        "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "note_workers": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>earning fair wages</p>",
-                                        "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                }
-                            },
-                            "block_order": [
-                                "heading_workers",
-                                "label_workers",
-                                "note_workers"
-                            ]
-                        },
-                        "card_recycled_materials": {
-                            "type": "stat-card",
-                            "settings": {
-                                "background_color": "#F8F9DC",
-                                "text_color": "#003225",
-                                "note_color": "#224E09",
-                                "border_color": "#003225",
-                                "border_width": 1,
-                                "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 20,
-                                "gap": 8,
-                                "show_watermark": false
-                            },
-                            "blocks": {
-                                "heading_recycled": {
-                                    "type": "heading",
-                                    "settings": {
-                                        "heading": "40%",
-                                        "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h3",
-                                        "heading_alignment": "text-center",
-                                        "text_color": "#003225",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "label_recycled": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>Recycled Materials</p>",
-                                        "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "note_recycled": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>in our products</p>",
-                                        "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                }
-                            },
-                            "block_order": [
-                                "heading_recycled",
-                                "label_recycled",
-                                "note_recycled"
-                            ]
-                        },
-                        "card_carbon_neutral": {
-                            "type": "stat-card",
-                            "settings": {
-                                "background_color": "#F8F9DC",
-                                "text_color": "#003225",
-                                "note_color": "#224E09",
-                                "border_color": "#003225",
-                                "border_width": 1,
-                                "border_radius": 0,
-                                "padding_vertical": 36,
-                                "padding_horizontal": 20,
-                                "gap": 8,
-                                "show_watermark": false
-                            },
-                            "blocks": {
-                                "heading_neutral": {
-                                    "type": "heading",
-                                    "settings": {
-                                        "heading": "2026",
-                                        "heading_size": "vt-heading-h2",
-                                        "heading_tag": "h3",
-                                        "heading_alignment": "text-center",
-                                        "text_color": "#003225",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "label_neutral": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>Carbon Neutral</p>",
-                                        "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                },
-                                "note_neutral": {
-                                    "type": "paragraph",
-                                    "settings": {
-                                        "text": "<p>achieved</p>",
-                                        "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
-                                        "text_color": "#224E09",
-                                        "animation_type": "none"
-                                    }
-                                }
-                            },
-                            "block_order": [
-                                "heading_neutral",
-                                "label_neutral",
-                                "note_neutral"
-                            ]
-                        }
-                    },
-                    "block_order": [
-                        "card_organic_cotton",
-                        "card_factory_workers",
-                        "card_recycled_materials",
-                        "card_carbon_neutral"
-                    ]
-                }
-            },
-            "block_order": [
-                "goals_cards_row"
-            ]
         }
     },
     "order": [
@@ -848,6 +825,5 @@
         "rich_text_section",
         "impact_metrics_section",
         "personal_sustainability_impact",
-        "sustainability_goals_section"
     ]
 }

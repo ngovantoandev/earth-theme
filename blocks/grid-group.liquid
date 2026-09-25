@@ -1,6 +1,7 @@
 {% doc %}
-  Renders a flexible grid or carousel group block with responsive column controls,
-  mobile swipe capability, and horizontal/vertical gap controls for desktop and mobile.
+  Renders a flexible grid or self-contained carousel group block with responsive column controls,
+  touch/swipe capability, custom navigation arrows, behavior controls (hover/always),
+  and responsive gap controls.
 
   @example
   {% content_for 'block', type: 'grid-group', id: 'grid-group' %}
@@ -9,59 +10,201 @@
 {%- liquid
   assign layout_type = block.settings.type | default: 'grid'
   assign desktop_cols = block.settings.desktop_columns | default: 4
-  assign mobile_cols = block.settings.mobile_columns | default: 1
-  assign gap_h = block.settings.gap_horizontal | default: 30
-  assign gap_v = block.settings.gap_vertical | default: 28
-  assign gap_h_m = block.settings.gap_horizontal_mobile | default: 16
-  assign gap_v_m = block.settings.gap_vertical_mobile | default: 24
+  assign mobile_cols = block.settings.mobile_columns | default: '1'
+
+  if block.settings.offset_desktop != blank
+    assign offset_desktop = block.settings.offset_desktop
+  else
+    assign offset_desktop = 34
+  endif
+
+  if block.settings.offset_mobile != blank
+    assign offset_mobile = block.settings.offset_mobile
+  else
+    assign offset_mobile = 20
+  endif
+
+  if block.settings.gap_desktop != blank
+    assign gap_desktop = block.settings.gap_desktop
+  elsif block.settings.gap_horizontal != blank
+    assign gap_desktop = block.settings.gap_horizontal
+  else
+    assign gap_desktop = 16
+  endif
+
+  if block.settings.gap_mobile != blank
+    assign gap_mobile = block.settings.gap_mobile
+  elsif block.settings.gap_horizontal_mobile != blank
+    assign gap_mobile = block.settings.gap_horizontal_mobile
+  else
+    assign gap_mobile = 20
+  endif
+
+  if block.settings.padding_vertical != blank
+    assign pad_v = block.settings.padding_vertical
+  else
+    assign pad_v = 0
+  endif
+
+  if block.settings.padding_horizontal != blank
+    assign pad_h = block.settings.padding_horizontal
+  else
+    assign pad_h = 0
+  endif
+
+  if block.settings.padding_vertical_mobile != blank
+    assign pad_v_m = block.settings.padding_vertical_mobile
+  else
+    assign pad_v_m = 0
+  endif
+
+  if block.settings.padding_horizontal_mobile != blank
+    assign pad_h_m = block.settings.padding_horizontal_mobile
+  else
+    assign pad_h_m = 0
+  endif
+
+  assign show_nav_desktop = block.settings.show_navigation_desktop
+  if show_nav_desktop == nil
+    assign show_nav_desktop = false
+  endif
+
+  assign show_nav_mobile = block.settings.show_navigation_mobile
+  if show_nav_mobile == nil
+    assign show_nav_mobile = false
+  endif
+
+  assign nav_behavior = block.settings.navigation_behavior | default: 'hover'
+
+  assign enable_swipe_mobile = block.settings.enable_swipe_mobile
+  if enable_swipe_mobile == nil
+    assign enable_swipe_mobile = true
+  endif
+
+  if layout_type == 'carousel'
+    assign show_nav_desktop_effective = show_nav_desktop
+  else
+    assign show_nav_desktop_effective = false
+  endif
+
+  if enable_swipe_mobile
+    assign show_nav_mobile_effective = show_nav_mobile
+  else
+    assign show_nav_mobile_effective = false
+  endif
 -%}
 
 <div
-  class="grid-group grid-group--{{ layout_type }}"
-  data-grid-type="{{ layout_type }}"
+  class="grid-group vt-grid-group vt-grid-group--{{ layout_type }} vt-grid-group--nav-{{ nav_behavior }}{% if layout_type == 'carousel' %} vt-grid-group--carousel-mode{% endif %}{% if enable_swipe_mobile %} vt-grid-group--swipe-mobile{% endif %}"
+  id="vtGridGroup-{{ block.id }}"
+  data-block-id="{{ block.id }}"
+  data-layout-type="{{ layout_type }}"
   data-desktop-columns="{{ desktop_cols }}"
   data-mobile-columns="{{ mobile_cols }}"
-  data-enable-swipe-mobile="{{ block.settings.enable_swipe_mobile | default: true }}"
+  data-gap-desktop="{{ gap_desktop }}"
+  data-gap-mobile="{{ gap_mobile }}"
+  data-offset-desktop="{{ offset_desktop }}"
+  data-offset-mobile="{{ offset_mobile }}"
+  data-enable-swipe-mobile="{{ enable_swipe_mobile }}"
+  data-show-nav-desktop="{{ show_nav_desktop_effective }}"
+  data-show-nav-mobile="{{ show_nav_mobile_effective }}"
+  data-nav-behavior="{{ nav_behavior }}"
   style="
     --grid-desktop-columns: {{ desktop_cols }};
-    --grid-mobile-columns: {{ mobile_cols }};
-    --grid-gap-h: {{ gap_h }}px;
-    --grid-gap-v: {{ gap_v }}px;
-    --grid-gap-h-m: {{ gap_h_m }}px;
-    --grid-gap-v-m: {{ gap_v_m }}px;
+    --grid-mobile-columns: {% if mobile_cols == '2' %}2{% else %}1{% endif %};
+    --grid-gap-desktop: {{ gap_desktop }}px;
+    --grid-gap-mobile: {{ gap_mobile }}px;
+    --grid-offset-desktop: {{ offset_desktop }}px;
+    --grid-offset-mobile: {{ offset_mobile }}px;
+    --grid-pad-v: {{ pad_v }}px;
+    --grid-pad-h: {{ pad_h }}px;
+    --grid-pad-v-m: {{ pad_v_m }}px;
+    --grid-pad-h-m: {{ pad_h_m }}px;
   "
   {{ block.shopify_attributes }}
 >
-  {% content_for 'blocks' %}
+  <div class="vt-grid-group__slider swiper" id="vtGridSlider-{{ block.id }}">
+    <div class="vt-grid-group__track swiper-wrapper">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+
+  {%- if show_nav_desktop_effective or show_nav_mobile_effective -%}
+    <button
+      type="button"
+      class="earth-slider-nav__btn vt-grid-group__btn vt-grid-group__btn--prev{% unless show_nav_desktop_effective %} vt-grid-group__btn--hide-desktop{% endunless %}{% unless show_nav_mobile_effective %} vt-grid-group__btn--hide-mobile{% endunless %}"
+      id="vtGridPrev-{{ block.id }}"
+      aria-label="Previous slide"
+    >
+      <img src="{{ 'icon-prev-left.svg' | asset_url }}" width="15" height="15" alt="" class="earth-slider-nav__icon earth-slider-nav__icon--prev" loading="lazy">
+    </button>
+    <button
+      type="button"
+      class="earth-slider-nav__btn vt-grid-group__btn vt-grid-group__btn--next{% unless show_nav_desktop_effective %} vt-grid-group__btn--hide-desktop{% endunless %}{% unless show_nav_mobile_effective %} vt-grid-group__btn--hide-mobile{% endunless %}"
+      id="vtGridNext-{{ block.id }}"
+      aria-label="Next slide"
+    >
+      <img src="{{ 'icon-next-right.svg' | asset_url }}" width="15" height="15" alt="" class="earth-slider-nav__icon earth-slider-nav__icon--next" loading="lazy">
+    </button>
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
-  .grid-group {
+  .vt-grid-group {
     width: 100%;
+    position: relative;
     box-sizing: border-box;
+    padding: var(--grid-pad-v, 0px) var(--grid-pad-h, 0px);
   }
 
-  /* Grid layout */
-  .grid-group--grid {
+  /* --- FULL WIDTH BREAKOUT FOR CAROUSEL MODE & ACTIVE SWIPER --- */
+  .vt-grid-group--carousel-mode,
+  .vt-grid-group--swiper-active {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    position: relative;
+    box-sizing: border-box;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .vt-grid-group__slider {
+    width: 100%;
+    position: relative;
+  }
+
+  /* --- GRID MODE (DESKTOP) --- */
+  .vt-grid-group--grid:not(.vt-grid-group--swiper-active) .vt-grid-group__slider {
+    overflow: visible;
+    width: 100%;
+  }
+
+  .vt-grid-group--grid:not(.vt-grid-group--swiper-active) .vt-grid-group__track {
     display: grid;
     grid-template-columns: repeat(var(--grid-desktop-columns, 4), minmax(0, 1fr));
-    column-gap: var(--grid-gap-h, 30px);
-    row-gap: var(--grid-gap-v, 28px);
+    gap: var(--grid-gap-desktop, 16px);
     align-items: stretch;
+    width: 100%;
+    box-sizing: border-box;
+    transform: none;
   }
 
-  .grid-group--grid > * {
+  .vt-grid-group--grid:not(.vt-grid-group--swiper-active) .vt-grid-group__track > * {
     display: flex;
     flex-direction: column;
     align-self: stretch;
     height: 100%;
     box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
   }
 
-  .grid-group--grid > * > *,
-  .grid-group--grid > .vt-stat-card {
-    height: 100% !important;
-    width: 100% !important;
+  .vt-grid-group--grid:not(.vt-grid-group--swiper-active) .vt-grid-group__track > * > *,
+  .vt-grid-group--grid:not(.vt-grid-group--swiper-active) .vt-grid-group__track > .vt-stat-card {
+    height: 100%;
+    width: 100%;
     flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -69,63 +212,349 @@
     box-sizing: border-box;
   }
 
+  /* Grid mode on Mobile when swipe is disabled */
   @media screen and (max-width: 768px) {
-    .grid-group--grid {
+    .vt-grid-group--grid:not(.vt-grid-group--swiper-active) .vt-grid-group__track {
       grid-template-columns: repeat(var(--grid-mobile-columns, 1), minmax(0, 1fr));
-      column-gap: var(--grid-gap-h-m, 16px);
-      row-gap: var(--grid-gap-v-m, 24px);
+      gap: var(--grid-gap-mobile, 20px);
     }
   }
 
-  /* Carousel layout */
-  .grid-group--carousel {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: calc((100% - (var(--grid-desktop-columns, 4) - 1) * var(--grid-gap-h, 30px)) / var(--grid-desktop-columns, 4));
-    column-gap: var(--grid-gap-h, 30px);
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  /* --- CAROUSEL MODE & ACTIVE SWIPER --- */
+  .vt-grid-group--carousel-mode .vt-grid-group__slider,
+  .vt-grid-group--swiper-active .vt-grid-group__slider {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+  }
+
+  .vt-grid-group--carousel-mode .vt-grid-group__track,
+  .vt-grid-group--swiper-active .vt-grid-group__track {
+    display: flex;
+    flex-direction: row;
     align-items: stretch;
+    box-sizing: border-box;
+    gap: 0;
   }
 
-  .grid-group--carousel::-webkit-scrollbar {
-    display: none;
-  }
-
-  .grid-group--carousel > * {
-    scroll-snap-align: start;
+  .vt-grid-group--carousel-mode .swiper-slide,
+  .vt-grid-group--swiper-active .swiper-slide {
+    height: auto;
     display: flex;
     flex-direction: column;
     align-self: stretch;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    min-width: 0;
+  }
+
+  .vt-grid-group--carousel-mode .swiper-slide > *,
+  .vt-grid-group--swiper-active .swiper-slide > * {
     height: 100%;
+    width: 100%;
     box-sizing: border-box;
   }
 
-  @media screen and (max-width: 768px) {
-    .grid-group--carousel {
-      column-gap: var(--grid-gap-h-m, 16px);
-      grid-auto-columns: calc((100% - (var(--grid-mobile-columns, 1) - 1) * var(--grid-gap-h-m, 16px)) / var(--grid-mobile-columns, 1));
+  /* --- NAVIGATION BUTTONS (VERTICALLY CENTERED AT BOTH ENDS) --- */
+  .vt-grid-group .vt-grid-group__btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    margin: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--color-secondary, #71CC3B);
+    border: 1.5px solid var(--color-secondary, #71CC3B);
+    color: var(--color-black, #003225);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, visibility 0.25s ease;
+  }
+
+  .vt-grid-group .vt-grid-group__btn--prev {
+    left: var(--grid-offset-desktop, 34px);
+  }
+
+  .vt-grid-group .vt-grid-group__btn--next {
+    right: var(--grid-offset-desktop, 34px);
+  }
+
+  /* Disabled & Locked navigation buttons: hide completely (no dimming) */
+  .vt-grid-group .vt-grid-group__btn.vt-grid-group__arrow--disabled,
+  .vt-grid-group .vt-grid-group__btn.vt-grid-group__arrow--locked,
+  .vt-grid-group .vt-grid-group__btn.swiper-button-disabled,
+  .vt-grid-group .vt-grid-group__btn.swiper-button-lock {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* Responsive visibility & hover behavior for navigation buttons */
+  @media screen and (min-width: 769px) {
+    .vt-grid-group .vt-grid-group__btn--hide-desktop {
+      display: none !important;
+    }
+
+    /* 1. Show on hover behavior (desktop only) */
+    .vt-grid-group--nav-hover .vt-grid-group__btn {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .vt-grid-group--nav-hover:hover .vt-grid-group__btn:not(.vt-grid-group__btn--hide-desktop):not(.vt-grid-group__arrow--disabled):not(.swiper-button-disabled) {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+
+    /* 2. Always show behavior (desktop) */
+    .vt-grid-group--nav-always .vt-grid-group__btn:not(.vt-grid-group__btn--hide-desktop):not(.vt-grid-group__arrow--disabled):not(.swiper-button-disabled) {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
     }
   }
 
-  .grid-group--carousel > * > *,
-  .grid-group--carousel > .vt-stat-card {
-    height: 100% !important;
-    width: 100% !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    box-sizing: border-box;
+  @media screen and (max-width: 768px) {
+    .vt-grid-group .vt-grid-group__btn--hide-mobile {
+      display: none !important;
+    }
+    .vt-grid-group .vt-grid-group__btn {
+      width: 40px;
+      height: 40px;
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
+    }
+    .vt-grid-group .vt-grid-group__btn--prev {
+      left: var(--grid-offset-mobile, 20px);
+    }
+    .vt-grid-group .vt-grid-group__btn--next {
+      right: var(--grid-offset-mobile, 20px);
+    }
+  }
+
+  /* Eliminate any Swiper default chevron pseudo-elements */
+  .vt-grid-group .vt-grid-group__btn::before,
+  .vt-grid-group .vt-grid-group__btn::after {
+    display: none;
+    content: none;
+  }
+
+  .vt-grid-group .vt-grid-group__btn:hover {
+    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 6px 18px rgba(113, 204, 59, 0.45);
+  }
+
+  .vt-grid-group .earth-slider-nav__icon {
+    width: 15px;
+    height: 15px;
+    object-fit: contain;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+
+  .vt-grid-group .vt-grid-group__btn--prev:hover .earth-slider-nav__icon--prev {
+    transform: rotate(-45deg);
+  }
+
+  .vt-grid-group .vt-grid-group__btn--next:hover .earth-slider-nav__icon--next {
+    transform: rotate(45deg);
   }
 {% endstylesheet %}
+
+<script>
+  (function() {
+    function initGridGroupBlock(blockId) {
+      var rootEl = document.getElementById('vtGridGroup-' + blockId);
+      if (!rootEl) return;
+
+      var sliderEl = rootEl.querySelector('.vt-grid-group__slider');
+      var trackEl = rootEl.querySelector('.vt-grid-group__track');
+      if (!sliderEl || !trackEl) return;
+
+      var layoutType = rootEl.getAttribute('data-layout-type') || 'grid';
+      var enableSwipeMobile = rootEl.getAttribute('data-enable-swipe-mobile') === 'true';
+      var desktopCols = parseInt(rootEl.getAttribute('data-desktop-columns'), 10) || 4;
+      var mobileColsRaw = rootEl.getAttribute('data-mobile-columns') || '1';
+      var gapDesktop = parseInt(rootEl.getAttribute('data-gap-desktop'), 10);
+      if (isNaN(gapDesktop)) gapDesktop = 16;
+      var gapMobile = parseInt(rootEl.getAttribute('data-gap-mobile'), 10);
+      if (isNaN(gapMobile)) gapMobile = 20;
+      var showNavDesktop = rootEl.getAttribute('data-show-nav-desktop') === 'true';
+      var showNavMobile = rootEl.getAttribute('data-show-nav-mobile') === 'true';
+
+      var prevBtn = rootEl.querySelector('.vt-grid-group__btn--prev');
+      var nextBtn = rootEl.querySelector('.vt-grid-group__btn--next');
+
+      // Determine mobile slides per view: "1" = 1.2 (peek layout), "2" = 2
+      var mobileSlidesPerView = (mobileColsRaw === '2') ? 2 : 1.2;
+
+      // Tag all direct children as swiper slides
+      function prepareSlides() {
+        var children = Array.from(trackEl.children);
+        children.forEach(function(child) {
+          if (!child.classList.contains('swiper-slide')) {
+            child.classList.add('swiper-slide');
+          }
+        });
+        return children.length;
+      }
+
+      function destroySwiperInstance() {
+        if (sliderEl.swiper) {
+          try {
+            sliderEl.swiper.destroy(false, false);
+          } catch(e) {}
+          sliderEl.swiper = null;
+        }
+        trackEl.style.transform = '';
+        trackEl.style.transitionDuration = '';
+        sliderEl.classList.remove('swiper-initialized', 'swiper-horizontal');
+        rootEl.classList.remove('vt-grid-group--swiper-active');
+        Array.from(trackEl.children).forEach(function(child) {
+          child.classList.remove('swiper-slide', 'swiper-slide-active', 'swiper-slide-next', 'swiper-slide-prev');
+          child.style.width = '';
+          child.style.marginRight = '';
+        });
+      }
+
+      function setupSwiper() {
+        var isMobile = window.innerWidth <= 768;
+        var shouldBeActive = false;
+        if (layoutType === 'carousel') {
+          shouldBeActive = isMobile ? enableSwipeMobile : true;
+        } else {
+          // Grid mode: on desktop it is ALWAYS a CSS grid, NEVER Swiper!
+          // On mobile: only active if enableSwipeMobile is true!
+          shouldBeActive = isMobile && enableSwipeMobile;
+        }
+
+        if (!shouldBeActive) {
+          destroySwiperInstance();
+          return;
+        }
+
+        if (typeof Swiper === 'undefined') {
+          setTimeout(setupSwiper, 50);
+          return;
+        }
+
+        var slideCount = prepareSlides();
+        if (slideCount === 0) return;
+
+        if (sliderEl.swiper) {
+          try {
+            sliderEl.swiper.destroy(false, false);
+          } catch(e) {}
+          sliderEl.swiper = null;
+        }
+
+        var offsetDesktop = parseInt(rootEl.getAttribute('data-offset-desktop'), 10);
+        if (isNaN(offsetDesktop)) offsetDesktop = 34;
+        var offsetMobile = parseInt(rootEl.getAttribute('data-offset-mobile'), 10);
+        if (isNaN(offsetMobile)) offsetMobile = 20;
+
+        var desktopSlidesPerView = (layoutType === 'carousel') ? (desktopCols + 0.15) : desktopCols;
+
+        var swiperConfig = {
+          slidesPerView: isMobile ? mobileSlidesPerView : desktopSlidesPerView,
+          spaceBetween: isMobile ? gapMobile : gapDesktop,
+          slidesOffsetBefore: isMobile ? offsetMobile : offsetDesktop,
+          slidesOffsetAfter: isMobile ? offsetMobile : offsetDesktop,
+          grabCursor: true,
+          watchSlidesProgress: true,
+          watchOverflow: false,
+          speed: 400,
+          touchEventsTarget: 'wrapper',
+          preventClicks: false,
+          preventClicksPropagation: false,
+          loop: false,
+          breakpoints: {
+            769: {
+              slidesPerView: desktopSlidesPerView,
+              spaceBetween: gapDesktop,
+              slidesOffsetBefore: offsetDesktop,
+              slidesOffsetAfter: offsetDesktop,
+              slidesPerGroup: 1
+            }
+          }
+        };
+
+        if ((showNavDesktop || showNavMobile) && prevBtn && nextBtn) {
+          swiperConfig.navigation = {
+            prevEl: prevBtn,
+            nextEl: nextBtn,
+            disabledClass: 'vt-grid-group__arrow--disabled',
+            lockClass: 'vt-grid-group__arrow--locked'
+          };
+        }
+
+        try {
+          new Swiper(sliderEl, swiperConfig);
+          rootEl.classList.add('vt-grid-group--swiper-active');
+        } catch (err) {
+          console.warn('Grid-group Swiper initialization note:', err);
+        }
+      }
+
+      setupSwiper();
+
+      if (!rootEl._hasResizeListener) {
+        rootEl._hasResizeListener = true;
+        var resizeTimer;
+        window.addEventListener('resize', function() {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function() {
+            setupSwiper();
+          }, 100);
+        });
+      }
+    }
+
+    var blockId = '{{ block.id }}';
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        initGridGroupBlock(blockId);
+      });
+    } else {
+      initGridGroupBlock(blockId);
+    }
+
+    document.addEventListener('shopify:section:load', function() {
+      initGridGroupBlock(blockId);
+    });
+
+    document.addEventListener('shopify:section:select', function() {
+      initGridGroupBlock(blockId);
+    });
+
+    document.addEventListener('shopify:block:select', function() {
+      initGridGroupBlock(blockId);
+    });
+
+    document.addEventListener('shopify:block:deselect', function() {
+      initGridGroupBlock(blockId);
+    });
+  })();
+</script>
 
 {% schema %}
 {
   "name": "Grid group",
   "tag": null,
-  "blocks": [{ "type": "@theme" }],
+  "blocks": [
+    { "type": "stat-card" }
+  ],
   "settings": [
     {
       "type": "header",
@@ -168,32 +597,62 @@
     },
     {
       "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation_desktop",
+      "label": "Show navigation (desktop)",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_navigation_mobile",
+      "label": "Show navigation (mobile)",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "navigation_behavior",
+      "label": "Behavior",
+      "options": [
+        { "value": "hover", "label": "Show on hover" },
+        { "value": "always", "label": "Always show" }
+      ],
+      "default": "hover"
+    },
+    {
+      "type": "header",
+      "content": "Carousel offset"
+    },
+    {
+      "type": "range",
+      "id": "offset_desktop",
+      "label": "Offset (desktop)",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "offset_mobile",
+      "label": "Offset (mobile)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
       "content": "Gap"
     },
     {
       "type": "range",
-      "id": "gap_horizontal",
-      "label": "Horizontal",
-      "min": 0,
-      "max": 100,
-      "step": 2,
-      "unit": "px",
-      "default": 30
-    },
-    {
-      "type": "range",
-      "id": "gap_vertical",
-      "label": "Vertical",
-      "min": 0,
-      "max": 100,
-      "step": 2,
-      "unit": "px",
-      "default": 28
-    },
-    {
-      "type": "range",
-      "id": "gap_horizontal_mobile",
-      "label": "Horizontal (mobile)",
+      "id": "gap_desktop",
+      "label": "Desktop",
       "min": 0,
       "max": 100,
       "step": 2,
@@ -202,13 +661,61 @@
     },
     {
       "type": "range",
-      "id": "gap_vertical_mobile",
-      "label": "Vertical (mobile)",
+      "id": "gap_mobile",
+      "label": "Mobile",
       "min": 0,
       "max": 100,
       "step": 2,
       "unit": "px",
-      "default": 24
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Padding (mobile)"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical_mobile",
+      "label": "Vertical padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "label": "Horizontal padding",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 0
     }
   ],
   "presets": [
@@ -219,10 +726,37 @@
         "desktop_columns": 4,
         "mobile_columns": "1",
         "enable_swipe_mobile": true,
-        "gap_horizontal": 30,
-        "gap_vertical": 28,
-        "gap_horizontal_mobile": 16,
-        "gap_vertical_mobile": 24
+        "show_navigation_desktop": false,
+        "show_navigation_mobile": false,
+        "navigation_behavior": "hover",
+        "offset_desktop": 34,
+        "offset_mobile": 20,
+        "gap_desktop": 16,
+        "gap_mobile": 20,
+        "padding_vertical": 0,
+        "padding_horizontal": 0,
+        "padding_vertical_mobile": 0,
+        "padding_horizontal_mobile": 0
+      }
+    },
+    {
+      "name": "Carousel group",
+      "settings": {
+        "type": "carousel",
+        "desktop_columns": 4,
+        "mobile_columns": "1",
+        "enable_swipe_mobile": true,
+        "show_navigation_desktop": false,
+        "show_navigation_mobile": false,
+        "navigation_behavior": "hover",
+        "offset_desktop": 34,
+        "offset_mobile": 20,
+        "gap_desktop": 16,
+        "gap_mobile": 20,
+        "padding_vertical": 0,
+        "padding_horizontal": 0,
+        "padding_vertical_mobile": 0,
+        "padding_horizontal_mobile": 0
       }
     }
   ]

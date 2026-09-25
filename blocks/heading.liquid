@@ -7,7 +7,7 @@
   {%- assign animation_type = block.settings.animation_type -%}
 
   {%- assign vt_anim_classes = '' -%}
-  {%- unless animation_type == 'none' -%}
+  {%- unless animation_type == 'none' or request.visual_preview_mode -%}
     {%- assign vt_anim_classes = 'vt-animate vt-animate--' | append: animation_type -%}
     {%- if animation_type == 'slide' or animation_type == 'float' -%}
       {%- assign vt_anim_classes = vt_anim_classes
@@ -25,7 +25,7 @@
   {%- assign heading_class = heading_class | strip -%}
 
   {%- assign vt_style = '' -%}
-  {%- unless animation_type == 'none' -%}
+  {%- unless animation_type == 'none' or request.visual_preview_mode -%}
     {%- assign vt_style = vt_style
       | append: '--vt-duration: '
       | append: block.settings.animation_duration
@@ -64,21 +64,7 @@
     {%- endif -%}
   {%- endunless -%}
 
-  {%- if block.settings.text_color != blank -%}
-    {%- assign vt_style = vt_style | append: ' color: ' | append: block.settings.text_color | append: ' !important;' -%}
-  {%- endif -%}
-  {%- if block.settings.font_size != blank and block.settings.font_size > 0 -%}
-    {%- assign vt_style = vt_style | append: ' font-size: ' | append: block.settings.font_size | append: 'px !important;' -%}
-  {%- endif -%}
-  {%- assign margin_style = '' -%}
-  {%- if block.settings.margin_top != blank and block.settings.margin_top > 0 -%}
-    {%- assign margin_style = margin_style | append: 'margin-top: ' | append: block.settings.margin_top | append: 'px; ' -%}
-  {%- endif -%}
-  {%- if block.settings.margin_bottom != blank and block.settings.margin_bottom > 0 -%}
-    {%- assign margin_style = margin_style | append: 'margin-bottom: ' | append: block.settings.margin_bottom | append: 'px; ' -%}
-  {%- endif -%}
-
-  <div class="vt-heading-wrapper {{ block.settings.heading_alignment }}"{% if margin_style != '' %} style="{{ margin_style | strip }}"{% endif %}>
+  <div class="vt-heading-wrapper {{ block.settings.heading_alignment }}">
     {%- case heading_tag -%}
       {%- when 'h1' -%}
         <h1
@@ -197,7 +183,7 @@
         { "value": "vt-heading-h5", "label": "t:blocks.heading.settings.heading_size.options__6.label" },
         { "value": "vt-heading-h6", "label": "t:blocks.heading.settings.heading_size.options__7.label" }
       ],
-      "default": "vt-heading-h2",
+      "default": "vt-heading-h3",
       "label": "t:blocks.heading.settings.heading_size.label"
     },
     {
@@ -225,41 +211,6 @@
       "default": "h2",
       "label": "t:blocks.heading.settings.heading_tag.label",
       "info": "t:blocks.heading.settings.heading_tag.info"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "Text color"
-    },
-    {
-      "type": "range",
-      "id": "font_size",
-      "min": 0,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Custom font size (0 for preset size)",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "margin_top",
-      "min": 0,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Margin top",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Margin bottom",
-      "default": 0
     },
     {
       "type": "header",
@@ -318,7 +269,7 @@
       "id": "animation_easing",
       "options": [
         { "value": "linear", "label": "t:blocks.heading.settings.animation_easing.options__1.label" },
-        { "value": "ease-out-sine", "label": "t:blocks.heading.settings.animation_easing.options__1.label" },
+        { "value": "ease-out-sine", "label": "t:blocks.heading.settings.animation_easing.options__2.label" },
         { "value": "ease-in-sine", "label": "t:blocks.heading.settings.animation_easing.options__3.label" },
         { "value": "ease-in-out-sine", "label": "t:blocks.heading.settings.animation_easing.options__4.label" },
         { "value": "ease-in-cubic", "label": "t:blocks.heading.settings.animation_easing.options__5.label" },
@@ -343,7 +294,19 @@
   ],
   "presets": [
     {
-      "name": "t:blocks.heading.presets.name"
+      "name": "t:blocks.heading.presets.name",
+      "settings":{
+        "heading": "Heading",
+        "heading_size": "vt-heading-h3",
+        "heading_alignment": "text-left",
+        "heading_tag": "h3",
+        "animation_type": "slide",
+        "animation_direction": "from-bottom",
+        "animation_duration": 1.2,
+        "animation_delay": 0.2,
+        "animation_easing": "ease-out-sine",
+        "animation_blur_intensity": 5
+      }
     }
   ]
 }

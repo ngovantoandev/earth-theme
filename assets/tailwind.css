@@ -20,8 +20,6 @@
     --color-gray-900: oklch(21% 0.034 264.665);
     --color-black: #000;
     --color-white: #fff;
-    --text-3xl: 1.875rem;
-    --text-3xl--line-height: calc(2.25 / 1.875);
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -213,9 +211,6 @@
       max-width: 96rem;
     }
   }
-  .box-border {
-    box-sizing: border-box;
-  }
   .block {
     display: block;
   }
@@ -237,12 +232,6 @@
   .inline-flex {
     display: inline-flex;
   }
-  .table {
-    display: table;
-  }
-  .w-full {
-    width: 100%;
-  }
   .flex-shrink {
     flex-shrink: 1;
   }
@@ -252,47 +241,14 @@
   .grow {
     flex-grow: 1;
   }
-  .border-collapse {
-    border-collapse: collapse;
-  }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
   }
   .resize {
     resize: both;
   }
-  .snap-x {
-    scroll-snap-type: x var(--tw-scroll-snap-strictness);
-  }
-  .snap-mandatory {
-    --tw-scroll-snap-strictness: mandatory;
-  }
-  .\[scrollbar-width\:none\] {
-    scrollbar-width: none;
-  }
-  .auto-cols-\[calc\(\(100\%-\(var\(--grid-mobile-columns\,1\)-1\)\*var\(--grid-gap-h-m\,16px\)\)\/var\(--grid-mobile-columns\,1\)\)\] {
-    grid-auto-columns: calc((100% - (var(--grid-mobile-columns,1) - 1) * var(--grid-gap-h-m,16px)) / var(--grid-mobile-columns,1));
-  }
-  .grid-flow-col {
-    grid-auto-flow: column;
-  }
-  .grid-cols-\[repeat\(var\(--grid-mobile-columns\,1\)\,minmax\(0\,1fr\)\)\] {
-    grid-template-columns: repeat(var(--grid-mobile-columns,1),minmax(0,1fr));
-  }
   .flex-wrap {
     flex-wrap: wrap;
-  }
-  .items-stretch {
-    align-items: stretch;
-  }
-  .gap-x-\[var\(--grid-gap-h-m\,16px\)\] {
-    column-gap: var(--grid-gap-h-m,16px);
-  }
-  .gap-y-\[var\(--grid-gap-v-m\,24px\)\] {
-    row-gap: var(--grid-gap-v-m,24px);
-  }
-  .overflow-x-auto {
-    overflow-x: auto;
   }
   .rounded {
     border-radius: 0.25rem;
@@ -310,10 +266,6 @@
   .text-right {
     text-align: right;
   }
-  .text-3xl {
-    font-size: var(--text-3xl);
-    line-height: var(--tw-leading, var(--text-3xl--line-height));
-  }
   .capitalize {
     text-transform: capitalize;
   }
@@ -325,9 +277,6 @@
   }
   .italic {
     font-style: italic;
-  }
-  .underline {
-    text-decoration-line: underline;
   }
   .outline {
     outline-style: var(--tw-outline-style);
@@ -352,59 +301,6 @@
   .backface-hidden {
     backface-visibility: hidden;
   }
-  @media (width >= 48rem) {
-    .md\:auto-cols-\[calc\(\(100\%-\(var\(--grid-desktop-columns\,4\)-1\)\*var\(--grid-gap-h\,12px\)\)\/var\(--grid-desktop-columns\,4\)\)\] {
-      grid-auto-columns: calc((100% - (var(--grid-desktop-columns,4) - 1) * var(--grid-gap-h,12px)) / var(--grid-desktop-columns,4));
-    }
-    .md\:grid-cols-\[repeat\(var\(--grid-desktop-columns\,4\)\,minmax\(0\,1fr\)\)\] {
-      grid-template-columns: repeat(var(--grid-desktop-columns,4),minmax(0,1fr));
-    }
-    .md\:gap-x-\[var\(--grid-gap-h\,12px\)\] {
-      column-gap: var(--grid-gap-h,12px);
-    }
-    .md\:gap-y-\[var\(--grid-gap-v\,28px\)\] {
-      row-gap: var(--grid-gap-v,28px);
-    }
-  }
-  .\[\&_\.vt-stat-card\]\:box-border .vt-stat-card {
-    box-sizing: border-box;
-  }
-  .\[\&_\.vt-stat-card\]\:flex .vt-stat-card {
-    display: flex;
-  }
-  .\[\&_\.vt-stat-card\]\:\!h-full .vt-stat-card {
-    height: 100% !important;
-  }
-  .\[\&_\.vt-stat-card\]\:\!w-full .vt-stat-card {
-    width: 100% !important;
-  }
-  .\[\&_\.vt-stat-card\]\:flex-col .vt-stat-card {
-    flex-direction: column;
-  }
-  .\[\&_\.vt-stat-card\]\:justify-center .vt-stat-card {
-    justify-content: center;
-  }
-  .\[\&\:\:-webkit-scrollbar\]\:hidden::-webkit-scrollbar {
-    display: none;
-  }
-  .\[\&\>\*\]\:box-border > * {
-    box-sizing: border-box;
-  }
-  .\[\&\>\*\]\:flex > * {
-    display: flex;
-  }
-  .\[\&\>\*\]\:h-full > * {
-    height: 100%;
-  }
-  .\[\&\>\*\]\:snap-start > * {
-    scroll-snap-align: start;
-  }
-  .\[\&\>\*\]\:flex-col > * {
-    flex-direction: column;
-  }
-  .\[\&\>\*\]\:self-stretch > * {
-    align-self: stretch;
-  }
 }
 @property --tw-rotate-x {
   syntax: "*";
@@ -425,11 +321,6 @@
 @property --tw-skew-y {
   syntax: "*";
   inherits: false;
-}
-@property --tw-scroll-snap-strictness {
-  syntax: "*";
-  inherits: false;
-  initial-value: proximity;
 }
 @property --tw-border-style {
   syntax: "*";
@@ -538,7 +429,6 @@
       --tw-rotate-z: initial;
       --tw-skew-x: initial;
       --tw-skew-y: initial;
-      --tw-scroll-snap-strictness: proximity;
       --tw-border-style: solid;
       --tw-outline-style: solid;
       --tw-blur: initial;

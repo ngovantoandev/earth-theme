@@ -36,23 +36,13 @@
   }
   .group--horizontal {
     flex-direction: row;
-    justify-content: var(--vt-alignment, center);
-    align-items: var(--vt-position, center);
-    gap: var(--vt-group-gap, 8px);
-  }
-  .group--horizontal[style*="--vt-alignment: left"] {
-    justify-content: flex-start;
-  }
-  .group--horizontal[style*="--vt-alignment: center"] {
-    justify-content: center;
-  }
-  .group--horizontal[style*="--vt-alignment: right"] {
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
   }
   .group--vertical {
     gap: var(--vt-group-gap);
     flex-direction: column;
-    align-items: var(--vt-position, flex-start);
+    align-items: var(--vt-position);
   }
 {% endstylesheet %}
 
@@ -60,11 +50,13 @@
 {
   "name": "t:general.group",
   "tag": null,
-  "blocks": [{ "type": "@theme" }],
+  "blocks": [
+    { "type": "@theme" }   
+  ],
   "settings": [
     {
       "type": "header",
-      "content": "t:general.layout"
+      "content": "Layout"
     },
     {
       "type": "select",
@@ -97,10 +89,11 @@
       "default": "left"
     },
     {
+      "visible_if": "{{ block.settings.layout_direction == 'group--vertical' }}",
       "type": "select",
       "id": "position",
       "label": "t:labels.position",
-      "default": "center",
+      "default": "flex-start",
       "options": [
         { "value": "flex-start", "label": "t:options.position.top" },
         { "value": "center", "label": "t:options.position.center" },
@@ -110,7 +103,43 @@
     },
     {
       "type": "header",
-      "content": "t:labels.spacing"
+      "content": "Size"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "fill"
+    },
+    {
+      "type": "range",
+      "id": "width_custom",
+      "label": "Custom width",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.width == 'custom' }}"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "fit"
+    },
+    {
+      "type": "header",
+      "content": "Gap"
     },
     {
       "type": "range",
@@ -133,15 +162,12 @@
       "default": 16
     }
   ],
-  "presets": [
+  "presets": [    
     {
-      "name": "t:general.group",
-      "category": "t:general.layout",
-      "settings": {
-        "layout_direction": "group--horizontal",
-        "alignment": "center",
-        "position": "center"
-      }
+      "name": "Group",
+      "blocks": [
+        { "type": "@theme" }      
+      ] 
     },
     {
       "name": "t:general.column",
@@ -155,9 +181,7 @@
       "name": "t:general.row",
       "category": "t:general.layout",
       "settings": {
-        "layout_direction": "group--horizontal",
-        "alignment": "center",
-        "position": "center"
+        "layout_direction": "group--horizontal"
       }
     }
   ]

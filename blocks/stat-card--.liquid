@@ -1,0 +1,521 @@
+{% doc %}
+  Renders an impact metric statistic card with customizable background color, text color,
+  border radius, padding, gap, and selectable watermark icon.
+
+  @example
+  {% content_for 'block', type: 'card', id: 'card' %}
+{% enddoc %}
+
+{%- liquid
+  if block.settings.background_color != blank
+    assign bg_color = block.settings.background_color
+  else
+    assign bg_color = '#224E09'
+  endif
+
+  if block.settings.heading_color != blank
+    assign heading_color = block.settings.heading_color
+  elsif block.settings.text_color != blank
+    assign heading_color = block.settings.text_color
+  else
+    assign heading_color = '#F8F9DC'
+  endif
+
+  if block.settings.paragraph_color != blank
+    assign paragraph_color = block.settings.paragraph_color
+  elsif block.settings.text_color != blank
+    assign paragraph_color = block.settings.text_color
+  else
+    assign paragraph_color = '#F8F9DC'
+  endif
+
+  if block.settings.note_color != blank
+    assign note_color = block.settings.note_color
+  elsif block.settings.paragraph_color != blank
+    assign note_color = block.settings.paragraph_color
+  elsif block.settings.text_color != blank
+    assign note_color = block.settings.text_color
+  else
+    assign note_color = '#F8F9DC'
+  endif
+
+  if block.settings.border_color != blank
+    assign border_color = block.settings.border_color
+  else
+    assign border_color = 'transparent'
+  endif
+
+  if block.settings.border_radius != blank
+    assign border_radius_px = block.settings.border_radius
+  else
+    assign border_radius_px = 0
+  endif
+
+  if block.settings.border_width != blank
+    assign border_width_px = block.settings.border_width
+  else
+    assign border_width_px = 0
+  endif
+
+  if block.settings.padding_vertical != blank
+    assign padding_v_px = block.settings.padding_vertical
+  else
+    assign padding_v_px = 36
+  endif
+
+  if block.settings.padding_horizontal != blank
+    assign padding_h_px = block.settings.padding_horizontal
+  else
+    assign padding_h_px = 24
+  endif
+
+  if block.settings.gap != blank
+    assign gap_px = block.settings.gap
+  else
+    assign gap_px = 12
+  endif
+
+  assign show_watermark = block.settings.show_watermark
+  if show_watermark == nil
+    assign show_watermark = true
+  endif
+
+  if block.settings.watermark_opacity != blank
+    assign watermark_opacity = block.settings.watermark_opacity | times: 1.0 | divided_by: 100.0
+  else
+    assign watermark_opacity = 0.07
+  endif
+
+  assign watermark_icon = block.settings.watermark_icon | default: 'ecology'
+  assign watermark_color = block.settings.watermark_color | default: heading_color | default: '#F8F9DC'
+
+  if block.settings.watermark_size_desktop != blank
+    assign watermark_size_desktop_px = block.settings.watermark_size_desktop
+  else
+    assign watermark_size_desktop_px = 240
+  endif
+
+  if block.settings.watermark_size_mobile != blank
+    assign watermark_size_mobile_px = block.settings.watermark_size_mobile
+  else
+    assign watermark_size_mobile_px = 180
+  endif
+-%}
+
+<div
+  class="vt-stat-card"
+  style="
+    --vt-stat-card-bg: {{ bg_color }};
+    --vt-stat-card-heading: {{ heading_color }};
+    --vt-stat-card-paragraph: {{ paragraph_color }};
+    --vt-stat-card-note: {{ note_color }};
+    --vt-stat-card-border-width: {{ border_width_px }}px;
+    --vt-stat-card-border-color: {{ border_color }};
+    --vt-stat-card-radius: {{ border_radius_px }}px;
+    --vt-stat-card-padding-v: {{ padding_v_px }}px;
+    --vt-stat-card-padding-h: {{ padding_h_px }}px;
+    --vt-stat-card-gap: {{ gap_px }}px;
+    --vt-stat-card-watermark-opacity: {{ watermark_opacity }};
+    --vt-stat-card-watermark-color: {{ watermark_color }};
+    --vt-stat-card-watermark-size-desktop: {{ watermark_size_desktop_px }}px;
+    --vt-stat-card-watermark-size-mobile: {{ watermark_size_mobile_px }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if show_watermark -%}
+    <div class="vt-stat-card__watermark" aria-hidden="true">
+      {%- case watermark_icon -%}
+        {%- when 'tree' -%}
+          <svg viewBox="0 0 27.52 32" fill="currentColor">
+            <path d="M22.16,24.11c2.96,0,5.36-2.4,5.36-5.36,0-1.22-.42-2.41-1.18-3.35-.52-.65-1.19-1.17-1.95-1.52,.2-.67,.31-1.36,.31-2.08,0-1.71-.61-3.36-1.72-4.65-.94-1.09-2.18-1.87-3.55-2.24-.18-1.23-.74-2.36-1.64-3.25-1.08-1.07-2.51-1.66-4.03-1.66s-2.95,.59-4.03,1.66c-.9,.89-1.47,2.02-1.64,3.25-1.37,.37-2.61,1.15-3.55,2.24-1.11,1.29-1.72,2.95-1.72,4.65,0,.71,.1,1.41,.31,2.08-.75,.35-1.42,.87-1.95,1.52-.76,.95-1.18,2.14-1.18,3.35,0,2.96,2.4,5.36,5.36,5.36h7.46v6.02H5.09v1.87H22.42v-1.87h-7.73v-6.02h7.46Zm-16.8-1.87c-1.92,0-3.49-1.56-3.49-3.49,0-1.63,1.1-3.02,2.69-3.39l1.13-.26-.49-1.05c-.33-.7-.5-1.46-.5-2.24,0-1.26,.45-2.48,1.27-3.43,.81-.94,1.93-1.57,3.15-1.77l.78-.13v-.79c.03-2.1,1.76-3.81,3.86-3.81s3.83,1.71,3.85,3.81v.79s.79,.13,.79,.13c1.22,.2,2.34,.83,3.15,1.77,.82,.95,1.27,2.17,1.27,3.43,0,.78-.17,1.54-.5,2.24l-.49,1.05,1.13,.26c1.58,.37,2.69,1.77,2.69,3.39,0,1.92-1.56,3.49-3.49,3.49h-7.46v-5.21l3.43-3.43-1.33-1.33-2.11,2.11v-6.21h-1.87v2.83l-2.11-2.11-1.33,1.33,3.43,3.43v4.11l-2.11-2.11-1.33,1.33,3.43,3.43v1.83H5.36Z"/>
+          </svg>
+        {%- when 'zero-emissions' -%}
+          <svg viewBox="0 0 40 40" fill="currentColor">
+            <path d="M24.29,37.14c-3.15,0-5.71-2.56-5.71-5.71,0-.79-.64-1.43-1.43-1.43s-1.43,.64-1.43,1.43c0,.41,.04,.8,.09,1.19-1.71-.56-2.95-2.16-2.95-4.05,0-2.36,1.92-4.29,4.29-4.29,.79,0,1.43-.64,1.43-1.43s-.64-1.43-1.43-1.43c-2.87,0-5.34,1.72-6.47,4.17-1.21-.34-2.1-1.43-2.1-2.74,0-1.58,1.28-2.86,2.86-2.86,.79,0,1.43-.64,1.43-1.43s-.64-1.43-1.43-1.43c-1.96,0-4.13,1.43-4.29,1.43-2.36,0-4.29-1.92-4.29-4.29,0-2,1.39-3.68,3.25-4.14l-2.19-2.19C1.6,9.14,0,11.52,0,14.29,0,17.82,2.58,20.74,5.95,21.31c-.14,.5-.24,1.01-.24,1.55,0,2.66,1.84,4.89,4.31,5.52,0,.07-.02,.13-.02,.2,0,3.84,3.05,6.96,6.86,7.11,1.48,2.57,4.25,4.31,7.43,4.31s5.92-1.72,7.4-4.27l-2.12-2.12c-.86,2.07-2.9,3.54-5.28,3.54Z"/>
+            <path d="M15.71,2.86c3.15,0,5.71,2.56,5.71,5.71,0,.79,.64,1.43,1.43,1.43s1.43-.64,1.43-1.43c0-.41-.04-.8-.09-1.19,1.71,.56,2.95,2.16,2.95,4.05,0,2.36-1.92,4.29,4.29-4.29-.79,0-1.43,.64-1.43,1.43s-.64-1.43-1.43-1.43c3.46,0,6.35-2.47,7-5.74,.05,0,.09,.03,.14,.03,1.58,0,2.86,1.28,2.86,2.86s-1.28,2.86-2.86,2.86c-.79,0-1.43,.64-1.43,1.43s.64,1.43,1.43,1.43c2.08,0,3.88-1.13,4.88-2.79,1.29,.28,2.26,1.42,2.26,2.79,0,1.58-1.28,2.86-2.86,2.86-.79,0-1.43,.64-1.43,1.43,0,.65,.45,1.18,1.05,1.35-.33,.59-.84,1.08-1.48,1.32l2.11,2.11c1.39-.9,2.37-2.39,2.57-4.12,1.72-.99,2.9-2.82,2.9-4.94,0-2.66-1.84-4.89-4.31-5.52,0-.07,.02-.13,.02-.2,0-3.15-2.56-5.71-5.71-5.71-.05,0-.09,.02-.14,.03-.63-3.18-3.39-5.58-6.71-5.71C21.66,1.74,18.89,0,15.71,0s-5.91,1.72-7.4,4.28l2.12,2.12c.86-2.07,2.9-3.54,5.28-3.54Z"/>
+            <path d="M2.44,.42C1.88-.14,.98-.14,.42,.42-.14,.98-.14,1.88,.42,2.44L37.56,39.58c.28,.28,.64,.42,1.01,.42s.73-.14,1.01-.42c.56-.56,.56-1.46,0-2.02L2.44,.42Z"/>
+          </svg>
+        {%- when 'quality' -%}
+          <svg viewBox="0 0 39.9 39.95" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M32.4,14.04c0,6.9-5.6,12.5-12.5,12.5S7.4,21.04,7.4,14.04,13,1.54,19.9,1.54s12.5,5.6,12.5,12.5Z"/>
+            <path d="M6.2,26.44l-3.4,5.4h5.6l2.2,4.9,3.4-5.2"/>
+            <path d="M33.7,26.44l3.4,5.4h-5.6l-2.2,4.9-3.4-5.2"/>
+            <path d="M15.3,14.04l3.1,3.1,6.2-6.2"/>
+          </svg>
+        {%- when 'drop' -%}
+          <svg viewBox="0 0 27 35" fill="none" stroke="currentColor" stroke-width="3">
+            <path d="M23.84,17.24L13.5,1.5,3.16,17.24c-1.03,1.6-1.66,3.43-1.66,5.42,0,5.99,5.37,10.85,12,10.85s12-4.86,12-10.85c0-1.98-.63-3.82-1.66-5.42Z"/>
+          </svg>
+        {%- when 'leaf' -%}
+          <svg viewBox="0 0 40.31 37" fill="currentColor">
+            <path d="M36.51,0c-5.17,8.61-12.89,8.26-17.78,16.54-.57,.97-1,1.93-1.32,2.87,.52,.58,1.02,1.21,1.49,1.9,3.01,4.38,3.12,8.28,2.58,10.93,6.77-8.32,12.2-17.8,14.91-28.21-2.52,11.16-8.15,21.39-15.25,30.36,2.9,.38,10.76,.46,16.05-8.62,7.41-12.74-.68-25.76-.68-25.76Z"/>
+            <path d="M18.16,21.81C12.49,13.58,2.73,13.34,0,13.45c2,3.28,2.37,6.29,2.73,9.21,.38,3.06,.74,5.95,2.88,9.1,4.12,6.08,11.22,5.33,12.74,5.09C14.55,28.4,9.27,20.54,2.16,14.55c7.25,5.63,12.81,13.17,16.96,21.35,1.31-2.16,3.56-7.51-.97-14.09Z"/>
+          </svg>
+        {%- when 'carbon' -%}
+          <svg viewBox="0 0 12 12" fill="currentColor">
+            <path d="M5.17,10.76c-1.49,0-2.44-.45-3.01-.9-.79-.62-1.04-1.34-1.09-1.51-.54-1.49-.46-2.79,.25-3.88C2.71,2.37,5.96,1.94,6.1,1.92c3.12-.39,3.97-1.64,3.98-1.66,.16-.25,.5-.34,.77-.19,.11,.06,.2,.16,.24,.27,1.17,2.91,1.21,5.34,.11,7.22-1.42,2.44-4.21,3.01-4.33,3.03-.56,.11-1.13,.17-1.7,.17Zm-3.02-2.69c.04,.13,.71,2.2,4.49,1.48,.06-.01,2.42-.52,3.58-2.51,.83-1.43,.86-3.28,.11-5.52-.1,.08-.22,.16-.35,.24-.95,.61-2.21,1.02-3.74,1.21-.03,0-2.87,.39-3.97,2.07-.53,.8-.57,1.81-.14,2.99,0,.01,.01,.03,.01,.04Z"/>
+          </svg>
+        {%- else -%}
+          {%- comment -%} ecology (default) {%- endcomment -%}
+          <svg width="226" height="219" viewBox="0 0 226 219" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M44.2935 155.704L103.994 155.687V201.85H59.1362C51.0349 201.85 43.424 202.851 36.5589 197.53C33.5631 195.21 31.9066 192.131 31.8366 188.141C31.7377 182.412 37.5685 167.248 44.2935 155.704Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M187.249 31.8274L173.791 38.3602C165.331 20.4846 153.698 -0.173127 145.127 -1.79959e-05L97.228 2.86865C105.572 9.85486 111.593 19.8911 117.378 29.5316C122.871 38.6817 127.235 48.788 131.129 59.0633L116.295 66.2638L169.456 85.1616L187.245 31.8274H187.249Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M114.23 31.7779L83.0117 82.6762L43.6796 58.5274L67.147 20.2867C71.3831 13.383 74.5107 6.37202 82.6367 3.29726C86.1805 1.95773 89.6749 2.15557 93.1074 4.18342C98.0399 7.09331 107.909 19.9982 114.23 31.7738V31.7779Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M153.958 219L154.061 204.038C173.832 204.376 197.51 203.107 201.152 195.346L219.819 151.133C209.859 155.514 198.198 156.466 186.993 157.377C176.346 158.247 165.339 157.674 154.395 156.61L154.51 139.753L111.585 176.951L153.962 219H153.958Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.13164 93.4336L18.7492 101.471C7.94475 118.036 -3.58086 138.772 1.05081 145.989L28.5524 185.318C30.143 174.552 35.5411 164.169 40.729 154.191C45.6657 144.699 52.0157 135.664 58.753 126.951L72.6563 135.808L61.3902 77.928L6.13164 93.4336Z" fill="currentColor"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M186.379 153.552L154.609 102.996L193.689 78.439L217.552 116.432C221.863 123.295 226.758 129.205 225.909 137.853C225.538 141.624 223.812 144.666 220.474 146.846C215.677 149.979 199.739 153.103 186.383 153.552H186.379Z" fill="currentColor"/>
+          </svg>
+      {%- endcase -%}
+    </div>
+  {%- endif -%}
+
+  <div class="vt-stat-card__content">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .vt-stat-card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: auto;
+    background-color: var(--vt-stat-card-bg, #224E09);
+    color: var(--vt-stat-card-paragraph, #F8F9DC);
+    border: var(--vt-stat-card-border-width, 0px) solid var(--vt-stat-card-border-color, transparent);
+    border-radius: var(--vt-stat-card-radius, 0px);
+    padding: var(--vt-stat-card-padding-v, 36px) var(--vt-stat-card-padding-h, 24px);
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .vt-stat-card__watermark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: var(--vt-stat-card-watermark-opacity, 0.07);
+    z-index: 0;
+  }
+
+  .vt-stat-card__watermark svg {
+    width: var(--vt-stat-card-watermark-size-desktop, 240px);
+    height: var(--vt-stat-card-watermark-size-desktop, 240px);
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    color: var(--vt-stat-card-watermark-color, var(--vt-stat-card-heading, #F8F9DC));
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-stat-card__watermark svg {
+      width: var(--vt-stat-card-watermark-size-mobile, 180px);
+      height: var(--vt-stat-card-watermark-size-mobile, 180px);
+    }
+  }
+
+  .vt-stat-card__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: var(--vt-stat-card-gap, 12px);
+  }
+
+  /* Heading color inside stat card */
+  .vt-stat-card .vt-heading {
+    color: var(--vt-stat-card-heading, #F8F9DC);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+
+  .vt-stat-card .vt-heading:not([style*="font-size"]):not([class*="vt-heading-"]):not([class*="vt-hero-heading"]) {
+    font-size: clamp(2.1rem, 3.2vw, 2.75rem);
+  }
+
+  .vt-stat-card .vt-icon svg {
+    color: inherit;
+  }
+
+  .vt-stat-card .vt-heading-wrapper {
+    margin: 0;
+  }
+
+  .vt-stat-card .vt-subheading-wrapper {
+    margin: 0;
+  }
+
+  .vt-stat-card .vt-subheading {
+    color: var(--vt-stat-card-heading, #F8F9DC);
+    font-weight: 500;
+    line-height: 1.3;
+    opacity: 0.95;
+  }
+
+  /* Paragraph color inside card */
+  .vt-stat-card .vt-paragraph {
+    color: var(--vt-stat-card-paragraph, #F8F9DC);
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .vt-stat-card .vt-paragraph p {
+    color: var(--vt-stat-card-paragraph, #F8F9DC);
+    font-size: inherit;
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  /* Note paragraph (extra-small) color */
+  .vt-stat-card .vt-paragraph.vt-paragraph-extra-small,
+  .vt-stat-card .vt-paragraph.vt-paragraph-extra-small p {
+    color: var(--vt-stat-card-note, #F8F9DC);
+  }
+
+  /* Badges / group row inside card */
+  .vt-stat-card .group {
+    width: auto;
+    max-width: 100%;
+    margin-top: 4px;
+  }
+
+  .vt-stat-card .group--horizontal {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Stat card",
+  "tag": null,
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#224E09"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#F8F9DC"
+    },
+    {
+      "type": "color",
+      "id": "paragraph_color",
+      "label": "Paragraph color",
+      "default": "#F8F9DC"
+    },
+    {
+      "type": "color",
+      "id": "note_color",
+      "label": "Note text color",
+      "default": "#F8F9DC"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#003225"
+    },
+    {
+      "type": "header",
+      "content": "Border & Spacing"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 16,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 12,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 4,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between elements",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Watermark"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_watermark",
+      "label": "Show watermark",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "watermark_icon",
+      "label": "Watermark icon",
+      "options": [
+        { "value": "leaf", "label": "t:blocks.icon.settings.icon.options__1.label" },
+        { "value": "carbon", "label": "t:blocks.icon.settings.icon.options__2.label" },
+        { "value": "tree", "label": "t:blocks.icon.settings.icon.options__3.label" },
+        { "value": "zero-emissions", "label": "t:blocks.icon.settings.icon.options__4.label" },
+        { "value": "quality", "label": "t:blocks.icon.settings.icon.options__5.label" },
+        { "value": "drop", "label": "t:blocks.icon.settings.icon.options__6.label" },
+        { "value": "ecology", "label": "t:blocks.icon.settings.icon.options__7.label" },
+        { "value": "arrow-left", "label": "t:blocks.icon.settings.icon.options__8.label" },
+        { "value": "arrow-right", "label": "t:blocks.icon.settings.icon.options__9.label" },
+        { "value": "close", "label": "t:blocks.icon.settings.icon.options__10.label" }
+      ],
+      "default": "ecology"
+    },
+    {
+      "type": "color",
+      "id": "watermark_color",
+      "label": "Icon color",
+      "default": "#F8F9DC"
+    },
+    {
+      "type": "range",
+      "id": "watermark_size_desktop",
+      "min": 40,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size desktop",
+      "default": 240
+    },
+    {
+      "type": "range",
+      "id": "watermark_size_mobile",
+      "min": 40,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "label": "Icon size mobile",
+      "default": 180
+    },
+    {
+      "type": "range",
+      "id": "watermark_opacity",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "%",
+      "label": "Watermark opacity",
+      "default": 7
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stat card",
+      "settings": {
+        "background_color": "#224E09",
+        "heading_color": "#F8F9DC",
+        "paragraph_color": "#F8F9DC",
+        "note_color": "#F8F9DC",
+        "border_color": "#003225",
+        "border_width": 0,
+        "border_radius": 0,
+        "padding_vertical": 36,
+        "padding_horizontal": 24,
+        "gap": 12,
+        "show_watermark": true,
+        "watermark_icon": "leaf",
+        "watermark_color": "#F8F9DC",
+        "watermark_size_desktop": 240,
+        "watermark_size_mobile": 180,
+        "watermark_opacity": 7
+      },
+      "blocks": [
+        {
+          "type": "icons",
+          "settings": {
+            "icon": "leaf",
+            "icon_size_desktop": 36,
+            "icon_size_mobile": 32
+          }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "heading": "Heading",
+            "heading_size": "vt-heading-h2",
+            "heading_alignment": "text-center"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "paragraph_size": "vt-paragraph-medium",
+            "paragraph_alignment": "text-center"
+          }
+        },
+        {
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "paragraph_size": "vt-paragraph-extra-small",
+            "paragraph_alignment": "text-center"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

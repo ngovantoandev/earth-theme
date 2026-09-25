@@ -5,79 +5,68 @@
   {% content_for 'block', type: 'paragraph', id: 'paragraph' %}
 {% enddoc %}
 
+{% liquid
+  assign animation_type = block.settings.animation_type
+
+  # -----------------------------------------------------------------------
+  # Animation classes / custom properties. Skipped inside the visual preset
+  # preview so presets render fully visible instead of waiting on an
+  # IntersectionObserver that may never fire inside the preview frame.
+  # -----------------------------------------------------------------------
+  assign vt_anim_classes = ''
+  unless animation_type == 'none' or request.visual_preview_mode
+    assign vt_anim_classes = 'vt-animate vt-animate--' | append: animation_type
+
+    if animation_type == 'slide' or animation_type == 'float'
+      assign vt_anim_classes = vt_anim_classes | append: ' vt-animate--dir-' | append: block.settings.animation_direction
+    endif
+  endunless
+
+  assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)'
+  case block.settings.animation_easing
+    when 'linear'
+      assign vt_easing_value = 'linear'
+    when 'ease-out-sine'
+      assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)'
+    when 'ease-in-sine'
+      assign vt_easing_value = 'cubic-bezier(0.12, 0, 0.39, 0)'
+    when 'ease-in-out-sine'
+      assign vt_easing_value = 'cubic-bezier(0.37, 0, 0.63, 1)'
+    when 'ease-in-cubic'
+      assign vt_easing_value = 'cubic-bezier(0.32, 0, 0.67, 0)'
+    when 'ease-out-cubic'
+      assign vt_easing_value = 'cubic-bezier(0.33, 1, 0.68, 1)'
+    when 'ease-in-out-cubic'
+      assign vt_easing_value = 'cubic-bezier(0.65, 0, 0.35, 1)'
+  endcase
+
+  # -----------------------------------------------------------------------
+  # Class list (built with assign + append, no capture needed)
+  # -----------------------------------------------------------------------
+  assign vt_class_list = 'vt-paragraph ' | append: block.settings.paragraph_size | append: ' ' | append: block.settings.paragraph_alignment | append: ' vt-paragraph--width-' | append: block.settings.paragraph_width
+
+  if vt_anim_classes != blank
+    assign vt_class_list = vt_class_list | append: ' ' | append: vt_anim_classes
+  endif
+%}
+
 {%- if block.settings.text != blank -%}
-  {%- assign animation_type = block.settings.animation_type -%}
-
-  {%- comment -%} Build animation classes {%- endcomment -%}
-  {%- assign vt_anim_classes = '' -%}
-  {%- unless animation_type == 'none' -%}
-    {%- assign vt_anim_classes = 'vt-animate vt-animate--' | append: animation_type -%}
-
-    {%- if animation_type == 'slide' or animation_type == 'float' -%}
-      {%- assign vt_anim_classes = vt_anim_classes
-        | append: ' vt-animate--dir-'
-        | append: block.settings.animation_direction
-      -%}
-    {%- endif -%}
-  {%- endunless -%}
-
-  {%- capture paragraph_class -%}
-    vt-paragraph
-    {{ block.settings.paragraph_size }}
-    {{ block.settings.paragraph_alignment }}
-    {{ vt_anim_classes }}
-  {%- endcapture -%}
-  {%- assign paragraph_class = paragraph_class | strip -%}
-
-  {%- comment -%} Build animation CSS custom properties {%- endcomment -%}
-  {%- assign vt_style = '' -%}
-  {%- unless animation_type == 'none' -%}
-    {%- assign vt_style = vt_style
-      | append: '--vt-duration: '
-      | append: block.settings.animation_duration
-      | append: 's;'
-    -%}
-    {%- assign vt_style = vt_style | append: ' --vt-delay: ' | append: block.settings.animation_delay | append: 's;' -%}
-
-    {%- if animation_type == 'slide' or animation_type == 'float' or animation_type == 'blur' -%}
-      {%- case block.settings.animation_easing -%}
-        {%- when 'linear' -%}
-          {%- assign vt_easing_value = 'linear' -%}
-        {%- when 'ease-out-sine' -%}
-          {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
-        {%- when 'ease-in-sine' -%}
-          {%- assign vt_easing_value = 'cubic-bezier(0.12, 0, 0.39, 0)' -%}
-        {%- when 'ease-in-out-sine' -%}
-          {%- assign vt_easing_value = 'cubic-bezier(0.37, 0, 0.63, 1)' -%}
-        {%- when 'ease-in-cubic' -%}
-          {%- assign vt_easing_value = 'cubic-bezier(0.32, 0, 0.67, 0)' -%}
-        {%- when 'ease-out-cubic' -%}
-          {%- assign vt_easing_value = 'cubic-bezier(0.33, 1, 0.68, 1)' -%}
-        {%- when 'ease-in-out-cubic' -%}
-          {%- assign vt_easing_value = 'cubic-bezier(0.65, 0, 0.35, 1)' -%}
-        {%- else -%}
-          {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
-      {%- endcase -%}
-
-      {%- assign vt_style = vt_style | append: ' --vt-easing: ' | append: vt_easing_value | append: ';' -%}
-    {%- endif -%}
-
-    {%- if animation_type == 'blur' -%}
-      {%- assign vt_style = vt_style
-        | append: ' --vt-blur: '
-        | append: block.settings.animation_blur_intensity
-        | append: 'px;'
-      -%}
-    {%- endif -%}
-  {%- endunless -%}
-
-  {%- if block.settings.text_color != blank -%}
-    {%- assign vt_style = vt_style | append: ' color: ' | append: block.settings.text_color | append: ' !important;' -%}
-  {%- endif -%}
-
   <div
-    class="{{ paragraph_class }}"
-    style="--vt-paragraph-max-width: {{ block.settings.paragraph_max_width }}px;{% if vt_style != '' %}{{ vt_style | strip }}{% endif %}"
+    class="{{ vt_class_list }}"
+    style="
+      {%- if block.settings.paragraph_width == 'custom' %}--vt-paragraph-width: {{ block.settings.width_custom }}%;{% endif -%}
+      {%- if block.settings.enable_max_width %}--vt-paragraph-max-width: {% render 'fluid-clamp', min_px: block.settings.paragraph_max_width, max_px: block.settings.paragraph_max_width %};{% endif -%}
+      {%- if vt_anim_classes != blank -%}
+        --vt-duration: {{ block.settings.animation_duration }}s;
+        --vt-delay: {{ block.settings.animation_delay }}s;
+      {%- endif -%}
+      {%- if animation_type == 'slide' or animation_type == 'float' or animation_type == 'blur' -%}
+        --vt-easing: {{ vt_easing_value }};
+      {%- endif -%}
+      {%- if animation_type == 'blur' -%}
+        --vt-blur: {{ block.settings.animation_blur_intensity }}px;
+      {%- endif -%}
+    "
     {{ block.shopify_attributes }}
   >
     {{ block.settings.text }}
@@ -86,30 +75,56 @@
 
 {% stylesheet %}
   .vt-paragraph {
-    max-width: var(--vt-paragraph-max-width);
-  }
-
-  .vt-paragraph p {
-    margin: 0;
+    max-width: var(--vt-paragraph-max-width, none);
+    contain: layout style;
   }
 
   .vt-paragraph.text-left {
     text-align: left;
-    margin-left: 0;
-    margin-right: auto;
   }
 
   .vt-paragraph.text-center {
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
   }
 
   .vt-paragraph.text-right {
     text-align: right;
-    margin-left: auto;
-    margin-right: 0;
   }
+
+  /* Width variants */
+  .vt-paragraph--width-fit {
+    width: fit-content;
+  }
+
+  .vt-paragraph--width-fill {
+    width: 100%;
+  }
+
+  .vt-paragraph--width-max-content {
+    width: max-content;
+    max-width: 100%;
+  }
+
+  .vt-paragraph--width-min-content {
+    width: min-content;
+  }
+
+  .vt-paragraph--width-custom {
+    width: var(--vt-paragraph-width, auto);
+  }
+
+  /* When the block doesn't stretch full-width, use the alignment setting
+     to also position the block itself within its container, not just the
+     text inside it. */
+  .vt-paragraph:not(.vt-paragraph--width-fill).text-center {
+    margin-inline: auto;
+  }
+
+  .vt-paragraph:not(.vt-paragraph--width-fill).text-right {
+    margin-inline-start: auto;
+    margin-inline-end: 0;
+  }
+
 {% endstylesheet %}
 
 {% schema %}
@@ -123,7 +138,36 @@
             "id": "text",            
             "default": "t:blocks.paragraph.settings.text.default",
             "label": "t:blocks.paragraph.settings.text.label"
-        },        
+        },      
+        {
+            "type": "header",
+            "content": "Content"
+        }, 
+        {
+            "type": "select",
+            "id": "paragraph_alignment",
+            "options":
+            [
+                {
+                    "value": "text-left",
+                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__1.label"
+                },
+                {
+                    "value": "text-center",
+                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__2.label"
+                },
+                {
+                    "value": "text-right",
+                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__3.label"
+                }
+            ],
+            "default": "text-left",
+            "label": "t:blocks.paragraph.settings.paragraph_alignment.label"
+        },
+        {
+            "type": "header",
+            "content": "Size"
+        }, 
         {
             "type": "select",
             "id": "paragraph_size",
@@ -148,42 +192,47 @@
             ],
             "default": "vt-paragraph-medium",
             "label": "t:blocks.paragraph.settings.paragraph_size.label"
-        },
+        },        
         {
             "type": "select",
-            "id": "paragraph_alignment",
-            "options":
-            [
-                {
-                    "value": "text-left",
-                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__1.label"
-                },
-                {
-                    "value": "text-center",
-                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__2.label"
-                },
-                {
-                    "value": "text-right",
-                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__3.label"
-                }
+            "id": "paragraph_width",
+            "label": "Width",
+            "options": [
+                { "value": "fit", "label": "Fit" },
+                { "value": "fill", "label": "Fill" },
+                { "value": "max-content", "label": "Max content" },
+                { "value": "min-content", "label": "Min content" },
+                { "value": "custom", "label": "Custom" }
             ],
-            "default": "text-center",
-            "label": "t:blocks.paragraph.settings.paragraph_alignment.label"
+            "default": "fit"
+        },
+        {
+            "type": "range",
+            "id": "width_custom",
+            "label": "Custom width",
+            "min": 1,
+            "max": 100,
+            "step": 1,
+            "unit": "%",
+            "default": 50,
+            "visible_if": "{{ block.settings.paragraph_width == 'custom' }}"
+        },
+        {
+            "type": "checkbox",
+            "id": "enable_max_width",
+            "label": "Width limit",            
+            "default": false
         },
         {
             "type": "range",
             "id": "paragraph_max_width",
-            "min": 200,
+            "min": 100,
             "max": 1200,
             "step": 20,
             "unit": "px",
             "default": 600,
-            "label": "t:blocks.paragraph.settings.paragraph_max_width.label"
-        },
-        {
-            "type": "color",
-            "id": "text_color",
-            "label": "Text color"
+            "label": "t:blocks.paragraph.settings.paragraph_max_width.label",
+            "visible_if": "{{ block.settings.enable_max_width == true }}"
         },
         {
             "type": "header",
@@ -319,7 +368,19 @@
     "presets":
     [
         {
-            "name": "t:blocks.paragraph.presets.name"
+            "name": "t:blocks.paragraph.presets.name",
+            "settings":{
+                "text": "<p>Discover our latest collection of premium goods designed for modern living. Enjoy free shipping on orders over $50.</p>",
+                "paragraph_size": "vt-paragraph-medium",
+                "paragraph_alignment": "text-left",
+                "paragraph_max_width": 800,
+                "animation_type": "slide",
+                "animation_direction": "from-bottom",
+                "animation_duration": 1.2,
+                "animation_delay": 0.2,
+                "animation_easing": "ease-out-sine",
+                "animation_blur_intensity": 5
+            }
         }
     ]
 }
