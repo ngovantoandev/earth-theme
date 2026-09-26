@@ -14,14 +14,36 @@
 {%- liquid
   assign gap_mobile_px = block.settings.gap_mobile
   assign gap_desktop_px = block.settings.gap_desktop
+
+  case block.settings.alignment
+    when 'center'
+      assign vt_align_items = 'center'
+      assign vt_justify = 'center'
+      assign vt_text_align = 'center'
+    when 'right'
+      assign vt_align_items = 'flex-end'
+      assign vt_justify = 'flex-end'
+      assign vt_text_align = 'right'
+    else
+      assign vt_align_items = 'flex-start'
+      assign vt_justify = 'flex-start'
+      assign vt_text_align = 'left'
+  endcase
+
+  assign vt_valign = block.settings.position | default: 'flex-start'
 -%}
 
 <div
-  class="group {{ block.settings.layout_direction }}"
+  class="group {{ block.settings.layout_direction }} group--align-{{ block.settings.alignment | default: 'left' }} group--width-{{ block.settings.width | default: 'fill' }}"
   style="
-    --vt-position: {{ block.settings.position }};
-    --vt-alignment: {{ block.settings.alignment }};
+    --vt-align-items: {{ vt_align_items }};
+    --vt-justify: {{ vt_justify }};
+    --vt-text-align: {{ vt_text_align }};
+    --vt-position: {{ vt_valign }};
     --vt-group-gap: {% render 'fluid-clamp', min_px: gap_mobile_px, max_px: gap_desktop_px %};
+    {%- if block.settings.width == 'custom' %}
+    --vt-group-width: {{ block.settings.width_custom }}%;
+    {%- endif %}
   "
   {{ block.shopify_attributes }}
 >
@@ -33,16 +55,64 @@
     display: flex;
     flex-wrap: nowrap;
     width: 100%;
+    box-sizing: border-box;
   }
+
+  .group--width-fit {
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .group--width-fill {
+    width: 100%;
+  }
+
+  .group--width-custom {
+    width: var(--vt-group-width, 100%);
+  }
+
   .group--horizontal {
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: var(--vt-justify, flex-start);
+    align-items: var(--vt-position, center);
+    text-align: var(--vt-text-align, left);
   }
+
   .group--vertical {
     gap: var(--vt-group-gap);
     flex-direction: column;
-    align-items: var(--vt-position);
+    align-items: var(--vt-align-items, flex-start);
+    justify-content: var(--vt-position, flex-start);
+    text-align: var(--vt-text-align, left);
+  }
+
+  .group--vertical.group--align-center {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .group--vertical.group--align-center > * {
+    margin-inline: auto;
+  }
+
+  .group--vertical.group--align-center .vt-paragraph {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .group--vertical.group--align-center .vt-paragraph p {
+    text-align: center;
+  }
+
+  .group--vertical.group--align-right {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .group--vertical.group--align-right > * {
+    margin-inline-start: auto;
+    margin-inline-end: 0;
   }
 {% endstylesheet %}
 

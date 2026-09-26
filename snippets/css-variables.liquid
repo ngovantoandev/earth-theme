@@ -618,9 +618,14 @@
         --font-product-grid--transform: {% if settings.product_grid_capitalize %}uppercase{% else %}none{% endif %};
 
         /* Layout */
-        --vt-page-width: {{ settings.max_page_width | default: '90rem' }};
+        
+        --vt-page-width: {{ settings.max_page_width }}px;        
         --vt-page-margin-desktop: {{ page_margin_desktop | divided_by: 16.0 | round: 4 }}rem;
         --vt-page-margin-mobile: {{ page_margin_mobile | divided_by: 16.0 | round: 4 }}rem;
+
+        --vt-page-spacing-desktop: {{ settings.min_page_margin }}px;
+        --vt-page-spacing-mobile: {{ settings.min_page_margin_mobile }}px;
+
         --vt-page-margin: clamp(var(--vt-page-margin-mobile), {{ page_margin_base | round: 4 }}px + {{ page_margin_vw | round: 4 }}vw, var(--vt-page-margin-desktop));
 
         /* ==========================================================================

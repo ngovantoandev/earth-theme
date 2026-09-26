@@ -1278,7 +1278,11 @@
             "options__10":
             {
                 "label": "Close"
-            }
+            },
+			"options__11":
+			{
+				"label": "Flower"
+			}
         },
         "icon_size_desktop":
         {

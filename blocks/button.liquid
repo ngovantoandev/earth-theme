@@ -38,7 +38,7 @@
 {%- assign animation_type = block.settings.animation_type -%}
 {%- assign vt_anim_classes = '' -%}
 
-{%- unless animation_type == 'none' -%}
+{%- unless animation_type == 'none' or request.visual_preview_mode -%}
   {%- assign vt_anim_classes = 'vt-animate vt-animate--' | append: animation_type -%}
 
   {%- if animation_type == 'slide' or animation_type == 'float' -%}
@@ -336,9 +336,21 @@
     ],
     "presets":
     [
-        {
-            "name": "t:blocks.button.presets.name"
+      {
+        "name": "t:blocks.button.presets.name",
+        "settings": {
+          "button_label": "Shop now",
+          "button_link": "shopify://collections/all",
+          "open_in_new_tab": false,
+          "button_style": "primary",
+          "animation_type": "slide",
+          "animation_direction": "from-bottom",
+          "animation_duration": 1.2,
+          "animation_delay": 0.2,
+          "animation_easing": "ease-out-sine",
+          "animation_blur_intensity": 5
         }
+      }
     ]
 }
 {% endschema %}

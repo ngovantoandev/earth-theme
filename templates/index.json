@@ -73,8 +73,11 @@
                     "settings": {
                         "heading": "<span>Earth-Core Sustainable Fashion</span>",
                         "heading_size": "vt-hero-heading",
-                        "heading_alignment": "text-center",
+                        "heading_alignment": "text-inherit",
                         "heading_tag": "h1",
+                        "heading_width": "fill",
+                        "enable_max_width": true,
+                        "heading_max_width": 1200,
                         "animation_type": "slide",
                         "animation_direction": "from-bottom",
                         "animation_duration": 1,
@@ -88,7 +91,7 @@
                     "settings": {
                         "text": "<p>One tree planted per product - 100K+ Trees Planted</p>",
                         "paragraph_size": "vt-paragraph-large",
-                        "paragraph_alignment": "text-center",
+                        "paragraph_alignment": "text-inherit",
                         "paragraph_max_width": 800,
                         "animation_type": "slide",
                         "animation_direction": "from-bottom",
@@ -173,7 +176,7 @@
                                     "settings": {
                                         "heading": "Our Real Impact",
                                         "heading_size": "vt-heading-h1",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h2",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -204,7 +207,8 @@
                             "settings": {
                                 "text": "<p>Transparency is at the heart of everything we do. Track our environmental and social impact in real-time.</p>",
                                 "paragraph_size": "vt-paragraph-large",
-                                "paragraph_alignment": "text-center",
+                                "paragraph_alignment": "text-inherit",
+                                "enable_max_width": true,
                                 "paragraph_max_width": 680,
                                 "animation_type": "slide",
                                 "animation_direction": "from-bottom",
@@ -257,9 +261,9 @@
                                 "enable_padding_mobile": true,
                                 "padding_vertical_mobile": 30,
                                 "padding_horizontal_mobile": 24,
-                                "width": "fit",
+                                "width": "fill",
                                 "width_custom": 50,
-                                "height": "fit",
+                                "height": "fill",
                                 "height_custom": 100,
                                 "gap": 6,
                                 "enable_gap_mobile": true,
@@ -302,7 +306,7 @@
                                     "settings": {
                                         "heading": "100000+",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h2",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -317,7 +321,7 @@
                                     "settings": {
                                         "text": "<p>Trees Planted</p>",
                                         "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "width_custom": 100,
                                         "enable_max_width": false,
@@ -335,7 +339,7 @@
                                     "settings": {
                                         "text": "<p>80% of 2025 goal reached</p>",
                                         "paragraph_size": "vt-paragraph-small",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "width_custom": 100,
                                         "enable_max_width": false,
@@ -377,9 +381,9 @@
                                 "enable_padding_mobile": true,
                                 "padding_vertical_mobile": 30,
                                 "padding_horizontal_mobile": 24,
-                                "width": "fit",
+                                "width": "fill",
                                 "width_custom": 50,
-                                "height": "fit",
+                                "height": "fill",
                                 "height_custom": 100,
                                 "gap": 6,
                                 "enable_gap_mobile": true,
@@ -422,7 +426,7 @@
                                     "settings": {
                                         "heading": "500T",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h2",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -437,7 +441,7 @@
                                     "settings": {
                                         "text": "<p>CO₂ Saved</p>",
                                         "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "width_custom": 100,
                                         "enable_max_width": false,
@@ -455,7 +459,7 @@
                                     "settings": {
                                         "text": "<p>≠ Equal to 2,500 cars off the road yearly</p>",
                                         "paragraph_size": "vt-paragraph-small",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "width_custom": 100,
                                         "enable_max_width": false,
@@ -497,9 +501,9 @@
                                 "enable_padding_mobile": true,
                                 "padding_vertical_mobile": 30,
                                 "padding_horizontal_mobile": 24,
-                                "width": "fit",
+                                "width": "fill",
                                 "width_custom": 50,
-                                "height": "fit",
+                                "height": "fill",
                                 "height_custom": 100,
                                 "gap": 6,
                                 "enable_gap_mobile": true,
@@ -542,7 +546,7 @@
                                     "settings": {
                                         "heading": "100%",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h2",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -557,7 +561,7 @@
                                     "settings": {
                                         "text": "<p>Fair Trade Certified</p>",
                                         "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "width_custom": 100,
                                         "enable_max_width": false,
@@ -634,9 +638,9 @@
                                 "enable_padding_mobile": true,
                                 "padding_vertical_mobile": 30,
                                 "padding_horizontal_mobile": 24,
-                                "width": "fit",
+                                "width": "fill",
                                 "width_custom": 50,
-                                "height": "fit",
+                                "height": "fill",
                                 "height_custom": 100,
                                 "gap": 6,
                                 "enable_gap_mobile": true,
@@ -679,7 +683,7 @@
                                     "settings": {
                                         "heading": "1,000,159",
                                         "heading_size": "vt-heading-h2",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h2",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -694,7 +698,7 @@
                                     "settings": {
                                         "text": "<p>Liters Water Saved</p>",
                                         "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "width_custom": 100,
                                         "enable_max_width": false,
@@ -712,7 +716,7 @@
                                     "settings": {
                                         "text": "<p>● Live update</p>",
                                         "paragraph_size": "vt-paragraph-small",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "width_custom": 100,
                                         "enable_max_width": false,
@@ -772,7 +776,7 @@
                     "settings": {
                         "heading": "Your Personal Sustainability Impact",
                         "heading_size": "vt-heading-h2",
-                        "heading_alignment": "text-center",
+                        "heading_alignment": "text-inherit",
                         "heading_tag": "h2",
                         "animation_type": "slide",
                         "animation_direction": "from-bottom",
@@ -787,7 +791,7 @@
                     "settings": {
                         "text": "<p>Connect your account to see how you contribute to sustainability goals.</p>",
                         "paragraph_size": "vt-paragraph-large",
-                        "paragraph_alignment": "text-center",
+                        "paragraph_alignment": "text-inherit",
                         "paragraph_max_width": 640,
                         "animation_type": "slide",
                         "animation_direction": "from-bottom",
@@ -826,7 +830,7 @@
                 "heading_color": "#003225",
                 "text_color": "#003225",
                 "padding_top": 0,
-                "padding_bottom": 80,
+                "padding_bottom": 110,
                 "padding_horizontal": 34,
                 "block_gap": 48,
                 "padding_top_mobile": 0,
@@ -892,7 +896,7 @@
                                     "settings": {
                                         "heading": "95%",
                                         "heading_size": "vt-heading-h4",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h4",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -903,11 +907,12 @@
                                     }
                                 },
                                 "card_1_label": {
-                                    "type": "sub-heading",
+                                    "type": "paragraph",
                                     "settings": {
-                                        "sub_heading": "Organic Cotton",
-                                        "subheading_tag": "h4",
-                                        "subheading_alignment": "text-center",
+                                        "text": "<p>Organic Cotton</p>",
+                                        "paragraph_size": "vt-paragraph-small",
+                                        "paragraph_alignment": "text-inherit",
+                                        "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
                                         "animation_duration": 1,
@@ -921,7 +926,7 @@
                                     "settings": {
                                         "text": "<p>of materials used</p>",
                                         "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -975,7 +980,7 @@
                                     "settings": {
                                         "heading": "2,500+",
                                         "heading_size": "vt-heading-h4",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h4",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -986,11 +991,12 @@
                                     }
                                 },
                                 "card_2_label": {
-                                    "type": "sub-heading",
+                                    "type": "paragraph",
                                     "settings": {
-                                        "sub_heading": "Factory Workers",
-                                        "subheading_tag": "h4",
-                                        "subheading_alignment": "text-center",
+                                        "text": "<p>Factory Workers</p>",
+                                        "paragraph_size": "vt-paragraph-small",
+                                        "paragraph_alignment": "text-inherit",
+                                        "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
                                         "animation_duration": 1,
@@ -1004,7 +1010,7 @@
                                     "settings": {
                                         "text": "<p>earning fair wages</p>",
                                         "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -1058,7 +1064,7 @@
                                     "settings": {
                                         "heading": "40%",
                                         "heading_size": "vt-heading-h4",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h4",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -1069,11 +1075,12 @@
                                     }
                                 },
                                 "card_3_label": {
-                                    "type": "sub-heading",
+                                    "type": "paragraph",
                                     "settings": {
-                                        "sub_heading": "Recycled Materials",
-                                        "subheading_tag": "h4",
-                                        "subheading_alignment": "text-center",
+                                        "text": "<p>Recycled Materials</p>",
+                                        "paragraph_size": "vt-paragraph-small",
+                                        "paragraph_alignment": "text-inherit",
+                                        "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
                                         "animation_duration": 1,
@@ -1087,7 +1094,7 @@
                                     "settings": {
                                         "text": "<p>in our products</p>",
                                         "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -1141,7 +1148,7 @@
                                     "settings": {
                                         "heading": "2026",
                                         "heading_size": "vt-heading-h4",
-                                        "heading_alignment": "text-center",
+                                        "heading_alignment": "text-inherit",
                                         "heading_tag": "h4",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -1152,11 +1159,12 @@
                                     }
                                 },
                                 "card_4_label": {
-                                    "type": "sub-heading",
+                                    "type": "paragraph",
                                     "settings": {
-                                        "sub_heading": "Carbon Neutral",
-                                        "subheading_tag": "h4",
-                                        "subheading_alignment": "text-center",
+                                        "text": "<p>Carbon Neutral</p>",
+                                        "paragraph_size": "vt-paragraph-small",
+                                        "paragraph_alignment": "text-inherit",
+                                        "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
                                         "animation_duration": 1,
@@ -1170,7 +1178,7 @@
                                     "settings": {
                                         "text": "<p>achieved</p>",
                                         "paragraph_size": "vt-paragraph-extra-small",
-                                        "paragraph_alignment": "text-center",
+                                        "paragraph_alignment": "text-inherit",
                                         "paragraph_width": "fit",
                                         "animation_type": "slide",
                                         "animation_direction": "from-bottom",
@@ -1200,63 +1208,71 @@
                 "goals_grid"
             ]
         },
-        "text_marquee": {
-            "type": "text-marquee",
-            "settings": {
-                "bg_color": "#F8F9DC",
-                "text_color": "#003225",
-                "speed": 24,
-                "gap_desktop": 32,
-                "gap_mobile": 24,
-                "padding_top": 0,
-                "padding_bottom": 96,
-                "padding_bottom_mobile": 64
-            },
-            "blocks": {
-                "marquee_item_1": {
-                    "type": "heading",
-                    "settings": {
-                        "heading": "SUSTAINABLE FABRICS",
-                        "heading_size": "vt-heading-h5",
-                        "heading_alignment": "text-center",
-                        "heading_tag": "h3"
-                    }
-                },
-                "marquee_item_2": {
-                    "type": "icons",
-                    "settings": {
-                        "icon": "leaf",
-                        "icon_color": "#003225",
-                        "icon_size_desktop": 24,
-                        "icon_size_mobile": 20
-                    }
-                },
-                "marquee_item_3": {
-                    "type": "heading",
-                    "settings": {
-                        "heading": "FEEL GOOD CLOTHES",
-                        "heading_size": "vt-heading-h5",
-                        "heading_alignment": "text-center",
-                        "heading_tag": "h3"
-                    }
-                },
-                "marquee_item_4": {
-                    "type": "icons",
-                    "settings": {
-                        "icon": "leaf",
-                        "icon_color": "#003225",
-                        "icon_size_desktop": 24,
-                        "icon_size_mobile": 20
-                    }
-                }
-            },
-            "block_order": [
-                "marquee_item_1",
-                "marquee_item_2",
-                "marquee_item_3",
-                "marquee_item_4"
-            ]
-        }
+        // "featured-collections":{
+        
+        // }
+
+        // "text_marquee": {
+        //     "type": "text-marquee",
+        //     "settings": {
+        //         "bg_color": "#F8F9DC",
+        //         "text_color": "#003225",
+        //         "speed": 3,
+        //         "padding_top": 0,
+        //         "padding_bottom": 96,
+        //         "padding_horizontal": 0,
+        //         "gap_desktop": 32,
+        //         "padding_top_mobile": 0,
+        //         "padding_bottom_mobile": 64,
+        //         "padding_horizontal_mobile": 0,
+        //         "gap_mobile": 24,
+        //         "full_width": true
+        //     },
+        //     "blocks": {
+        //         "marquee_item_1": {
+        //             "type": "heading",
+        //             "settings": {
+        //                 "heading": "SUSTAINABLE FABRICS",
+        //                 "heading_size": "vt-heading-h5",
+        //                 "heading_alignment": "text-inherit",
+        //                 "heading_tag": "h3"
+        //             }
+        //         },
+        //         "marquee_item_2": {
+        //             "type": "icons",
+        //             "settings": {
+        //                 "icon": "flower",
+        //                 "icon_color": "#71CC3B",
+        //                 "icon_size_desktop": 28,
+        //                 "icon_size_mobile": 22
+        //             }
+        //         },
+        //         "marquee_item_3": {
+        //             "type": "heading",
+        //             "settings": {
+        //                 "heading": "FEEL GOOD CLOTHES",
+        //                 "heading_size": "vt-heading-h5",
+        //                 "heading_alignment": "text-inherit",
+        //                 "heading_tag": "h3"
+        //             }
+        //         },
+        //         "marquee_item_4": {
+        //             "type": "icons",
+        //             "settings": {
+        //                 "icon": "flower",
+        //                 "icon_color": "#71CC3B",
+        //                 "icon_size_desktop": 28,
+        //                 "icon_size_mobile": 22
+        //             }
+        //         }
+        //     },
+        //     "block_order": [
+        //         "marquee_item_1",
+        //         "marquee_item_2",
+        //         "marquee_item_3",
+        //         "marquee_item_4"
+        //     ]
+        // }
     },
     "order": [
         "hero_slider_section",
@@ -1264,6 +1280,7 @@
         "impact_metrics_section",
         "personal_sustainability_impact",
         "sustainability_goals",
-        "text_marquee"
+        // "featured_collections"
+        // "text_marquee"
     ]
 }

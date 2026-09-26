@@ -5,14 +5,14 @@
     --bg-color: {{ section.settings.bg_color | default: 'var(--color-white, #F8F9DC)' }};
     --heading-color: {{ section.settings.heading_color | default: 'var(--color-black, #003225)' }};
     --subtitle-color: {{ section.settings.subtitle_color | default: 'var(--color-primary, #224E09)' }};
-    --padding-top: {{ section.settings.padding_top | default: 80 }}px;
-    --padding-bottom: {{ section.settings.padding_bottom | default: 80 }}px;
-    --padding-horizontal: {{ section.settings.padding_horizontal | default: 34 }}px;
-    --block-gap: {{ section.settings.block_gap | default: section.settings.cards_margin_top | default: 64 }}px;
-    --padding-top-mobile: {{ section.settings.padding_top_mobile | default: 48 }}px;
-    --padding-bottom-mobile: {{ section.settings.padding_bottom_mobile | default: 48 }}px;
-    --padding-horizontal-mobile: {{ section.settings.padding_horizontal_mobile | default: 20 }}px;
-    --block-gap-mobile: {{ section.settings.block_gap_mobile | default: section.settings.cards_margin_top_mobile | default: 40 }}px;
+    --padding-top: {% if section.settings.padding_top != blank %}{{ section.settings.padding_top }}{% else %}80{% endif %}px;
+    --padding-bottom: {% if section.settings.padding_bottom != blank %}{{ section.settings.padding_bottom }}{% else %}80{% endif %}px;
+    --padding-horizontal: {% if section.settings.padding_horizontal != blank %}{{ section.settings.padding_horizontal }}{% else %}34{% endif %}px;
+    --block-gap: {% if section.settings.block_gap != blank %}{{ section.settings.block_gap }}{% elsif section.settings.cards_margin_top != blank %}{{ section.settings.cards_margin_top }}{% else %}64{% endif %}px;
+    --padding-top-mobile: {% if section.settings.padding_top_mobile != blank %}{{ section.settings.padding_top_mobile }}{% else %}48{% endif %}px;
+    --padding-bottom-mobile: {% if section.settings.padding_bottom_mobile != blank %}{{ section.settings.padding_bottom_mobile }}{% else %}48{% endif %}px;
+    --padding-horizontal-mobile: {% if section.settings.padding_horizontal_mobile != blank %}{{ section.settings.padding_horizontal_mobile }}{% else %}20{% endif %}px;
+    --block-gap-mobile: {% if section.settings.block_gap_mobile != blank %}{{ section.settings.block_gap_mobile }}{% elsif section.settings.cards_margin_top_mobile != blank %}{{ section.settings.cards_margin_top_mobile }}{% else %}40{% endif %}px;
   "
 >
   <div class="vt-impact-metrics__container">
@@ -41,6 +41,11 @@
     padding-left: var(--padding-horizontal, 34px);
     padding-right: var(--padding-horizontal, 34px);
     gap: var(--block-gap, 64px);
+  }
+
+  .vt-impact-metrics__container > * {
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   .vt-impact-metrics:not(.full-width) .vt-impact-metrics__container {
@@ -264,7 +269,7 @@
                   "settings": {
                     "heading": "Our Real Impact",
                     "heading_size": "vt-heading-h1",
-                    "heading_alignment": "text-center",
+                    "heading_alignment": "text-inherit",
                     "heading_tag": "h2",
                     "animation_type": "slide",
                     "animation_direction": "from-bottom",
@@ -290,7 +295,8 @@
               "settings": {
                 "text": "<p>Transparency is at the heart of everything we do. Track our environmental and social impact in real-time.</p>",
                 "paragraph_size": "vt-paragraph-large",
-                "paragraph_alignment": "text-center",
+                "paragraph_alignment": "text-inherit",
+                "enable_max_width": true,
                 "paragraph_max_width": 680,
                 "animation_type": "slide",
                 "animation_direction": "from-bottom",

@@ -1,5 +1,8 @@
 {% doc %}
   Renders a heading block with optional scroll-in animation.
+
+  @example
+  {% content_for 'block', type: 'heading', id: 'heading' %}
 {% enddoc %}
 
 {%- if block.settings.heading != blank -%}
@@ -64,7 +67,20 @@
     {%- endif -%}
   {%- endunless -%}
 
-  <div class="vt-heading-wrapper {{ block.settings.heading_alignment }}">
+  {%- comment -%} Width / max-width: built with assign + append, no capture needed {%- endcomment -%}
+  {%- assign vt_wrapper_class = 'vt-heading-wrapper '
+    | append: block.settings.heading_alignment
+    | append: ' vt-heading-wrapper--width-'
+    | append: block.settings.heading_width
+  -%}
+
+  <div
+    class="{{ vt_wrapper_class }}"
+    style="
+      {%- if block.settings.heading_width == 'custom' %}--vt-heading-width: {{ block.settings.width_custom }}%;{% endif -%}
+      {%- if block.settings.enable_max_width %}--vt-heading-max-width: {% render 'fluid-clamp', min_px: block.settings.heading_max_width, max_px: block.settings.heading_max_width %};{% endif -%}
+    "
+  >
     {%- case heading_tag -%}
       {%- when 'h1' -%}
         <h1
@@ -136,28 +152,56 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: var(--vt-heading-max-width, none);
+    contain: layout style;
+  }
+  .vt-heading-wrapper.text-left {    
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .vt-heading-wrapper.text-center {    
+    text-align: center;
+    justify-content: center;
+  }
+  .vt-heading-wrapper.text-right {    
+    text-align: right;
+    justify-content: flex-end;
+  }
+  .vt-heading-wrapper.text-inherit {    
+    text-align: inherit;
+    justify-content: inherit;
   }
 
-  .vt-heading-wrapper.text-left {
-    align-items: flex-start;
-    text-align: left;
+  /* Width variants */
+  .vt-heading-wrapper--width-fit {
+    width: fit-content;
   }
-  .vt-heading-wrapper.text-center {
-    align-items: center;
-    text-align: center;
+  .vt-heading-wrapper--width-fill {
+    width: 100%;
   }
-  .vt-heading-wrapper.text-right {
-    align-items: flex-end;
-    text-align: right;
+  .vt-heading-wrapper--width-max-content {
+    width: max-content;
+    max-width: 100%;
+  }
+  .vt-heading-wrapper--width-min-content {
+    width: min-content;
+  }
+  .vt-heading-wrapper--width-custom {
+    width: var(--vt-heading-width, auto);
+  }
+
+  .vt-heading-wrapper:not(.vt-heading-wrapper--width-fill).text-center {
+    margin-inline: auto;
+  }
+  .vt-heading-wrapper:not(.vt-heading-wrapper--width-fill).text-right {
+    margin-inline-start: auto;
+    margin-inline-end: 0;
   }
 
   .vt-heading {
     display: inline-flex;
-    align-items: center;
-    justify-content: inherit;
-    gap: 12px;
-    margin: 0;
   }
+  
 {% endstylesheet %}
 
 {% schema %}
@@ -170,6 +214,26 @@
       "id": "heading",
       "default": "t:blocks.heading.settings.heading.default",
       "label": "t:blocks.heading.settings.heading.label"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "options": [
+        { "value": "text-left", "label": "t:blocks.heading.settings.heading_alignment.options__1.label" },
+        { "value": "text-center", "label": "t:blocks.heading.settings.heading_alignment.options__2.label" },
+        { "value": "text-right", "label": "t:blocks.heading.settings.heading_alignment.options__3.label" },
+        { "value": "text-inherit", "label": "Inherit" }
+      ],
+      "default": "text-inherit",
+      "label": "t:blocks.heading.settings.heading_alignment.label"
+    },
+    {
+      "type": "header",
+      "content": "Size"
     },
     {
       "type": "select",
@@ -185,18 +249,7 @@
       ],
       "default": "vt-heading-h3",
       "label": "t:blocks.heading.settings.heading_size.label"
-    },
-    {
-      "type": "select",
-      "id": "heading_alignment",
-      "options": [
-        { "value": "text-left", "label": "t:blocks.heading.settings.heading_alignment.options__1.label" },
-        { "value": "text-center", "label": "t:blocks.heading.settings.heading_alignment.options__2.label" },
-        { "value": "text-right", "label": "t:blocks.heading.settings.heading_alignment.options__3.label" }
-      ],
-      "default": "text-center",
-      "label": "t:blocks.heading.settings.heading_alignment.label"
-    },
+    },    
     {
       "type": "select",
       "id": "heading_tag",
@@ -211,6 +264,47 @@
       "default": "h2",
       "label": "t:blocks.heading.settings.heading_tag.label",
       "info": "t:blocks.heading.settings.heading_tag.info"
+    },
+    {
+      "type": "select",
+      "id": "heading_width",
+      "label": "Width",
+      "options": [
+          { "value": "fit", "label": "Fit" },
+          { "value": "fill", "label": "Fill" },
+          { "value": "max-content", "label": "Max content" },
+          { "value": "min-content", "label": "Min content" },
+          { "value": "custom", "label": "Custom" }
+      ],
+      "default": "fit"
+    },
+    {
+        "type": "range",
+        "id": "width_custom",
+        "label": "Custom width",
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "unit": "%",
+        "default": 50,
+        "visible_if": "{{ block.settings.heading_width == 'custom' }}"
+    },
+    {
+        "type": "checkbox",
+        "id": "enable_max_width",
+        "label": "Width limit",            
+        "default": false
+    },
+    {
+        "type": "range",
+        "id": "heading_max_width",
+        "min": 100,
+        "max": 1200,
+        "step": 20,
+        "unit": "px",
+        "default": 600,
+        "label": "Max width",
+        "visible_if": "{{ block.settings.enable_max_width == true }}"
     },
     {
       "type": "header",
@@ -297,10 +391,14 @@
       "name": "t:blocks.heading.presets.name",
       "settings":{
         "heading": "Heading",
-        "heading_size": "vt-heading-h3",
-        "heading_alignment": "text-left",
-        "heading_tag": "h3",
-        "animation_type": "slide",
+        "heading_size": "vt-heading-h2",
+        "heading_alignment": "text-inherit",        
+        "heading_tag": "h2",
+        "heading_width": "fit",
+        "width_custom": 100,
+        "enable_max_width": false,
+        "heading_max_width": 600,
+        "animation_type": "none",
         "animation_direction": "from-bottom",
         "animation_duration": 1.2,
         "animation_delay": 0.2,

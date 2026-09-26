@@ -1,41 +1,80 @@
-<section class="earth-marquee earth-marquee-{{ section.id }} full-width" style="--marquee-speed: {{ section.settings.speed }}s; --marquee-bg: {{ section.settings.bg_color }}; --marquee-color: {{ section.settings.text_color }};">
-  <div class="earth-marquee__track">
-    {%- for i in (1..4) -%}
-      <div class="earth-marquee__group" {% if i > 1 %}aria-hidden="true"{% endif %}>
-        {%- if section.blocks.size > 0 -%}
-          {%- for block in section.blocks -%}
-            <span class="earth-marquee__item" {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}>
-              <span class="earth-marquee__text">{{ block.settings.text | escape }}</span>
-              <img 
-                src="{{ 'icon-flower.svg' | asset_url }}" 
-                class="earth-marquee__flower" 
-                alt="flower" 
-                width="24" 
-                height="22" 
-                loading="lazy"
-              >
-            </span>
-          {%- endfor -%}
-        {%- else -%}
-          <span class="earth-marquee__item">
-            <span class="earth-marquee__text">SUSTAINABLE FABRICS</span>
-            <img src="{{ 'icon-flower.svg' | asset_url }}" class="earth-marquee__flower" alt="flower" width="24" height="22" loading="lazy">
-          </span>
-          <span class="earth-marquee__item">
-            <span class="earth-marquee__text">FEEL GOOD CLOTHES</span>
-            <img src="{{ 'icon-flower.svg' | asset_url }}" class="earth-marquee__flower" alt="flower" width="24" height="22" loading="lazy">
-          </span>
-          <span class="earth-marquee__item">
-            <span class="earth-marquee__text">SUSTAINABLE FABRICS</span>
-            <img src="{{ 'icon-flower.svg' | asset_url }}" class="earth-marquee__flower" alt="flower" width="24" height="22" loading="lazy">
-          </span>
-          <span class="earth-marquee__item">
-            <span class="earth-marquee__text">FEEL GOOD CLOTHES</span>
-            <img src="{{ 'icon-flower.svg' | asset_url }}" class="earth-marquee__flower" alt="flower" width="24" height="22" loading="lazy">
-          </span>
-        {%- endif -%}
-      </div>
-    {%- endfor -%}
+{%- liquid
+  assign speed_level = section.settings.speed | default: 3 | plus: 0
+  case speed_level
+    when 5
+      assign speed_duration = 12
+    when 4
+      assign speed_duration = 18
+    when 3
+      assign speed_duration = 24
+    when 2
+      assign speed_duration = 34
+    when 1
+      assign speed_duration = 48
+    else
+      if speed_level > 5
+        assign speed_duration = speed_level
+      else
+        assign speed_duration = 24
+      endif
+  endcase
+
+  assign gap_desktop = section.settings.gap_desktop | default: 32
+  assign pt = section.settings.padding_top | default: 0
+  assign pb = section.settings.padding_bottom | default: 96
+  assign ph = section.settings.padding_horizontal | default: 0
+
+  assign gap_mobile = section.settings.gap_mobile | default: 24
+  assign pt_mob = section.settings.padding_top_mobile | default: 0
+  assign pb_mob = section.settings.padding_bottom_mobile | default: 64
+  assign ph_mob = section.settings.padding_horizontal_mobile | default: 0
+-%}
+
+{%- capture marquee_blocks -%}
+  {% content_for 'blocks' %}
+{%- endcapture -%}
+
+{%- liquid
+  if marquee_blocks == blank or section.blocks.size == 0
+    capture marquee_blocks
+      echo '<div class="vt-heading-wrapper text-center"><h3 class="vt-heading vt-heading-h5">SUSTAINABLE FABRICS</h3></div>'
+      echo '<div class="vt-icon vt-icon--flower" style="--vt-icon-color: #71CC3B; --vt-icon-size: 28px;"><span class="vt-icon__inner">'
+      render 'icons', icon: 'flower'
+      echo '</span></div>'
+      echo '<div class="vt-heading-wrapper text-center"><h3 class="vt-heading vt-heading-h5">FEEL GOOD CLOTHES</h3></div>'
+      echo '<div class="vt-icon vt-icon--flower" style="--vt-icon-color: #71CC3B; --vt-icon-size: 28px;"><span class="vt-icon__inner">'
+      render 'icons', icon: 'flower'
+      echo '</span></div>'
+    endcapture
+  endif
+-%}
+
+<section
+  class="earth-marquee earth-marquee-{{ section.id }}{% if section.settings.full_width %} full-width{% endif %}"
+  id="earthMarquee-{{ section.id }}"
+  style="
+    --marquee-duration: {{ speed_duration }}s;
+    --marquee-direction: {% if section.settings.direction == 'right' %}reverse{% else %}normal{% endif %};
+    --marquee-bg: {{ section.settings.bg_color | default: 'var(--color-white, #F8F9DC)' }};
+    --marquee-color: {{ section.settings.text_color | default: 'var(--color-black, #003225)' }};
+    --marquee-gap: {{ gap_desktop }}px;
+    --marquee-gap-mobile: {{ gap_mobile }}px;
+    --marquee-padding-top: {{ pt }}px;
+    --marquee-padding-bottom: {{ pb }}px;
+    --marquee-padding-horizontal: {{ ph }}px;
+    --marquee-padding-top-mobile: {{ pt_mob }}px;
+    --marquee-padding-bottom-mobile: {{ pb_mob }}px;
+    --marquee-padding-horizontal-mobile: {{ ph_mob }}px;
+  "
+>
+  <div class="earth-marquee__container">
+    <div class="earth-marquee__track">
+      {%- for i in (1..6) -%}
+        <div class="earth-marquee__group" {% if i > 1 %}aria-hidden="true"{% endif %}>
+          {{ marquee_blocks }}
+        </div>
+      {%- endfor -%}
+    </div>
   </div>
 </section>
 
@@ -45,25 +84,43 @@
     overflow: hidden;
     width: 100%;
     user-select: none;
-    background-color: var(--marquee-bg, var(--color-white, #F8F9DC));
-    padding: 0 0 96px 0;
-    margin-top: -1px;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
+    background-color: var(--marquee-bg, #F8F9DC);
+    color: var(--marquee-color, #003225);
+    padding-top: var(--marquee-padding-top, 0px);
+    padding-bottom: var(--marquee-padding-bottom, 96px);
+    padding-left: var(--marquee-padding-horizontal, 0px);
+    padding-right: var(--marquee-padding-horizontal, 0px);
+    margin: 0;
     box-sizing: border-box;
     display: flex;
     align-items: center;
+  }
+
+  .earth-marquee__container {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .earth-marquee:not(.full-width) .earth-marquee__container {
+    max-width: 1200px;
+  }
+
+  .earth-marquee.full-width .earth-marquee__container {
+    max-width: 100%;
   }
 
   .earth-marquee__track {
     display: flex;
     width: max-content;
     will-change: transform;
-    animation: earthMarqueeScroll var(--marquee-speed, 22s) linear infinite;
+    animation: earthMarqueeScroll var(--marquee-duration, 24s) linear infinite;
+    animation-direction: var(--marquee-direction, normal);
   }
 
-  .earth-marquee__track:hover {
+  .earth-marquee__track:hover,
+  .earth-marquee:hover .earth-marquee__track {
     animation-play-state: paused;
     cursor: default;
   }
@@ -72,34 +129,92 @@
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    gap: 32px;
-    padding-right: 32px;
+    gap: var(--marquee-gap, 32px);
+    padding-right: var(--marquee-gap, 32px);
   }
 
-  .earth-marquee__item {
-    display: inline-flex;
-    align-items: center;
-    gap: 32px;
-    white-space: nowrap;
+  /* Child block wrappers align horizontally in single line */
+  .earth-marquee__group > * {
+    flex-shrink: 0 !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
   }
 
-  .earth-marquee__text {
-    color: var(--marquee-color, var(--color-black, #003225));
-    font-size: 22px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: -0.02em;
-    line-height: 1;
+  /* Block 1: heading.liquid */
+  .earth-marquee .vt-heading-wrapper {
+    width: auto !important;
+    max-width: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .earth-marquee .vt-heading {
+    color: var(--marquee-color, #003225) !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    line-height: 1 !important;
     font-family: inherit;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    font-size: 22px;
   }
 
-  .earth-marquee__flower {
-    width: 24px;
-    height: auto;
-    object-fit: contain;
-    display: inline-block;
-    vertical-align: middle;
-    flex-shrink: 0;
+  /* Block 2: icons.liquid */
+  .earth-marquee .vt-icon {
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    color: var(--vt-icon-color, #71CC3B) !important;
+  }
+
+  .earth-marquee .vt-icon svg {
+    display: block !important;
+    width: var(--vt-icon-size, 28px) !important;
+    height: var(--vt-icon-size, 26px) !important;
+    min-width: 20px !important;
+    min-height: 20px !important;
+    object-fit: contain !important;
+    fill: currentColor !important;
+  }
+
+  .earth-marquee .vt-icon svg path {
+    fill: currentColor !important;
+  }
+
+  /* Block 3: image.liquid */
+  .earth-marquee .vt-image {
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  .earth-marquee .vt-image img {
+    width: auto !important;
+    height: auto !important;
+    max-height: 36px !important;
+    object-fit: contain !important;
+    display: inline-block !important;
+  }
+
+  /* Disable entrance transitions inside continuous marquee track */
+  .earth-marquee .vt-animate {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    animation: none !important;
   }
 
   @keyframes earthMarqueeScroll {
@@ -113,27 +228,41 @@
 
   @media (max-width: 768px) {
     .earth-marquee {
-      padding: 0 0 64px 0;
+      padding-top: var(--marquee-padding-top-mobile, 0px);
+      padding-bottom: var(--marquee-padding-bottom-mobile, 64px);
+      padding-left: var(--marquee-padding-horizontal-mobile, 0px);
+      padding-right: var(--marquee-padding-horizontal-mobile, 0px);
     }
-    .earth-marquee__text {
-      font-size: 22px;
+
+    .earth-marquee__group {
+      gap: var(--marquee-gap-mobile, 24px);
+      padding-right: var(--marquee-gap-mobile, 24px);
     }
-    .earth-marquee__flower {
-      width: 22px;
+
+    .earth-marquee .vt-heading {
+      font-size: 18px !important;
     }
-    .earth-marquee__group,
-    .earth-marquee__item {
-      gap: 24px;
-      padding-right: 24px;
+
+    .earth-marquee .vt-image img {
+      max-height: 24px !important;
     }
   }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "Text Marquee",
+  "name": "Text marquee",
   "class": "earth-marquee-section",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "icons" },
+    { "type": "image" }
+  ],
   "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
     {
       "type": "color",
       "id": "bg_color",
@@ -147,56 +276,165 @@
       "default": "#003225"
     },
     {
+      "type": "header",
+      "content": "Motion"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
       "type": "range",
       "id": "speed",
-      "min": 10,
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Speed",
+      "default": 3
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Side padding (left & right)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "min": 12,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between items",
+      "default": 32
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Side padding (left & right)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 8,
       "max": 60,
       "step": 2,
-      "unit": "s",
-      "label": "Scroll Speed",
+      "unit": "px",
+      "label": "Gap between items",
       "default": 24
-    }
-  ],
-  "blocks": [
+    },
     {
-      "type": "marquee_text",
-      "name": "Marquee Item",
-      "settings": [
-        {
-          "type": "text",
-          "id": "text",
-          "label": "Text",
-          "default": "SUSTAINABLE FABRICS"
-        }
-      ]
+      "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": true
     }
   ],
   "presets": [
     {
-      "name": "Text Marquee",
+      "name": "Text marquee",
       "blocks": [
         {
-          "type": "marquee_text",
+          "type": "heading",
           "settings": {
-            "text": "SUSTAINABLE FABRICS"
+            "heading": "SUSTAINABLE FABRICS",
+            "heading_size": "vt-heading-h5",
+            "heading_alignment": "text-center",
+            "heading_tag": "h3"
           }
         },
         {
-          "type": "marquee_text",
+          "type": "icons",
           "settings": {
-            "text": "FEEL GOOD CLOTHES"
+            "icon": "flower",
+            "icon_color": "#71CC3B",
+            "icon_size_desktop": 28,
+            "icon_size_mobile": 22
           }
         },
         {
-          "type": "marquee_text",
+          "type": "heading",
           "settings": {
-            "text": "SUSTAINABLE FABRICS"
+            "heading": "FEEL GOOD CLOTHES",
+            "heading_size": "vt-heading-h5",
+            "heading_alignment": "text-center",
+            "heading_tag": "h3"
           }
         },
         {
-          "type": "marquee_text",
+          "type": "icons",
           "settings": {
-            "text": "FEEL GOOD CLOTHES"
+            "icon": "flower",
+            "icon_color": "#71CC3B",
+            "icon_size_desktop": 28,
+            "icon_size_mobile": 22
           }
         }
       ]

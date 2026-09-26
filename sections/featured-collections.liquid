@@ -1,36 +1,83 @@
-{% comment %}
+{% comment %} {% comment %}
   Featured Eco Essentials - Category Showcase
   Matching exact design with 2x2 cards, badges, numbers, titles, and reusable arrow buttons
 {% endcomment %}
 
-<section class="earth-featured-essentials full-width" id="earthFeaturedEssentials-{{ section.id }}">
+<section
+  class="earth-featured-essentials full-width{% if section.settings.full_width != false %} earth-featured-essentials--full{% else %} earth-featured-essentials--contained{% endif %} earth-featured-essentials--{{ section.settings.layout_style | default: 'asymmetric' }} earth-featured-essentials--hover-{{ section.settings.image_hover_effect | default: 'zoom' }}"
+  id="earthFeaturedEssentials-{{ section.id }}"
+  style="
+    --section-bg: {{ section.settings.bg_color | default: '#EBF7BE' }};
+    --section-text: {{ section.settings.text_color | default: '#003225' }};
+    --section-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --section-pb: {{ section.settings.padding_bottom | default: 96 }}px;
+    --section-m-pt: {{ section.settings.mobile_padding_top | default: 48 }}px;
+    --section-m-pb: {{ section.settings.mobile_padding_bottom | default: 56 }}px;
+    --card-radius: {{ section.settings.card_border_radius | default: 0 }}px;
+    --card-height: {{ section.settings.card_height | default: 530 }}px;
+    --card-overlay-color: {{ section.settings.card_overlay_color | default: '#002017' }};
+    --card-overlay-opacity: {{ section.settings.card_overlay_opacity | default: 88 | divided_by: 100.0 }};
+  "
+>
   <div class="earth-essentials__container">
     <!-- 1. Section Header -->
-    <div class="earth-essentials__header">
-      <div class="earth-essentials__header-left">
-        <h2 class="earth-essentials__main-title">
-          <img src="{{ 'leaf-2.svg' | asset_url }}" width="36" height="36" alt="" class="earth-essentials__leaf-icon" loading="lazy">
-          <span>{{ section.settings.title | default: 'Featured Eco Essentials' }}</span>
-        </h2>
-      </div>
-
-      <div class="earth-essentials__header-right">
-        <p class="earth-essentials__header-desc">
-          {{ section.settings.subtitle | default: 'Where fashion meets purpose: recycled fabrics, reduced impact, endless wear.' }}
-        </p>
-        <div class="earth-essentials__header-cta">
-          {%- assign header_btn_text = section.settings.header_button_text | default: 'SHOP COLLECTION' -%}
-          {%- assign header_btn_url = section.settings.header_button_link | default: routes.all_products_collection_url -%}
-          {% render 'btn-arrow',
-            text: header_btn_text,
-            url: header_btn_url,
-            theme: 'dark'
-          %}
-        </div>
-      </div>
+    {%- assign header_layout = section.settings.header_layout | default: 'split_btn' -%}
+    {%- assign show_leaf_val = section.settings.show_leaf_icons -%}
+    {%- if show_leaf_val == nil -%}{%- assign show_leaf_val = section.settings.show_leaf_icon -%}{%- endif -%}
+    {%- assign btn_text_val = section.settings.header_btn_text -%}
+    {%- if btn_text_val == blank -%}{%- assign btn_text_val = section.settings.header_button_text -%}{%- endif -%}
+    {%- assign btn_url_val = section.settings.header_btn_url -%}
+    {%- if btn_url_val == blank -%}{%- assign btn_url_val = section.settings.header_button_link | default: routes.all_products_collection_url -%}{%- endif -%}
+    {%- assign btn_type_val = section.settings.header_btn_type -%}
+    {%- if btn_type_val == blank -%}{%- assign btn_type_val = section.settings.header_button_type | default: 'arrow' -%}{%- endif -%}
+    {%- assign btn_theme_val = section.settings.header_btn_theme -%}
+    {%- if btn_theme_val == blank -%}{%- assign btn_theme_val = section.settings.header_arrow_theme | default: 'dark' -%}{%- endif -%}
+    {%- assign btn_color_val = section.settings.header_btn_color -%}
+    {%- if btn_color_val == blank -%}{%- assign btn_color_val = section.settings.header_arrow_text_color -%}{%- endif -%}
+    {%- assign show_btn_val = section.settings.show_header_btn -%}
+    {%- if show_btn_val == nil -%}
+      {%- if btn_text_val != blank -%}
+        {%- assign show_btn_val = true -%}
+      {%- endif -%}
+    {%- endif -%}
+    <div class="earth-essentials__header-container">
+      {% render 'title-styling',
+        layout: header_layout,
+        title: section.settings.title,
+        title_color: section.settings.title_color,
+        title_size: section.settings.title_size_desktop,
+        title_size_desktop: section.settings.title_size_desktop,
+        title_size_mobile: section.settings.title_size_mobile,
+        eyebrow: section.settings.eyebrow,
+        show_eyebrow_icon: section.settings.show_eyebrow_icon,
+        eyebrow_color: section.settings.eyebrow_color,
+        eyebrow_size_desktop: section.settings.eyebrow_size_desktop,
+        eyebrow_size_mobile: section.settings.eyebrow_size_mobile,
+        subtitle: section.settings.subtitle,
+        subtitle_color: section.settings.subtitle_color,
+        subtitle_size_desktop: section.settings.subtitle_size_desktop,
+        subtitle_size_mobile: section.settings.subtitle_size_mobile,
+        show_leaf: show_leaf_val,
+        leaf_position: section.settings.leaf_position,
+        leaf_color: section.settings.leaf_color,
+        leaf_size: section.settings.leaf_size,
+        leaf_gap: section.settings.leaf_gap,
+        split_ratio: section.settings.header_split_ratio,
+        show_btn: show_btn_val,
+        btn_text: btn_text_val,
+        btn_url: btn_url_val,
+        btn_type: btn_type_val,
+        btn_theme: btn_theme_val,
+        btn_color: btn_color_val,
+        btn_bg_color: section.settings.header_btn_bg_color,
+        btn_text_color: section.settings.header_btn_text_color,
+        btn_arrow_circle_bg: section.settings.header_btn_circle_bg,
+        btn_arrow_circle_color: section.settings.header_btn_circle_color,
+        text_color: section.settings.text_color
+      %}
     </div>
 
-    <!-- 2. 2x2 Cards Grid -->
+    <!-- 2. Cards Grid -->
     <div class="earth-essentials__grid">
       {%- if section.blocks.size > 0 -%}
         {%- for block in section.blocks -%}
@@ -65,33 +112,80 @@
             </div>
 
             <!-- Top Left Floating Badges -->
-            <div class="earth-essentials__badges">
-              {%- if block.settings.badge_1 != blank -%}
-                <span class="earth-essentials__badge">
-                  <img src="{{ 'Drop.svg' | asset_url }}" width="12" height="14" alt="" class="earth-essentials__badge-icon">
-                  <span>{{ block.settings.badge_1 }}</span>
-                </span>
-              {%- endif -%}
-              {%- if block.settings.badge_2 != blank -%}
-                <span class="earth-essentials__badge">
-                  <img src="{{ 'leaf-2.svg' | asset_url }}" width="12" height="12" alt="" class="earth-essentials__badge-icon">
-                  <span>{{ block.settings.badge_2 }}</span>
-                </span>
-              {%- endif -%}
-            </div>
+            {%- if section.settings.show_badges -%}
+              <div class="earth-essentials__badges">
+                {%- if block.settings.badge_1 != blank -%}
+                  <span class="earth-essentials__badge">
+                    {%- assign icon_1 = block.settings.badge_1_icon | default: 'drop' -%}
+                    {%- if icon_1 != 'none' -%}
+                      <span class="earth-essentials__badge-icon" aria-hidden="true">
+                        {%- case icon_1 -%}
+                          {%- when 'drop' -%}{{ 'icon-Drop.svg' | inline_asset_content }}
+                          {%- when 'leaf' -%}{{ 'icon-Carbon.svg' | inline_asset_content }}
+                          {%- else -%}{{ 'icon-Drop.svg' | inline_asset_content }}
+                        {%- endcase -%}
+                      </span>
+                    {%- endif -%}
+                    <span>{{ block.settings.badge_1 }}</span>
+                  </span>
+                {%- endif -%}
+                {%- if block.settings.badge_2 != blank -%}
+                  <span class="earth-essentials__badge">
+                    {%- assign icon_2 = block.settings.badge_2_icon | default: 'leaf' -%}
+                    {%- if icon_2 != 'none' -%}
+                      <span class="earth-essentials__badge-icon" aria-hidden="true">
+                        {%- case icon_2 -%}
+                          {%- when 'drop' -%}{{ 'icon-Drop.svg' | inline_asset_content }}
+                          {%- when 'leaf' -%}{{ 'icon-Carbon.svg' | inline_asset_content }}
+                          {%- else -%}{{ 'icon-Carbon.svg' | inline_asset_content }}
+                        {%- endcase -%}
+                      </span>
+                    {%- endif -%}
+                    <span>{{ block.settings.badge_2 }}</span>
+                  </span>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
 
             <!-- Bottom Content -->
             <div class="earth-essentials__card-body">
-              <span class="earth-essentials__card-number">{{ card_num }}</span>
+              {%- if section.settings.show_card_numbers -%}
+                <span class="earth-essentials__card-number">{{ card_num }}</span>
+              {%- endif -%}
               <h3 class="earth-essentials__card-title">{{ card_title }}</h3>
-              <p class="earth-essentials__card-subtitle">{{ card_subtitle }}</p>
-              <div class="earth-essentials__card-cta">
-                {% render 'btn-arrow',
-                  text: card_btn_text,
-                  url: card_url,
-                  theme: 'light'
-                %}
-              </div>
+              {%- if card_subtitle != blank -%}
+                <p class="earth-essentials__card-subtitle">{{ card_subtitle }}</p>
+              {%- endif -%}
+              {%- assign card_btn_type = block.settings.button_type | default: 'arrow' -%}
+              {%- if card_btn_type != 'none' and card_btn_text != blank -%}
+                <div class="earth-essentials__card-cta">
+                  {%- if card_btn_type == 'arrow' -%}
+                    {%- assign card_arrow_theme = block.settings.arrow_theme | default: 'light' -%}
+                    {% render 'btn-arrow',
+                      text: card_btn_text,
+                      url: card_url,
+                      theme: card_arrow_theme,
+                      color: block.settings.button_color,
+                      circle_bg: block.settings.button_circle_bg,
+                      circle_color: block.settings.button_circle_icon,
+                      font_size: block.settings.font_size,
+                      padding_vertical: block.settings.padding_vertical,
+                      padding_horizontal: block.settings.padding_horizontal
+                    %}
+                  {%- else -%}
+                    {% render 'btn-action',
+                      text: card_btn_text,
+                      url: card_url,
+                      variant: card_btn_type,
+                      custom_bg: block.settings.button_circle_bg,
+                      custom_color: block.settings.button_color,
+                      font_size: block.settings.font_size,
+                      padding_vertical: block.settings.padding_vertical,
+                      padding_horizontal: block.settings.padding_horizontal
+                    %}
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
             </div>
           </div>
         {%- endfor -%}
@@ -103,18 +197,22 @@
             <img src="{{ 'cat-organic.jpg' | asset_url }}" width="800" height="600" alt="Organic Essentials" class="earth-essentials__image" loading="lazy">
             <div class="earth-essentials__overlay"></div>
           </div>
-          <div class="earth-essentials__badges">
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Drop.svg' | asset_url }}" width="12" height="14" alt="" class="earth-essentials__badge-icon">
-              <span>GOTS Certified</span>
-            </span>
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Carbon.svg' | asset_url }}" width="12" height="12" alt="" class="earth-essentials__badge-icon">
-              <span>Carbon</span>
-            </span>
-          </div>
+          {%- if section.settings.show_badges -%}
+            <div class="earth-essentials__badges">
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Drop.svg' | inline_asset_content }}</span>
+                <span>GOTS Certified</span>
+              </span>
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Carbon.svg' | inline_asset_content }}</span>
+                <span>Carbon</span>
+              </span>
+            </div>
+          {%- endif -%}
           <div class="earth-essentials__card-body">
-            <span class="earth-essentials__card-number">01</span>
+            {%- if section.settings.show_card_numbers -%}
+              <span class="earth-essentials__card-number">01</span>
+            {%- endif -%}
             <h3 class="earth-essentials__card-title">Organic Essentials</h3>
             <p class="earth-essentials__card-subtitle">From farm to wardrobe</p>
             <div class="earth-essentials__card-cta">
@@ -133,18 +231,22 @@
             <img src="{{ 'cat-ocean.jpg' | asset_url }}" width="800" height="600" alt="Recycled Ocean" class="earth-essentials__image" loading="lazy">
             <div class="earth-essentials__overlay"></div>
           </div>
-          <div class="earth-essentials__badges">
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Drop.svg' | asset_url }}" width="12" height="14" alt="" class="earth-essentials__badge-icon">
-              <span>Ocean Plastic</span>
-            </span>
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Carbon.svg' | asset_url }}" width="12" height="12" alt="" class="earth-essentials__badge-icon">
-              <span>B Corp</span>
-            </span>
-          </div>
+          {%- if section.settings.show_badges -%}
+            <div class="earth-essentials__badges">
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Drop.svg' | inline_asset_content }}</span>
+                <span>Ocean Plastic</span>
+              </span>
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Carbon.svg' | inline_asset_content }}</span>
+                <span>B Corp</span>
+              </span>
+            </div>
+          {%- endif -%}
           <div class="earth-essentials__card-body">
-            <span class="earth-essentials__card-number">02</span>
+            {%- if section.settings.show_card_numbers -%}
+              <span class="earth-essentials__card-number">02</span>
+            {%- endif -%}
             <h3 class="earth-essentials__card-title">Recycled Ocean</h3>
             <p class="earth-essentials__card-subtitle">Plastic-free future</p>
             <div class="earth-essentials__card-cta">
@@ -163,18 +265,22 @@
             <img src="{{ 'earth-3.jpg' | asset_url }}" width="800" height="600" alt="Timeless Neutrals" class="earth-essentials__image" loading="lazy">
             <div class="earth-essentials__overlay"></div>
           </div>
-          <div class="earth-essentials__badges">
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Drop.svg' | asset_url }}" width="12" height="14" alt="" class="earth-essentials__badge-icon">
-              <span>Fair Trade</span>
-            </span>
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Carbon.svg' | asset_url }}" width="12" height="12" alt="" class="earth-essentials__badge-icon">
-              <span>Zero Waste</span>
-            </span>
-          </div>
+          {%- if section.settings.show_badges -%}
+            <div class="earth-essentials__badges">
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Drop.svg' | inline_asset_content }}</span>
+                <span>Fair Trade</span>
+              </span>
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Carbon.svg' | inline_asset_content }}</span>
+                <span>Zero Waste</span>
+              </span>
+            </div>
+          {%- endif -%}
           <div class="earth-essentials__card-body">
-            <span class="earth-essentials__card-number">03</span>
+            {%- if section.settings.show_card_numbers -%}
+              <span class="earth-essentials__card-number">03</span>
+            {%- endif -%}
             <h3 class="earth-essentials__card-title">Timeless Neutrals</h3>
             <p class="earth-essentials__card-subtitle">Built to last forever</p>
             <div class="earth-essentials__card-cta">
@@ -193,18 +299,22 @@
             <img src="{{ 'cat-activewear.jpg' | asset_url }}" width="800" height="600" alt="Eco Activewear" class="earth-essentials__image" loading="lazy">
             <div class="earth-essentials__overlay"></div>
           </div>
-          <div class="earth-essentials__badges">
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Drop.svg' | asset_url }}" width="12" height="14" alt="" class="earth-essentials__badge-icon">
-              <span>Recycled Fabric</span>
-            </span>
-            <span class="earth-essentials__badge">
-              <img src="{{ 'Carbon.svg' | asset_url }}" width="12" height="12" alt="" class="earth-essentials__badge-icon">
-              <span>Low Impact</span>
-            </span>
-          </div>
+          {%- if section.settings.show_badges -%}
+            <div class="earth-essentials__badges">
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Drop.svg' | inline_asset_content }}</span>
+                <span>Recycled Fabric</span>
+              </span>
+              <span class="earth-essentials__badge">
+                <span class="earth-essentials__badge-icon" aria-hidden="true">{{ 'icon-Carbon.svg' | inline_asset_content }}</span>
+                <span>Low Impact</span>
+              </span>
+            </div>
+          {%- endif -%}
           <div class="earth-essentials__card-body">
-            <span class="earth-essentials__card-number">04</span>
+            {%- if section.settings.show_card_numbers -%}
+              <span class="earth-essentials__card-number">04</span>
+            {%- endif -%}
             <h3 class="earth-essentials__card-title">Eco Activewear</h3>
             <p class="earth-essentials__card-subtitle">Move with purpose</p>
             <div class="earth-essentials__card-cta">
@@ -226,57 +336,31 @@
      Featured Eco Essentials Styles
      ========================================================================== */
   .earth-featured-essentials {
-    background-color: var(--color-gray-50, #EBF7BE);
-    padding: clamp(56px, 7vw, 96px) 24px clamp(64px, 8vw, 110px);
+    grid-column: 1 / -1 !important;
+    background-color: var(--section-bg, #EBF7BE);
+    color: var(--section-text, #003225);
+    padding-top: var(--section-pt, 80px);
+    padding-bottom: var(--section-pb, 96px);
+    padding-left: clamp(20px, 2.5vw, 34px);
+    padding-right: clamp(20px, 2.5vw, 34px);
     width: 100%;
     box-sizing: border-box;
+    transition: background-color 0.3s ease;
   }
   .earth-essentials__container {
     margin: 0 auto;
     width: 100%;
+    max-width: var(--page-width, 1320px);
+    box-sizing: border-box;
+  }
+  .earth-featured-essentials--full .earth-essentials__container {
+    max-width: 100%;
   }
 
   /* 1. Header Layout */
-  .earth-essentials__header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 36px;
+  .earth-essentials__header-container {
+    width: 100%;
     margin-bottom: clamp(40px, 5vw, 60px);
-  }
-  .earth-essentials__header-left {
-    flex: 1.2;
-  }
-  .earth-essentials__main-title {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-size: clamp(2rem, 3.8vw, 3.2rem);
-    font-weight: 800;
-    color: var(--color-black, #003225);
-    letter-spacing: -0.03em;
-    margin: 0;
-    line-height: 1.1;
-  }
-  .earth-essentials__leaf-icon {
-    width: 36px;
-    height: 36px;
-    object-fit: contain;
-    flex-shrink: 0;
-  }
-  .earth-essentials__header-right {
-    flex: 0.9;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
-  .earth-essentials__header-desc {
-    font-size: 21px;
-    color: var(--color-black, #003225);
-    line-height: 1.45;
-    margin: 0;
-    max-width: 420px;
   }
 
   /* 2. Reusable Arrow Link Button Component */
@@ -311,7 +395,8 @@
     transform: translateX(4px);
   }
 
-  .earth-btn-arrow__icon-circle img {
+  .earth-btn-arrow__icon-circle img,
+  .earth-btn-arrow__icon-circle svg {
     width: 12px;
     height: 10px;
     display: block;
@@ -320,60 +405,88 @@
 
   /* Theme variants for arrow button */
   .earth-btn-arrow--dark {
-    color: var(--color-black, #003225);
+    color: var(--section-text, #003225);
   }
   .earth-btn-arrow--dark .earth-btn-arrow__icon-circle {
-    background-color: var(--color-black, #003225);
-    color: var(--color-white);
+    background-color: var(--section-text, #003225);
+    color: var(--color-white, #FFFFFF);
   }
 
   .earth-btn-arrow--light {
-    color: var(--color-white);
+    color: var(--color-white, #FFFFFF);
   }
   .earth-btn-arrow--light .earth-btn-arrow__icon-circle {
-    background-color: var(--color-white);
+    background-color: var(--color-white, #FFFFFF);
     color: var(--color-black, #003225);
   }
-  .earth-btn-arrow--light .earth-btn-arrow__icon-circle img {
+  .earth-btn-arrow--light .earth-btn-arrow__icon-circle img,
+  .earth-btn-arrow--light .earth-btn-arrow__icon-circle svg {
     filter: brightness(0) saturate(100%) invert(18%) sepia(35%) saturate(1914%) hue-rotate(92deg) brightness(94%) contrast(97%);
   }
 
-  /* 3. Asymmetric Masonry / Diagonal Staggered Grid */
+  /* 3. Cards Grid Layouts */
   .earth-essentials__grid {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     width: 100%;
   }
+
   .earth-essentials__card {
     position: relative;
-    border-radius: 0;
+    border-radius: var(--card-radius, 0px);
     overflow: hidden;
-    height: 530px;
+    height: var(--card-height, 530px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: clamp(24px, 3.5vw, 36px);
     box-sizing: border-box;
     cursor: pointer;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
   }
 
-  /* Card 01 (Row 1 Left - Wider: 57.5%) */
-  .earth-essentials__card:nth-child(4n + 1) {
+  /* Layout 1: Asymmetric Diagonal Staggered Grid (Default) */
+  .earth-featured-essentials--asymmetric .earth-essentials__card:nth-child(4n + 1) {
     width: calc(57.5% - 10px);
   }
-  /* Card 02 (Row 1 Right - Narrower: 42.5%) */
-  .earth-essentials__card:nth-child(4n + 2) {
+  .earth-featured-essentials--asymmetric .earth-essentials__card:nth-child(4n + 2) {
     width: calc(42.5% - 10px);
   }
-  /* Card 03 (Row 2 Left - Narrower: 42.5%) */
-  .earth-essentials__card:nth-child(4n + 3) {
+  .earth-featured-essentials--asymmetric .earth-essentials__card:nth-child(4n + 3) {
     width: calc(42.5% - 10px);
   }
-  /* Card 04 (Row 2 Right - Wider: 57.5%) */
-  .earth-essentials__card:nth-child(4n + 4) {
+  .earth-featured-essentials--asymmetric .earth-essentials__card:nth-child(4n + 4) {
     width: calc(57.5% - 10px);
   }
+
+  /* Layout 2: Equal 2-Column Grid */
+  .earth-featured-essentials--grid_equal .earth-essentials__card {
+    width: calc(50% - 10px);
+  }
+
+  /* Layout 3: 3-Column Grid */
+  .earth-featured-essentials--grid_3_col .earth-essentials__card {
+    width: calc(33.333% - 13.333px);
+  }
+
+  /* Layout 4: 4-Column Grid */
+  .earth-featured-essentials--grid_4_col .earth-essentials__card {
+    width: calc(25% - 15px);
+  }
+
+  /* Hover Effects */
+  .earth-featured-essentials--hover-zoom .earth-essentials__card:hover .earth-essentials__image {
+    transform: scale(1.05);
+  }
+  .earth-featured-essentials--hover-lift .earth-essentials__card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 36px rgba(0, 32, 23, 0.22);
+  }
+  .earth-featured-essentials--hover-glow .earth-essentials__card:hover {
+    box-shadow: 0 0 0 2px var(--color-secondary, #71CC3B), 0 12px 30px rgba(113, 204, 59, 0.2);
+  }
+
   .earth-essentials__image-wrapper {
     position: absolute;
     inset: 0;
@@ -385,15 +498,12 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .earth-essentials__card:hover .earth-essentials__image {
-    transform: scale(1.06);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .earth-essentials__overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.05) 40%, rgba(0, 32, 23, 0.88) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.05) 40%, rgba(0, 32, 23, var(--card-overlay-opacity, 0.88)) 100%);
   }
 
   /* Badges */
@@ -418,15 +528,30 @@
     backdrop-filter: blur(4px);
   }
   .earth-essentials__badge-icon {
-    object-fit: contain;
-    filter: brightness(0) saturate(100%) invert(18%) sepia(35%) saturate(1914%) hue-rotate(92deg) brightness(94%) contrast(97%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+  }
+  .earth-essentials__badge-icon svg {
+    width: 12px;
+    height: 12px;
+    display: block;
+  }
+  .earth-essentials__badge-icon svg path[stroke] {
+    stroke: #003225 !important;
+  }
+  .earth-essentials__badge-icon svg path[fill] {
+    fill: #003225 !important;
   }
 
   /* Card Body */
   .earth-essentials__card-body {
     position: relative;
     z-index: 2;
-    color: var(--color-white);
+    color: var(--color-white, #FFFFFF);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -436,28 +561,44 @@
     font-weight: 400;
     opacity: 0.9;
     margin-bottom: 4px;
+    color: var(--color-white, #FFFFFF);
   }
   .earth-essentials__card-title {
     font-size: 34px;
     font-weight: 800;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    color: var(--color-white);
+    color: var(--color-white, #FFFFFF);
     margin: 0 0 6px 0;
   }
   .earth-essentials__card-subtitle {
     font-size: 18px;
-    color: var(--color-white);
+    color: var(--color-white, #FFFFFF);
     margin: 0 0 18px 0;
+    opacity: 0.92;
   }
   .earth-essentials__card-cta {
     display: flex;
   }
 
-  /* Responsive Design for Mobile */
-  @media (max-width: 820px) {
+  /* Responsive Design for Tablet & Mobile */
+  @media (max-width: 1024px) {
     .earth-featured-essentials {
-      padding: 40px 16px 56px;
+      padding-top: calc(var(--section-pt, 80px) * 0.75);
+      padding-bottom: calc(var(--section-pb, 96px) * 0.75);
+    }
+    .earth-featured-essentials--grid_3_col .earth-essentials__card,
+    .earth-featured-essentials--grid_4_col .earth-essentials__card {
+      width: calc(50% - 10px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .earth-featured-essentials {
+      padding-top: var(--section-m-pt, 48px);
+      padding-bottom: var(--section-m-pb, 56px);
+      padding-left: 20px;
+      padding-right: 20px;
     }
     .earth-essentials__header {
       flex-direction: column;
@@ -470,15 +611,14 @@
       flex: auto;
     }
     .earth-essentials__main-title {
-      font-size: 26px;
+      font-size: 2.25rem !important;
       gap: 10px;
     }
     .earth-essentials__leaf-icon {
-      width: 28px;
-      height: 28px;
+      display: none !important;
     }
     .earth-essentials__header-desc {
-      font-size: 15px;
+      font-size: 1.125rem;
       max-width: 100%;
     }
     .earth-essentials__grid {
@@ -490,14 +630,13 @@
       width: 100% !important;
       padding: 16px !important;
     }
-    /* Card 01 & 03 (Lẻ - Ngắn: 265px) */
-    .earth-essentials__card:nth-child(odd) {
+    /* Mobile Asymmetric Heights */
+    .earth-featured-essentials--asymmetric .earth-essentials__card:nth-child(odd) {
       width: 100% !important;
       height: 265px !important;
       min-height: 265px !important;
     }
-    /* Card 02 & 04 (Chẵn - Dài: 450px) */
-    .earth-essentials__card:nth-child(even) {
+    .earth-featured-essentials--asymmetric .earth-essentials__card:nth-child(even) {
       width: 100% !important;
       height: 450px !important;
       min-height: 450px !important;
@@ -540,7 +679,8 @@
       width: 20px;
       height: 20px;
     }
-    .earth-btn-arrow__icon-circle img {
+    .earth-btn-arrow__icon-circle img,
+    .earth-btn-arrow__icon-circle svg {
       width: 9px;
       height: 7px;
     }
@@ -552,27 +692,401 @@
   "name": "Featured Eco Essentials",
   "settings": [
     {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Title Styling"
+    },
+    {
+      "type": "select",
+      "id": "header_layout",
+      "label": "Header Layout",
+      "options": [
+        { "value": "split", "label": "Split Columns" },
+        { "value": "centered", "label": "Centered" },
+        { "value": "stacked_left", "label": "Stacked Left" }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "select",
+      "id": "header_split_ratio",
+      "label": "Split Column Ratio",
+      "info": "Only applies when Header Layout is set to Split Columns",
+      "options": [
+        { "value": "1.4fr_1fr", "label": "Design Default (~60% / 40%)" },
+        { "value": "1fr_1fr", "label": "1fr / 1fr (Equal 50% / 50%)" },
+        { "value": "2fr_1fr", "label": "2fr / 1fr (Wide Title)" },
+        { "value": "1fr_2fr", "label": "1fr / 2fr (Wide Description)" }
+      ],
+      "default": "1.4fr_1fr"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow / Sub-tag"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_eyebrow_icon",
+      "label": "Show Eyebrow Sparkle Icon",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Eyebrow Custom Color"
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_desktop",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Eyebrow Font Size (Desktop)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size_mobile",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Eyebrow Font Size (Mobile)",
+      "default": 15
+    },
+    {
       "type": "text",
       "id": "title",
-      "label": "Section Title",
+      "label": "Section Heading",
       "default": "Featured Eco Essentials"
     },
     {
-      "type": "textarea",
+      "type": "color",
+      "id": "title_color",
+      "label": "Heading Text Color",
+      "default": "#003225"
+    },
+    {
+      "type": "range",
+      "id": "title_size_desktop",
+      "min": 24,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Desktop)",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 20,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading Font Size (Mobile)",
+      "default": 36
+    },
+    {
+      "type": "richtext",
       "id": "subtitle",
-      "label": "Section Subtitle",
-      "default": "Where fashion meets purpose: recycled fabrics, reduced impact, endless wear."
+      "label": "Subtitle Description",
+      "default": "<p>Where fashion meets purpose: recycled fabrics, reduced impact, endless wear.</p>"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle Text Color",
+      "default": "#003225"
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size_desktop",
+      "min": 14,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle Font Size (Desktop)",
+      "default": 21
+    },
+    {
+      "type": "range",
+      "id": "subtitle_size_mobile",
+      "min": 13,
+      "max": 22,
+      "step": 1,
+      "unit": "px",
+      "label": "Subtitle Font Size (Mobile)",
+      "default": 18
+    },
+    {
+      "type": "checkbox",
+      "id": "show_leaf_icons",
+      "label": "Show Decorative Leaf Icons",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "leaf_position",
+      "label": "Leaf Icon Position",
+      "options": [
+        { "value": "left", "label": "Left of Title (Design Default)" },
+        { "value": "both_sides", "label": "Both Sides of Title" },
+        { "value": "top", "label": "Top of Title" },
+        { "value": "right", "label": "Right of Title" },
+        { "value": "none", "label": "None (Hide)" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "color",
+      "id": "leaf_color",
+      "label": "Leaf Icon Color",
+      "default": "#71CC3B"
+    },
+    {
+      "type": "range",
+      "id": "leaf_size",
+      "min": 20,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "label": "Leaf Icon Size",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "leaf_gap",
+      "min": 4,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Leaf Icon Gap",
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header_btn",
+      "label": "Show Header Action Button",
+      "default": true
     },
     {
       "type": "text",
-      "id": "header_button_text",
+      "id": "header_btn_text",
       "label": "Header Button Text",
       "default": "SHOP COLLECTION"
     },
     {
       "type": "url",
-      "id": "header_button_link",
+      "id": "header_btn_url",
       "label": "Header Button Link"
+    },
+    {
+      "type": "select",
+      "id": "header_btn_type",
+      "label": "Header Button Style",
+      "options": [
+        { "value": "arrow", "label": "Arrow Link Button" },
+        { "value": "solid", "label": "Solid Button" },
+        { "value": "outline", "label": "Outline Button" }
+      ],
+      "default": "arrow"
+    },
+    {
+      "type": "select",
+      "id": "header_btn_theme",
+      "label": "Header Arrow Theme",
+      "options": [
+        { "value": "dark", "label": "Dark (Forest Green)" },
+        { "value": "light", "label": "Light" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "color",
+      "id": "header_btn_bg_color",
+      "label": "Button Background / Border Color",
+      "info": "Applies to Solid/Outline buttons"
+    },
+    {
+      "type": "color",
+      "id": "header_btn_text_color",
+      "label": "Button Text Color (Solid Button)"
+    },
+    {
+      "type": "color",
+      "id": "header_btn_color",
+      "label": "Button Text / Line Color (Arrow Button)"
+    },
+    {
+      "type": "color",
+      "id": "header_btn_circle_bg",
+      "label": "Arrow Circle Background Color"
+    },
+    {
+      "type": "color",
+      "id": "header_btn_circle_color",
+      "label": "Arrow Icon Color"
+    },
+    {
+      "type": "header",
+      "content": "Grid & Card Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout_style",
+      "label": "Grid Layout Style",
+      "options": [
+        {
+          "value": "asymmetric",
+          "label": "Asymmetric Diagonal Grid (57.5% / 42.5%)"
+        },
+        {
+          "value": "grid_equal",
+          "label": "Equal 2-Column Grid (50% / 50%)"
+        },
+        {
+          "value": "grid_3_col",
+          "label": "3-Column Grid"
+        },
+        {
+          "value": "grid_4_col",
+          "label": "4-Column Grid"
+        }
+      ],
+      "default": "asymmetric"
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "min": 400,
+      "max": 650,
+      "step": 10,
+      "unit": "px",
+      "label": "Card Height (Desktop)",
+      "default": 530
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Card Border Radius",
+      "default": 0
+    },
+    {
+      "type": "select",
+      "id": "image_hover_effect",
+      "label": "Card Hover Effect",
+      "options": [
+        {
+          "value": "zoom",
+          "label": "Zoom Image"
+        },
+        {
+          "value": "lift",
+          "label": "Elevate Card"
+        },
+        {
+          "value": "glow",
+          "label": "Eco Accent Glow"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ],
+      "default": "zoom"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_card_numbers",
+      "label": "Show Card Numbers (01, 02...)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badges",
+      "label": "Show Card Eco Badges",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors & Overlays"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Section Background Color",
+      "default": "#EBF7BE"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Header Text Color",
+      "default": "#003225"
+    },
+    {
+      "type": "range",
+      "id": "card_overlay_opacity",
+      "min": 20,
+      "max": 100,
+      "step": 2,
+      "unit": "%",
+      "label": "Card Dark Overlay Opacity",
+      "default": 88
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Desktop)",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Desktop)",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Top (Mobile)",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding Bottom (Mobile)",
+      "default": 56
     }
   ],
   "blocks": [
@@ -583,12 +1097,12 @@
         {
           "type": "collection",
           "id": "collection",
-          "label": "Collection"
+          "label": "Shopify Collection (Optional Auto-Fill)"
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Card Image"
+          "label": "Card Background Image"
         },
         {
           "type": "text",
@@ -603,16 +1117,50 @@
           "default": "From farm to wardrobe"
         },
         {
+          "type": "header",
+          "content": "Badge 1"
+        },
+        {
           "type": "text",
           "id": "badge_1",
           "label": "Badge 1 Text",
           "default": "GOTS Certified"
         },
         {
+          "type": "select",
+          "id": "badge_1_icon",
+          "label": "Badge 1 Icon",
+          "options": [
+            { "value": "drop", "label": "Water Drop" },
+            { "value": "leaf", "label": "Leaf (Carbon)" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "drop"
+        },
+        {
+          "type": "header",
+          "content": "Badge 2"
+        },
+        {
           "type": "text",
           "id": "badge_2",
           "label": "Badge 2 Text",
           "default": "Carbon"
+        },
+        {
+          "type": "select",
+          "id": "badge_2_icon",
+          "label": "Badge 2 Icon",
+          "options": [
+            { "value": "drop", "label": "Water Drop" },
+            { "value": "leaf", "label": "Leaf (Carbon)" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "header",
+          "content": "Call to Action Button"
         },
         {
           "type": "text",
@@ -624,6 +1172,73 @@
           "type": "url",
           "id": "button_link",
           "label": "Button Link"
+        },
+        {
+          "type": "select",
+          "id": "button_type",
+          "label": "Button Style",
+          "options": [
+            { "value": "arrow", "label": "Arrow Button" },
+            { "value": "solid", "label": "Solid Button" },
+            { "value": "outline", "label": "Outline Button" },
+            { "value": "none", "label": "None (Hide Button)" }
+          ],
+          "default": "arrow"
+        },
+        {
+          "type": "select",
+          "id": "arrow_theme",
+          "label": "Arrow Preset Theme",
+          "options": [
+            { "value": "light", "label": "Light (on dark card)" },
+            { "value": "dark", "label": "Dark (on light card)" }
+          ],
+          "default": "light"
+        },
+        {
+          "type": "color",
+          "id": "button_color",
+          "label": "Custom Text / Arrow Color"
+        },
+        {
+          "type": "color",
+          "id": "button_circle_bg",
+          "label": "Custom Circle Background / Solid BG"
+        },
+        {
+          "type": "color",
+          "id": "button_circle_icon",
+          "label": "Custom Circle Icon Color"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "label": "Font Size Override (0 = Global)",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_vertical",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding Top / Bottom Override",
+          "default": 0
+        },
+        {
+          "type": "range",
+          "id": "padding_horizontal",
+          "min": 0,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Padding Left / Right Override",
+          "default": 0
         }
       ]
     }
@@ -638,7 +1253,9 @@
             "title": "Organic Essentials",
             "subtitle": "From farm to wardrobe",
             "badge_1": "GOTS Certified",
+            "badge_1_icon": "drop",
             "badge_2": "Carbon",
+            "badge_2_icon": "leaf",
             "button_text": "SHOP ORGANIC ESSENTIALS"
           }
         },
@@ -648,7 +1265,9 @@
             "title": "Recycled Ocean",
             "subtitle": "Plastic-free future",
             "badge_1": "Ocean Plastic",
+            "badge_1_icon": "drop",
             "badge_2": "B Corp",
+            "badge_2_icon": "leaf",
             "button_text": "DISCOVER RECYCLED OCEAN"
           }
         },
@@ -658,7 +1277,9 @@
             "title": "Timeless Neutrals",
             "subtitle": "Built to last forever",
             "badge_1": "Fair Trade",
+            "badge_1_icon": "drop",
             "badge_2": "Zero Waste",
+            "badge_2_icon": "leaf",
             "button_text": "EXPLORE TIMELESS NEUTRALS"
           }
         },
@@ -668,7 +1289,9 @@
             "title": "Eco Activewear",
             "subtitle": "Move with purpose",
             "badge_1": "Recycled Fabric",
+            "badge_1_icon": "drop",
             "badge_2": "Low Impact",
+            "badge_2_icon": "leaf",
             "button_text": "SHOP ECO ACTIVEWEAR"
           }
         }
@@ -676,4 +1299,4 @@
     }
   ]
 }
-{% endschema %}
+{% endschema %} {% endcomment %}

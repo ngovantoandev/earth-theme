@@ -75,24 +75,33 @@
 
 {% stylesheet %}
   .vt-paragraph {
+    display: flex;
     max-width: var(--vt-paragraph-max-width, none);
     contain: layout style;
   }
 
+  .vt-paragraph.text-inherit {
+    text-align: inherit;
+    justify-content: inherit;
+  }
+
   .vt-paragraph.text-left {
     text-align: left;
+    justify-content: flex-start;
   }
 
   .vt-paragraph.text-center {
     text-align: center;
+    justify-content: center;
   }
 
   .vt-paragraph.text-right {
     text-align: right;
+    justify-content: flex-end;
   }
 
   /* Width variants */
-  .vt-paragraph--width-fit {
+  .vt-paragraph--width-fit {    
     width: fit-content;
   }
 
@@ -113,9 +122,6 @@
     width: var(--vt-paragraph-width, auto);
   }
 
-  /* When the block doesn't stretch full-width, use the alignment setting
-     to also position the block itself within its container, not just the
-     text inside it. */
   .vt-paragraph:not(.vt-paragraph--width-fill).text-center {
     margin-inline: auto;
   }
@@ -159,9 +165,13 @@
                 {
                     "value": "text-right",
                     "label": "t:blocks.paragraph.settings.paragraph_alignment.options__3.label"
-                }
+                },
+                {
+                    "value": "text-inherit",
+                    "label": "Inherit"
+                }            
             ],
-            "default": "text-left",
+            "default": "text-inherit",
             "label": "t:blocks.paragraph.settings.paragraph_alignment.label"
         },
         {

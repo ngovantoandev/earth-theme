@@ -48,18 +48,18 @@
   endcase
 
   case block.settings.decorative_icon_position
-    when 'top'
+    when 'left'
       assign vt_icon_justify = 'flex-start'
-    when 'bottom'
+    when 'right'
       assign vt_icon_justify = 'flex-end'
     else
       assign vt_icon_justify = 'center'
   endcase
 
   case block.settings.decorative_icon_alignment
-    when 'left'
+    when 'top'
       assign vt_icon_align = 'flex-start'
-    when 'right'
+    when 'bottom'
       assign vt_icon_align = 'flex-end'
     else
       assign vt_icon_align = 'center'
@@ -134,9 +134,11 @@
     {%- if block.settings.width == 'custom' %}
     --vt-width: {{ block.settings.width_custom }}%;
     {%- endif %}
+
     {%- if block.settings.height == 'custom' %}
-    --vt-height: {{ block.settings.height_custom }}%;
+    --vt-min-height: {% render 'fluid-clamp', min_px: block.settings.min_height, max_px: block.settings.min_height %};
     {%- endif %}
+
     {%- if vt_animate_classes != blank %}
     --vt-duration: {{ block.settings.animation_duration }}s;
     --vt-delay: {{ block.settings.animation_delay }}s;
@@ -153,7 +155,7 @@
   {{ block.shopify_attributes }}
 >
   {%- if block.settings.enable_decorative_icon %}
-    <span
+    <div
       class="vt-card__decorative-icon"
       style="
         --vt-icon-justify: {{ vt_icon_justify }};
@@ -165,7 +167,7 @@
       aria-hidden="true"
     >
       {%- render 'icons', icon: block.settings.decorative_icon -%}
-    </span>
+    </div>
   {%- endif %}
 
   <div class="vt-card__content">
@@ -229,7 +231,8 @@
   }
 
   .vt-card--height-custom {
-    height: var(--vt-height, auto);
+    height: auto;
+    min-height: var(--vt-min-height, auto);
   }
 
   .vt-card__content {
@@ -243,14 +246,17 @@
   }
 
   /* Decorative watermark icon: purely visual, never affects layout flow */
-  .vt-card__decorative-icon {
+  .vt-card__decorative-icon {    
     position: absolute;
     inset: 0;
     z-index: 0;
     display: flex;
+    width: 100%;
+    height: 100%;
+    padding-block: var(--vt-padding-block, 1rem);
+    padding-inline: var(--vt-padding-inline, 1rem);
     justify-content: var(--vt-icon-justify, center);
-    align-items: var(--vt-icon-align, center);
-    padding: 5%;
+    align-items: var(--vt-icon-align, center);    
     pointer-events: none;
     color: var(--vt-decorative-icon-color, currentColor);
     opacity: var(--vt-decorative-icon-opacity, 0.12);
@@ -413,19 +419,19 @@
       "label": "Alignment",
       "options": [
         {
-          "value": "top",
+          "value": "left",
           "label": "Left"
         },
         {
-          "value": "middle",
+          "value": "center",
           "label": "Center"
         },
         {
-          "value": "bottom",
+          "value": "right",
           "label": "Right"
         }
       ],
-      "default": "middle",
+      "default": "center",
       "visible_if": "{{ block.settings.enable_decorative_icon == true }}"
     },
     {
@@ -434,16 +440,16 @@
       "label": "Position",
       "options": [
         {
-          "value": "left",
-          "label": "Bottom"
+          "value": "top",
+          "label": "Top"
         },
         {
           "value": "center",
           "label": "Middle"
         },
         {
-          "value": "right",
-          "label": "Top"
+          "value": "bottom",
+          "label": "Bottom"
         }
       ],
       "default": "center",
@@ -514,7 +520,7 @@
         { "value": "fill", "label": "Fill" },
         { "value": "custom", "label": "Custom" }
       ],
-      "default": "fit"
+      "default": "fill"
     },
     {
       "type": "range",
@@ -536,17 +542,17 @@
         { "value": "fill", "label": "Fill" },
         { "value": "custom", "label": "Custom" }
       ],
-      "default": "fit"
+      "default": "fill"
     },
     {
       "type": "range",
-      "id": "height_custom",
-      "label": "Custom height",
-      "min": 1,
-      "max": 100,
-      "step": 1,
-      "unit": "%",
-      "default": 50,
+      "id": "min_height",
+      "label": "Min height",
+      "min": 50,
+      "max": 450,
+      "step": 5,
+      "unit": "px",
+      "default": 100,
       "visible_if": "{{ block.settings.height == 'custom' }}"
     },
     {
@@ -730,7 +736,7 @@
         "alignment": "center",
         "enable_decorative_icon": false,
         "decorative_icon": "cotton-plant",
-        "decorative_icon_position": "middle",
+        "decorative_icon_position": "center",
         "decorative_icon_alignment": "center",
         "decorative_icon_color": "#F8F9DC",
         "decorative_icon_size_desktop": 226,
@@ -741,10 +747,10 @@
         "enable_padding_mobile": true,
         "padding_vertical_mobile": 30,
         "padding_horizontal_mobile": 24,
-        "width": "fit",
+        "width": "fill",
         "width_custom": 50,
-        "height": "fit",
-        "height_custom": 100,
+        "height": "fill",
+        "min_height": 100,
         "gap": 10,
         "enable_gap_mobile": true,
         "gap_mobile": 5,
@@ -786,7 +792,7 @@
           "settings": {
             "heading": "Card heading",
             "heading_size": "vt-heading-h3",
-            "heading_alignment": "text-center",
+            "heading_alignment": "text-inherit",
             "heading_tag": "h3",
             "animation_type": "slide",
             "animation_direction": "from-bottom",
@@ -801,7 +807,7 @@
           "settings": {
             "text": "<p>New season</p>",
             "paragraph_size": "vt-paragraph-medium",
-            "paragraph_alignment": "text-center",
+            "paragraph_alignment": "text-inherit",
             "paragraph_width": "fit",
             "width_custom": 100,
             "enable_max_width": false,
@@ -819,7 +825,7 @@
           "settings": {
             "text": "<p>Curated just for you</p>",
             "paragraph_size": "vt-paragraph-small",
-            "paragraph_alignment": "text-center",
+            "paragraph_alignment": "text-inherit",
             "paragraph_width": "fit",
             "width_custom": 100,
             "enable_max_width": false,
