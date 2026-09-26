@@ -187,11 +187,17 @@
   .fixed {
     position: fixed;
   }
+  .relative {
+    position: relative;
+  }
   .static {
     position: static;
   }
   .sticky {
     position: sticky;
+  }
+  .isolate {
+    isolation: isolate;
   }
   .container {
     width: 100%;
@@ -229,8 +235,14 @@
   .inline {
     display: inline;
   }
+  .inline-block {
+    display: inline-block;
+  }
   .inline-flex {
     display: inline-flex;
+  }
+  .table {
+    display: table;
   }
   .flex-shrink {
     flex-shrink: 1;
@@ -240,6 +252,9 @@
   }
   .grow {
     flex-grow: 1;
+  }
+  .border-collapse {
+    border-collapse: collapse;
   }
   .transform {
     transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
@@ -277,6 +292,9 @@
   }
   .italic {
     font-style: italic;
+  }
+  .underline {
+    text-decoration-line: underline;
   }
   .outline {
     outline-style: var(--tw-outline-style);

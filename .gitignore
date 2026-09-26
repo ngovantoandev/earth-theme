@@ -18,3 +18,4 @@ release
 .gemini/
 node_modules/
 .gemini/
+BLOCKS_REFERENCE.md

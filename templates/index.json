@@ -818,6 +818,444 @@
                 "impact_paragraph",
                 "impact_button"
             ]
+        },
+        "sustainability_goals": {
+            "type": "sustainability-goals",
+            "settings": {
+                "bg_color": "#F8F9DC",
+                "heading_color": "#003225",
+                "text_color": "#003225",
+                "padding_top": 0,
+                "padding_bottom": 80,
+                "padding_horizontal": 34,
+                "block_gap": 48,
+                "padding_top_mobile": 0,
+                "padding_bottom_mobile": 48,
+                "padding_horizontal_mobile": 20,
+                "block_gap_mobile": 32,
+                "full_width": true
+            },
+            "blocks": {
+                "goals_grid": {
+                    "type": "grid-group",
+                    "settings": {
+                        "type": "grid",
+                        "desktop_columns": 4,
+                        "mobile_columns": "1",
+                        "enable_swipe_mobile": true,
+                        "show_navigation_desktop": false,
+                        "show_navigation_mobile": false,
+                        "gap_desktop": 24,
+                        "gap_mobile": 16,
+                        "offset_desktop": 34,
+                        "offset_mobile": 20,
+                        "padding_vertical": 0,
+                        "padding_horizontal": 0,
+                        "padding_vertical_mobile": 0,
+                        "padding_horizontal_mobile": 0
+                    },
+                    "blocks": {
+                        "goal_card_1": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "heading_color": "#003225",
+                                "text_color": "#224E09",
+                                "position": "middle",
+                                "alignment": "center",
+                                "enable_decorative_icon": false,
+                                "padding_vertical": 44,
+                                "padding_horizontal": 24,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 32,
+                                "padding_horizontal_mobile": 20,
+                                "width": "fill",
+                                "height": "fill",
+                                "gap": 8,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 6,
+                                "border": "solid",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_opacity": 100,
+                                "border_radius": 0,
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.1,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
+                            },
+                            "blocks": {
+                                "card_1_heading": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "95%",
+                                        "heading_size": "vt-heading-h4",
+                                        "heading_alignment": "text-center",
+                                        "heading_tag": "h4",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.2,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_1_label": {
+                                    "type": "sub-heading",
+                                    "settings": {
+                                        "sub_heading": "Organic Cotton",
+                                        "subheading_tag": "h4",
+                                        "subheading_alignment": "text-center",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.3,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_1_desc": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>of materials used</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "paragraph_width": "fit",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.4,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "card_1_heading",
+                                "card_1_label",
+                                "card_1_desc"
+                            ]
+                        },
+                        "goal_card_2": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "heading_color": "#003225",
+                                "text_color": "#224E09",
+                                "position": "middle",
+                                "alignment": "center",
+                                "enable_decorative_icon": false,
+                                "padding_vertical": 44,
+                                "padding_horizontal": 24,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 32,
+                                "padding_horizontal_mobile": 20,
+                                "width": "fill",
+                                "height": "fill",
+                                "gap": 8,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 6,
+                                "border": "solid",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_opacity": 100,
+                                "border_radius": 0,
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.2,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
+                            },
+                            "blocks": {
+                                "card_2_heading": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "2,500+",
+                                        "heading_size": "vt-heading-h4",
+                                        "heading_alignment": "text-center",
+                                        "heading_tag": "h4",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.3,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_2_label": {
+                                    "type": "sub-heading",
+                                    "settings": {
+                                        "sub_heading": "Factory Workers",
+                                        "subheading_tag": "h4",
+                                        "subheading_alignment": "text-center",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.4,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_2_desc": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>earning fair wages</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "paragraph_width": "fit",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.5,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "card_2_heading",
+                                "card_2_label",
+                                "card_2_desc"
+                            ]
+                        },
+                        "goal_card_3": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "heading_color": "#003225",
+                                "text_color": "#224E09",
+                                "position": "middle",
+                                "alignment": "center",
+                                "enable_decorative_icon": false,
+                                "padding_vertical": 44,
+                                "padding_horizontal": 24,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 32,
+                                "padding_horizontal_mobile": 20,
+                                "width": "fill",
+                                "height": "fill",
+                                "gap": 8,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 6,
+                                "border": "solid",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_opacity": 100,
+                                "border_radius": 0,
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.3,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
+                            },
+                            "blocks": {
+                                "card_3_heading": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "40%",
+                                        "heading_size": "vt-heading-h4",
+                                        "heading_alignment": "text-center",
+                                        "heading_tag": "h4",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.4,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_3_label": {
+                                    "type": "sub-heading",
+                                    "settings": {
+                                        "sub_heading": "Recycled Materials",
+                                        "subheading_tag": "h4",
+                                        "subheading_alignment": "text-center",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.5,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_3_desc": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>in our products</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "paragraph_width": "fit",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.6,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "card_3_heading",
+                                "card_3_label",
+                                "card_3_desc"
+                            ]
+                        },
+                        "goal_card_4": {
+                            "type": "stat-card",
+                            "settings": {
+                                "background_color": "#F8F9DC",
+                                "heading_color": "#003225",
+                                "text_color": "#224E09",
+                                "position": "middle",
+                                "alignment": "center",
+                                "enable_decorative_icon": false,
+                                "padding_vertical": 44,
+                                "padding_horizontal": 24,
+                                "enable_padding_mobile": true,
+                                "padding_vertical_mobile": 32,
+                                "padding_horizontal_mobile": 20,
+                                "width": "fill",
+                                "height": "fill",
+                                "gap": 8,
+                                "enable_gap_mobile": true,
+                                "gap_mobile": 6,
+                                "border": "solid",
+                                "border_color": "#003225",
+                                "border_width": 1,
+                                "border_opacity": 100,
+                                "border_radius": 0,
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.4,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 1
+                            },
+                            "blocks": {
+                                "card_4_heading": {
+                                    "type": "heading",
+                                    "settings": {
+                                        "heading": "2026",
+                                        "heading_size": "vt-heading-h4",
+                                        "heading_alignment": "text-center",
+                                        "heading_tag": "h4",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.5,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_4_label": {
+                                    "type": "sub-heading",
+                                    "settings": {
+                                        "sub_heading": "Carbon Neutral",
+                                        "subheading_tag": "h4",
+                                        "subheading_alignment": "text-center",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.6,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                },
+                                "card_4_desc": {
+                                    "type": "paragraph",
+                                    "settings": {
+                                        "text": "<p>achieved</p>",
+                                        "paragraph_size": "vt-paragraph-extra-small",
+                                        "paragraph_alignment": "text-center",
+                                        "paragraph_width": "fit",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.7,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
+                                    }
+                                }
+                            },
+                            "block_order": [
+                                "card_4_heading",
+                                "card_4_label",
+                                "card_4_desc"
+                            ]
+                        }
+                    },
+                    "block_order": [
+                        "goal_card_1",
+                        "goal_card_2",
+                        "goal_card_3",
+                        "goal_card_4"
+                    ]
+                }
+            },
+            "block_order": [
+                "goals_grid"
+            ]
+        },
+        "text_marquee": {
+            "type": "text-marquee",
+            "settings": {
+                "bg_color": "#F8F9DC",
+                "text_color": "#003225",
+                "speed": 24,
+                "gap_desktop": 32,
+                "gap_mobile": 24,
+                "padding_top": 0,
+                "padding_bottom": 96,
+                "padding_bottom_mobile": 64
+            },
+            "blocks": {
+                "marquee_item_1": {
+                    "type": "heading",
+                    "settings": {
+                        "heading": "SUSTAINABLE FABRICS",
+                        "heading_size": "vt-heading-h5",
+                        "heading_alignment": "text-center",
+                        "heading_tag": "h3"
+                    }
+                },
+                "marquee_item_2": {
+                    "type": "icons",
+                    "settings": {
+                        "icon": "leaf",
+                        "icon_color": "#003225",
+                        "icon_size_desktop": 24,
+                        "icon_size_mobile": 20
+                    }
+                },
+                "marquee_item_3": {
+                    "type": "heading",
+                    "settings": {
+                        "heading": "FEEL GOOD CLOTHES",
+                        "heading_size": "vt-heading-h5",
+                        "heading_alignment": "text-center",
+                        "heading_tag": "h3"
+                    }
+                },
+                "marquee_item_4": {
+                    "type": "icons",
+                    "settings": {
+                        "icon": "leaf",
+                        "icon_color": "#003225",
+                        "icon_size_desktop": 24,
+                        "icon_size_mobile": 20
+                    }
+                }
+            },
+            "block_order": [
+                "marquee_item_1",
+                "marquee_item_2",
+                "marquee_item_3",
+                "marquee_item_4"
+            ]
         }
     },
     "order": [
@@ -825,5 +1263,7 @@
         "rich_text_section",
         "impact_metrics_section",
         "personal_sustainability_impact",
+        "sustainability_goals",
+        "text_marquee"
     ]
 }
