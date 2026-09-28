@@ -80,22 +80,12 @@
       grid-column: span 1 / span 1;
     }
 
-    /* Card đang TO ở desktop (7 cột: 4n + 1, 4n + 4) -> về mobile sẽ BÉ */
     .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card,
     .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 1),
     .vt-collection-list > .vt-collection-card:nth-child(4n + 4),
     .vt-collection-list .vt-collection-card--mobile-small {
-      min-height: 280px !important;
-    }
-
-    .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card > .relative.z-10,
-    .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card > .relative.z-10,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 1) > .relative.z-10,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 4) > .relative.z-10,
-    .vt-collection-list .vt-collection-card--mobile-small > .relative.z-10 {
-      padding: 1.25rem !important;
-      gap: 0.5rem !important;
+      min-height: 280px;
     }
 
     .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card .vt-heading,
@@ -103,7 +93,7 @@
     .vt-collection-list > .vt-collection-card:nth-child(4n + 1) .vt-heading,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 4) .vt-heading,
     .vt-collection-list .vt-collection-card--mobile-small .vt-heading {
-      font-size: clamp(1.25rem, 4.5vw, 1.5rem) !important;
+      font-size: clamp(1.25rem, 4.5vw, 1.5rem);
     }
 
     .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card .vt-paragraph,
@@ -111,26 +101,16 @@
     .vt-collection-list > .vt-collection-card:nth-child(4n + 1) .vt-paragraph,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 4) .vt-paragraph,
     .vt-collection-list .vt-collection-card--mobile-small .vt-paragraph {
-      font-size: 0.875rem !important;
-      line-height: 1.35 !important;
+      font-size: 0.875rem;
+      line-height: 1.35;
     }
 
-    /* Card đang BÉ ở desktop (5 cột: 4n + 2, 4n + 3) -> về mobile lại TO */
     .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card,
     .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 2),
     .vt-collection-list > .vt-collection-card:nth-child(4n + 3),
     .vt-collection-list .vt-collection-card--mobile-large {
-      min-height: 480px !important;
-    }
-
-    .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card > .relative.z-10,
-    .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card > .relative.z-10,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 2) > .relative.z-10,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 3) > .relative.z-10,
-    .vt-collection-list .vt-collection-card--mobile-large > .relative.z-10 {
-      padding: 1.75rem !important;
-      gap: 0.875rem !important;
+      min-height: 480px;
     }
 
     .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card .vt-heading,
@@ -138,7 +118,7 @@
     .vt-collection-list > .vt-collection-card:nth-child(4n + 2) .vt-heading,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 3) .vt-heading,
     .vt-collection-list .vt-collection-card--mobile-large .vt-heading {
-      font-size: clamp(1.625rem, 5.5vw, 2rem) !important;
+      font-size: clamp(1.625rem, 5.5vw, 2rem);
     }
 
     .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card .vt-paragraph,
@@ -146,8 +126,8 @@
     .vt-collection-list > .vt-collection-card:nth-child(4n + 2) .vt-paragraph,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 3) .vt-paragraph,
     .vt-collection-list .vt-collection-card--mobile-large .vt-paragraph {
-      font-size: 1rem !important;
-      line-height: 1.45 !important;
+      font-size: 1rem;
+      line-height: 1.45;
     }
   }
 
@@ -161,23 +141,23 @@
 
   /* Scoped typography for dynamically rendered cards inside vt-collection-list */
   .vt-collection-list .vt-collection-card .vt-heading-h3 {
-    color: #FFFFFF !important;
-    font-family: var(--vt-font-family-heading) !important;
-    font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 1.2rem + 1vw, 2rem)) !important;
-    font-weight: var(--vt-font-heading-weight, 500) !important;
-    letter-spacing: -0.02em !important;
-    line-height: var(--vt-font-heading-3-line-height, 1.2) !important;
+    color: #FFFFFF;
+    font-family: var(--vt-font-family-heading);
+    font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 1.2rem + 1vw, 2rem));
+    font-weight: var(--vt-font-heading-weight, 500);
+    letter-spacing: -0.02em;
+    line-height: var(--vt-font-heading-3-line-height, 1.2);
   }
 
   .vt-collection-list .vt-collection-card .vt-paragraph-medium {
-    color: rgba(255, 255, 255, 0.9) !important;
-    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem) !important;
-    font-weight: 300 !important;
-    line-height: 1.4 !important;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+    font-weight: 300;
+    line-height: 1.4;
   }
 
   .vt-collection-list .vt-collection-card .vt-button--link-light {
-    color: #FFFFFF !important;
+    color: #FFFFFF;
     text-transform: uppercase;
     font-size: 0.875rem;
     font-weight: 500;
@@ -192,8 +172,8 @@
     width: 1.625rem;
     height: 1.625rem;
     border-radius: 50%;
-    background-color: #FFFFFF !important;
-    color: #003225 !important;
+    background-color: #FFFFFF;
+    color: #003225;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -204,7 +184,7 @@
   .vt-collection-list .vt-collection-card .vt-button-icon svg {
     width: 0.75rem;
     height: 0.625rem;
-    color: #003225 !important;
+    color: #003225;
     fill: currentColor;
   }
 

@@ -17,8 +17,66 @@
   {%- assign size_class = 'vt-collection-card--desktop-small vt-collection-card--mobile-large' -%}
 {%- endif -%}
 
+{%- comment -%} Vertical position (Desktop & Mobile) {%- endcomment -%}
+{%- assign v_desktop = block.settings.content_position_desktop | default: 'bottom' -%}
+{%- case v_desktop -%}
+  {%- when 'top' -%}
+    {%- assign v_class_desktop = 'lg:justify-start' -%}
+  {%- when 'center' -%}
+    {%- assign v_class_desktop = 'lg:justify-center' -%}
+  {%- else -%}
+    {%- assign v_class_desktop = 'lg:justify-end' -%}
+{%- endcase -%}
+
+{%- assign v_mobile = block.settings.content_position_mobile | default: 'bottom' -%}
+{%- case v_mobile -%}
+  {%- when 'top' -%}
+    {%- assign v_class_mobile = 'justify-start' -%}
+  {%- when 'center' -%}
+    {%- assign v_class_mobile = 'justify-center' -%}
+  {%- else -%}
+    {%- assign v_class_mobile = 'justify-end' -%}
+{%- endcase -%}
+
+{%- comment -%} Horizontal alignment (Desktop & Mobile) {%- endcomment -%}
+{%- assign h_desktop = block.settings.content_alignment_desktop | default: 'left' -%}
+{%- case h_desktop -%}
+  {%- when 'center' -%}
+    {%- assign h_class_desktop = 'lg:items-center lg:text-center' -%}
+    {%- assign justify_desktop = 'center' -%}
+  {%- when 'right' -%}
+    {%- assign h_class_desktop = 'lg:items-end lg:text-right' -%}
+    {%- assign justify_desktop = 'flex-end' -%}
+  {%- else -%}
+    {%- assign h_class_desktop = 'lg:items-start lg:text-left' -%}
+    {%- assign justify_desktop = 'flex-start' -%}
+{%- endcase -%}
+
+{%- assign h_mobile = block.settings.content_alignment_mobile | default: 'left' -%}
+{%- case h_mobile -%}
+  {%- when 'center' -%}
+    {%- assign h_class_mobile = 'items-center text-center' -%}
+    {%- assign justify_mobile = 'center' -%}
+  {%- when 'right' -%}
+    {%- assign h_class_mobile = 'items-end text-right' -%}
+    {%- assign justify_mobile = 'flex-end' -%}
+  {%- else -%}
+    {%- assign h_class_mobile = 'items-start text-left' -%}
+    {%- assign justify_mobile = 'flex-start' -%}
+{%- endcase -%}
+
 <div
-  class="vt-collection-card {{ size_class }} group relative isolate overflow-hidden flex flex-col justify-end text-white min-h-[420px] lg:min-h-[532px] w-full"
+  class="vt-collection-card {{ size_class }} group relative isolate overflow-hidden flex flex-col {{ v_class_mobile }} {{ v_class_desktop }} text-white min-h-[420px] lg:min-h-[532px] w-full"
+  style="
+    --vt-card-pad-desktop: {{ block.settings.padding_desktop | default: 32 }}px;
+    --vt-card-pad-mobile: {{ block.settings.padding_mobile | default: 20 }}px;
+    --vt-card-gap-desktop: {{ block.settings.gap_desktop | default: 16 }}px;
+    --vt-card-gap-mobile: {{ block.settings.gap_mobile | default: 12 }}px;
+    --vt-ov-color: {{ block.settings.overlay_color | default: '#003225' }};
+    --vt-ov-opacity: {{ block.settings.overlay_opacity | default: 45 | divided_by: 100.0 }};
+    --vt-btn-justify-m: {{ justify_mobile }};
+    --vt-btn-justify-d: {{ justify_desktop }};
+  "
   {{ block.shopify_attributes }}
 >
   {%- if card_image != blank -%}
@@ -34,16 +92,18 @@
   {%- else -%}
     {%- assign svg_num = card_index | default: 1 -%}
     {%- if svg_num > 6 -%}{%- assign svg_num = 1 -%}{%- endif -%}
-    <div class="absolute inset-0 size-full bg-[#003225] flex items-center justify-center text-white/20">
+    <div class="absolute inset-0 size-full flex items-center justify-center text-white/20">
       {{ 'collection-' | append: svg_num | placeholder_svg_tag: 'size-full object-cover opacity-25' }}
     </div>
   {%- endif -%}
 
   <!-- Dark gradient overlay -->
-  <div
-    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#003225] via-[#003225]/45 to-transparent transition-opacity duration-300"
-    aria-hidden="true"
-  ></div>
+  {%- if block.settings.enable_overlay != false -%}
+    <div
+      class="vt-collection-card__overlay pointer-events-none absolute inset-0 transition-opacity duration-300"
+      aria-hidden="true"
+    ></div>
+  {%- endif -%}
 
   <!-- Direct link overlay when link is provided on card (disabled in design mode for easy block editing) -->
   {%- if card_url != blank -%}
@@ -53,7 +113,7 @@
   {%- endif -%}
 
   <!-- Content -->
-  <div class="relative z-10 flex flex-col items-start gap-3 lg:gap-4 p-6 lg:p-8 w-full pointer-events-auto">
+  <div class="vt-collection-card__content relative z-10 flex flex-col {{ h_class_mobile }} {{ h_class_desktop }} w-full pointer-events-auto">
     {% content_for 'blocks', closest.collection: card_collection %}
   </div>
 </div>
@@ -64,6 +124,188 @@
     box-sizing: border-box;
     height: 100%;
     width: 100%;
+  }
+
+  .vt-collection-card__content {
+    box-sizing: border-box;
+    padding: var(--vt-card-pad-desktop, 32px);
+    gap: var(--vt-card-gap-desktop, 16px);
+  }
+
+  .vt-collection-card__overlay {
+    background: linear-gradient(
+      to top,
+      var(--vt-ov-color, #003225) 0%,
+      color-mix(in srgb, var(--vt-ov-color, #003225) 30%, transparent) 45%,
+      transparent 100%
+    );
+    opacity: var(--vt-ov-opacity, 0.45);
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-collection-card__content {
+      padding: var(--vt-card-pad-mobile, 20px);
+      gap: var(--vt-card-gap-mobile, 12px);
+    }
+
+    .vt-collection-card--mobile-small .vt-collection-card__content {
+      padding: clamp(12px, calc(var(--vt-card-pad-mobile, 20px) * 0.75), 24px);
+      gap: clamp(6px, calc(var(--vt-card-gap-mobile, 12px) * 0.75), 14px);
+    }
+  }
+
+  /* Support Theme Editor <shopify-block> wrappers */
+  .vt-collection-card__content > shopify-block {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Alignment helpers for button CTA inside card */
+  .vt-collection-card .vt-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: var(--vt-btn-justify-m, flex-start);
+  }
+
+  .vt-collection-card__content.items-center .vt-buttons,
+  .vt-collection-card__content.text-center .vt-buttons {
+    justify-content: center !important;
+  }
+  .vt-collection-card__content.items-center .vt-buttons > a,
+  .vt-collection-card__content.text-center .vt-buttons > a {
+    margin-inline: auto;
+  }
+  .vt-collection-card__content.items-center .vt-heading-wrapper,
+  .vt-collection-card__content.text-center .vt-heading-wrapper {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .vt-collection-card__content.items-center .vt-paragraph,
+  .vt-collection-card__content.text-center .vt-paragraph {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .vt-collection-card__content.items-end .vt-buttons,
+  .vt-collection-card__content.text-right .vt-buttons {
+    justify-content: flex-end !important;
+  }
+  .vt-collection-card__content.items-end .vt-buttons > a,
+  .vt-collection-card__content.text-right .vt-buttons > a {
+    margin-left: auto;
+    margin-right: 0;
+  }
+  .vt-collection-card__content.items-end .vt-heading-wrapper,
+  .vt-collection-card__content.text-right .vt-heading-wrapper {
+    margin-left: auto;
+    margin-right: 0;
+    text-align: right;
+  }
+  .vt-collection-card__content.items-end .vt-paragraph,
+  .vt-collection-card__content.text-right .vt-paragraph {
+    text-align: right;
+    justify-content: flex-end;
+  }
+
+  .vt-collection-card__content.items-start .vt-buttons,
+  .vt-collection-card__content.text-left .vt-buttons {
+    justify-content: flex-start !important;
+  }
+  .vt-collection-card__content.items-start .vt-buttons > a,
+  .vt-collection-card__content.text-left .vt-buttons > a {
+    margin-right: auto;
+    margin-left: 0;
+  }
+  .vt-collection-card__content.items-start .vt-heading-wrapper,
+  .vt-collection-card__content.text-left .vt-heading-wrapper {
+    margin-right: auto;
+    margin-left: 0;
+    text-align: left;
+  }
+  .vt-collection-card__content.items-start .vt-paragraph,
+  .vt-collection-card__content.text-left .vt-paragraph {
+    text-align: left;
+    justify-content: flex-start;
+  }
+
+  @media screen and (min-width: 1024px) {
+    .vt-collection-card .vt-buttons {
+      justify-content: var(--vt-btn-justify-d, flex-start);
+    }
+
+    .vt-collection-card__content.lg\:items-end .vt-buttons,
+    .vt-collection-card__content.lg\:text-right .vt-buttons {
+      justify-content: flex-end !important;
+    }
+    .vt-collection-card__content.lg\:items-end .vt-buttons > a,
+    .vt-collection-card__content.lg\:text-right .vt-buttons > a {
+      margin-left: auto !important;
+      margin-right: 0 !important;
+    }
+    .vt-collection-card__content.lg\:items-end .vt-heading-wrapper,
+    .vt-collection-card__content.lg\:text-right .vt-heading-wrapper {
+      margin-left: auto !important;
+      margin-right: 0 !important;
+      text-align: right !important;
+    }
+    .vt-collection-card__content.lg\:items-end .vt-heading,
+    .vt-collection-card__content.lg\:text-right .vt-heading {
+      text-align: right !important;
+    }
+    .vt-collection-card__content.lg\:items-end .vt-paragraph,
+    .vt-collection-card__content.lg\:text-right .vt-paragraph {
+      text-align: right !important;
+      justify-content: flex-end !important;
+    }
+
+    .vt-collection-card__content.lg\:items-center .vt-buttons,
+    .vt-collection-card__content.lg\:text-center .vt-buttons {
+      justify-content: center !important;
+    }
+    .vt-collection-card__content.lg\:items-center .vt-buttons > a,
+    .vt-collection-card__content.lg\:text-center .vt-buttons > a {
+      margin-inline: auto !important;
+    }
+    .vt-collection-card__content.lg\:items-center .vt-heading-wrapper,
+    .vt-collection-card__content.lg\:text-center .vt-heading-wrapper {
+      margin-inline: auto !important;
+      text-align: center !important;
+    }
+    .vt-collection-card__content.lg\:items-center .vt-heading,
+    .vt-collection-card__content.lg\:text-center .vt-heading {
+      text-align: center !important;
+    }
+    .vt-collection-card__content.lg\:items-center .vt-paragraph,
+    .vt-collection-card__content.lg\:text-center .vt-paragraph {
+      text-align: center !important;
+      justify-content: center !important;
+    }
+
+    .vt-collection-card__content.lg\:items-start .vt-buttons,
+    .vt-collection-card__content.lg\:text-left .vt-buttons {
+      justify-content: flex-start !important;
+    }
+    .vt-collection-card__content.lg\:items-start .vt-buttons > a,
+    .vt-collection-card__content.lg\:text-left .vt-buttons > a {
+      margin-right: auto !important;
+      margin-left: 0 !important;
+    }
+    .vt-collection-card__content.lg\:items-start .vt-heading-wrapper,
+    .vt-collection-card__content.lg\:text-left .vt-heading-wrapper {
+      margin-right: auto !important;
+      margin-left: 0 !important;
+      text-align: left !important;
+    }
+    .vt-collection-card__content.lg\:items-start .vt-heading,
+    .vt-collection-card__content.lg\:text-left .vt-heading {
+      text-align: left !important;
+    }
+    .vt-collection-card__content.lg\:items-start .vt-paragraph,
+    .vt-collection-card__content.lg\:text-left .vt-paragraph {
+      text-align: left !important;
+      justify-content: flex-start !important;
+    }
   }
 
   /* Scoped typography for Heading inside collection card */
@@ -95,7 +337,7 @@
 
   /* Scoped CTA button styling inside collection card */
   .vt-collection-card .vt-buttons {
-    margin-top: clamp(0.5rem, 1vw, 1rem);
+    margin-top: clamp(0.25rem, 0.5vw, 0.75rem);
   }
 
   .vt-collection-card .vt-button,
@@ -156,6 +398,10 @@
   ],
   "settings": [
     {
+      "type": "header",
+      "content": "Media & Link"
+    },
+    {
       "type": "collection",
       "id": "collection",
       "label": "Collection"
@@ -163,17 +409,158 @@
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image"
+      "label": "Image override"
     },
     {
       "type": "url",
       "id": "link",
-      "label": "Link"
+      "label": "Link override"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay",
+      "label": "Enable dark overlay",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#003225",
+      "visible_if": "{{ block.settings.enable_overlay }}"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 45,
+      "visible_if": "{{ block.settings.enable_overlay }}"
+    },
+    {
+      "type": "header",
+      "content": "Desktop alignment"
+    },
+    {
+      "type": "select",
+      "id": "content_position_desktop",
+      "label": "Vertical position (Desktop)",
+      "options": [
+        { "value": "top", "label": "Top (Trên)" },
+        { "value": "center", "label": "Center (Giữa)" },
+        { "value": "bottom", "label": "Bottom (Dưới)" }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment_desktop",
+      "label": "Horizontal alignment (Desktop)",
+      "options": [
+        { "value": "left", "label": "Left (Trái)" },
+        { "value": "center", "label": "Center (Giữa)" },
+        { "value": "right", "label": "Right (Phải)" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Desktop spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_desktop",
+      "min": 12,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "label": "Card padding (Desktop)",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "min": 4,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between blocks (Desktop)",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Mobile alignment"
+    },
+    {
+      "type": "select",
+      "id": "content_position_mobile",
+      "label": "Vertical position (Mobile)",
+      "options": [
+        { "value": "top", "label": "Top (Trên)" },
+        { "value": "center", "label": "Center (Giữa)" },
+        { "value": "bottom", "label": "Bottom (Dưới)" }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment_mobile",
+      "label": "Horizontal alignment (Mobile)",
+      "options": [
+        { "value": "left", "label": "Left (Trái)" },
+        { "value": "center", "label": "Center (Giữa)" },
+        { "value": "right", "label": "Right (Phải)" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Mobile spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_mobile",
+      "min": 8,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Card padding (Mobile)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 4,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between blocks (Mobile)",
+      "default": 12
     }
   ],
   "presets": [
     {
       "name": "Collection card",
+      "settings": {
+        "enable_overlay": true,
+        "overlay_color": "#003225",
+        "overlay_opacity": 45,
+        "content_position_desktop": "bottom",
+        "content_alignment_desktop": "left",
+        "padding_desktop": 32,
+        "gap_desktop": 16,
+        "content_position_mobile": "bottom",
+        "content_alignment_mobile": "left",
+        "padding_mobile": 20,
+        "gap_mobile": 12
+      },
       "blocks": [
         {
           "type": "collection-title",

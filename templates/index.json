@@ -835,7 +835,7 @@
                 "block_gap": 48,
                 "padding_top_mobile": 0,
                 "padding_bottom_mobile": 48,
-                "padding_horizontal_mobile": 20,
+                "padding_horizontal_mobile": 0,
                 "block_gap_mobile": 32,
                 "full_width": true
             },

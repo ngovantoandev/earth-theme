@@ -116,10 +116,21 @@
   if btn_label == blank or btn_label contains 't:blocks.button'
     assign btn_label = 'DISCOVER'
   endif
+
+  assign btn_align = block.settings.button_alignment | default: 'inherit'
+  assign align_class = ''
+  case btn_align
+    when 'left'
+      assign align_class = ' vt-buttons--left'
+    when 'center'
+      assign align_class = ' vt-buttons--center'
+    when 'right'
+      assign align_class = ' vt-buttons--right'
+  endcase
 %}
 
 {%- if btn_label != blank -%}
-  <div class="vt-buttons">
+  <div class="vt-buttons vt-collection-buttons{{ align_class }}">
     <a
       {% if target_link == blank %}
         role="link"
@@ -160,6 +171,35 @@
     </a>
   </div>
 {%- endif -%}
+
+{% stylesheet %}
+  .vt-collection-buttons {
+    width: 100%;
+  }
+
+  .vt-collection-buttons.vt-buttons--left {
+    justify-content: flex-start !important;
+  }
+  .vt-collection-buttons.vt-buttons--left > a {
+    margin-right: auto !important;
+    margin-left: 0 !important;
+  }
+
+  .vt-collection-buttons.vt-buttons--center {
+    justify-content: center !important;
+  }
+  .vt-collection-buttons.vt-buttons--center > a {
+    margin-inline: auto !important;
+  }
+
+  .vt-collection-buttons.vt-buttons--right {
+    justify-content: flex-end !important;
+  }
+  .vt-collection-buttons.vt-buttons--right > a {
+    margin-left: auto !important;
+    margin-right: 0 !important;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
@@ -217,6 +257,31 @@
             ],
             "default": "link-light",
             "label": "t:blocks.button.settings.button_style.label"
+        },
+        {
+            "type": "select",
+            "id": "button_alignment",
+            "options":
+            [
+                {
+                    "value": "inherit",
+                    "label": "inherit"
+                },
+                {
+                    "value": "left",
+                    "label": "Left"
+                },
+                {
+                    "value": "center",
+                    "label": "Center"
+                },
+                {
+                    "value": "right",
+                    "label": "Right"
+                }
+            ],
+            "default": "inherit",
+            "label": "Alignment"
         },
         {
             "type": "header",
