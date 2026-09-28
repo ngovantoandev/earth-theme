@@ -1,0 +1,206 @@
+{% doc %}
+  Renders a collection card block for use inside collection-list / collection grid.
+  Supports manual image override, optional link, and child blocks (collection-title, collection-paragraph, collection-button).
+{% enddoc %}
+
+{%- assign card_collection = block.settings.collection | default: closest.collection | default: col | default: collection -%}
+{%- assign card_image = block.settings.image | default: card_collection.featured_image | default: card_collection.image -%}
+{%- assign card_url = block.settings.link | default: card_collection.url | default: 'shopify://collections/all' -%}
+
+{%- assign card_idx_num = card_index | default: 1 | plus: 0 -%}
+{%- assign mod4 = card_idx_num | modulo: 4 -%}
+{%- if mod4 == 1 or mod4 == 0 -%}
+  {%- comment -%} Card 1 & 4 (to ở desktop: 7 cols) -> về mobile BÉ {%- endcomment -%}
+  {%- assign size_class = 'vt-collection-card--desktop-large vt-collection-card--mobile-small' -%}
+{%- else -%}
+  {%- comment -%} Card 2 & 3 (bé ở desktop: 5 cols) -> về mobile TO {%- endcomment -%}
+  {%- assign size_class = 'vt-collection-card--desktop-small vt-collection-card--mobile-large' -%}
+{%- endif -%}
+
+<div
+  class="vt-collection-card {{ size_class }} group relative isolate overflow-hidden flex flex-col justify-end text-white min-h-[420px] lg:min-h-[532px] w-full"
+  {{ block.shopify_attributes }}
+>
+  {%- if card_image != blank -%}
+    {{
+      card_image
+      | image_url: width: 1400
+      | image_tag:
+        loading: 'lazy',
+        sizes: '(min-width: 1024px) 58vw, (min-width: 768px) 50vw, 100vw',
+        widths: '400, 600, 800, 1000, 1200, 1400',
+        class: 'absolute inset-0 size-full object-cover transition-transform duration-500 ease-out group-hover:scale-105 motion-reduce:transform-none'
+    }}
+  {%- else -%}
+    {%- assign svg_num = card_index | default: 1 -%}
+    {%- if svg_num > 6 -%}{%- assign svg_num = 1 -%}{%- endif -%}
+    <div class="absolute inset-0 size-full bg-[#003225] flex items-center justify-center text-white/20">
+      {{ 'collection-' | append: svg_num | placeholder_svg_tag: 'size-full object-cover opacity-25' }}
+    </div>
+  {%- endif -%}
+
+  <!-- Dark gradient overlay -->
+  <div
+    class="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#003225] via-[#003225]/45 to-transparent transition-opacity duration-300"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Direct link overlay when link is provided on card (disabled in design mode for easy block editing) -->
+  {%- if card_url != blank -%}
+    {%- unless request.design_mode -%}
+      <a href="{{ card_url }}" class="absolute inset-0 z-20" aria-label="Collection link"></a>
+    {%- endunless -%}
+  {%- endif -%}
+
+  <!-- Content -->
+  <div class="relative z-10 flex flex-col items-start gap-3 lg:gap-4 p-6 lg:p-8 w-full pointer-events-auto">
+    {% content_for 'blocks', closest.collection: card_collection %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .vt-collection-card {
+    position: relative;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+  }
+
+  /* Scoped typography for Heading inside collection card */
+  .vt-collection-card .vt-heading,
+  .vt-collection-card .vt-heading-wrapper h1,
+  .vt-collection-card .vt-heading-wrapper h2,
+  .vt-collection-card .vt-heading-wrapper h3,
+  .vt-collection-card .vt-heading-wrapper h4,
+  .vt-collection-card .vt-heading-wrapper h5,
+  .vt-collection-card .vt-heading-wrapper h6 {
+    color: #FFFFFF !important;
+    font-family: var(--vt-font-family-heading) !important;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  /* Default heading 3 size if no specific size class override */
+  .vt-collection-card .vt-heading:not([class*="vt-heading-"]):not([class*="vt-hero-"]) {
+    font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 1.2rem + 1vw, 2rem));
+    line-height: var(--vt-font-heading-3-line-height, 1.2);
+  }
+
+  /* Scoped typography for paragraph inside collection card */
+  .vt-collection-card .vt-paragraph,
+  .vt-collection-card .vt-paragraph p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    margin: 0;
+  }
+
+  /* Scoped CTA button styling inside collection card */
+  .vt-collection-card .vt-buttons {
+    margin-top: clamp(0.5rem, 1vw, 1rem);
+  }
+
+  .vt-collection-card .vt-button,
+  .vt-collection-card .vt-button--link,
+  .vt-collection-card .vt-button--link-light {
+    color: #FFFFFF !important;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .vt-collection-card .vt-button .vt-button-icon {
+    width: 1.625rem;
+    height: 1.625rem;
+    border-radius: 50%;
+    background-color: #FFFFFF !important;
+    color: #003225 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .vt-collection-card .vt-button .vt-button-icon svg {
+    width: 0.75rem;
+    height: 0.625rem;
+    color: #003225 !important;
+    fill: currentColor;
+  }
+
+  .vt-collection-card:hover .vt-button .vt-button-icon,
+  .vt-collection-card .vt-button:hover .vt-button-icon {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vt-collection-card:hover .vt-button .vt-button-icon,
+    .vt-collection-card .vt-button:hover .vt-button-icon {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection card",
+  "tag": null,
+  "blocks": [
+    { "type": "collection-title" },
+    { "type": "collection-paragraph" },
+    { "type": "collection-button" }
+  ],
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection card",
+      "blocks": [
+        {
+          "type": "collection-title",
+          "settings": {
+            "heading": "Organic Essentials",
+            "heading_size": "vt-heading-h3",
+            "heading_tag": "h3"
+          }
+        },
+        {
+          "type": "collection-paragraph",
+          "settings": {
+            "text": "<p>From farm to wardrobe</p>",
+            "paragraph_size": "vt-paragraph-medium"
+          }
+        },
+        {
+          "type": "collection-button",
+          "settings": {
+            "button_label": "Discover",
+            "button_link": "shopify://collections/all",
+            "button_style": "link-light"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+

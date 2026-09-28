@@ -1,0 +1,272 @@
+{% doc %}
+  Renders a collection grid layout.
+  - When 'Collections' (collection_list) setting is selected, dynamically repeats cards for each collection.
+  - Fallback renders child collection-card blocks if collection_list is empty.
+  - Follows asymmetric 7/5 - 5/7 column pattern on desktop, 2-column on tablet, 1-column on mobile.
+{% enddoc %}
+
+{%- if block.settings.collection_list != blank and block.settings.collection_list.count > 0 -%}
+  {%- assign items_to_loop = block.settings.collection_list -%}
+  {%- assign is_connected = true -%}
+{%- else -%}
+  {%- assign items_to_loop = (1..4) -%}
+  {%- assign is_connected = false -%}
+{%- endif -%}
+
+<div
+  class="vt-collection-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8 w-full"
+  {{ block.shopify_attributes }}
+>
+  {%- for item in items_to_loop -%}
+    {%- if is_connected -%}
+      {%- assign current_col = item -%}
+      {%- assign loop_idx = forloop.index -%}
+    {%- else -%}
+      {%- assign col_idx = forloop.index0 -%}
+      {%- assign current_col = collections[col_idx] -%}
+      {%- assign loop_idx = forloop.index -%}
+    {%- endif -%}
+    {% content_for "block", type: "collection-card", id: "collection_card", closest.collection: current_col, col: current_col, card_index: loop_idx %}
+  {%- endfor -%}
+</div>
+
+{% stylesheet %}
+  .vt-collection-list {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Desktop Asymmetric 12-column grid layout: 7/5 then 5/7 pattern */
+  @media screen and (min-width: 1024px) {
+    .vt-collection-list {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 32px;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 1),
+    .vt-collection-list > *:nth-child(4n + 4) {
+      grid-column: span 7 / span 7;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 2),
+    .vt-collection-list > *:nth-child(4n + 3) {
+      grid-column: span 5 / span 5;
+    }
+  }
+
+  /* Tablet 2 equal columns */
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    .vt-collection-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .vt-collection-list > * {
+      grid-column: span 1 / span 1;
+    }
+  }
+
+  /* Mobile: Odd items on desktop (1, 3, 5...) -> về mobile BÉ, Even items (2, 4, 6...) -> về mobile TO */
+  @media screen and (max-width: 768px) {
+    .vt-collection-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .vt-collection-list > * {
+      grid-column: span 1 / span 1;
+    }
+
+    /* Card đang TO ở desktop (7 cột: 4n + 1, 4n + 4) -> về mobile sẽ BÉ */
+    .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card,
+    .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 1),
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 4),
+    .vt-collection-list .vt-collection-card--mobile-small {
+      min-height: 280px !important;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card > .relative.z-10,
+    .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card > .relative.z-10,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 1) > .relative.z-10,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 4) > .relative.z-10,
+    .vt-collection-list .vt-collection-card--mobile-small > .relative.z-10 {
+      padding: 1.25rem !important;
+      gap: 0.5rem !important;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card .vt-heading,
+    .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card .vt-heading,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 1) .vt-heading,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 4) .vt-heading,
+    .vt-collection-list .vt-collection-card--mobile-small .vt-heading {
+      font-size: clamp(1.25rem, 4.5vw, 1.5rem) !important;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card .vt-paragraph,
+    .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card .vt-paragraph,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 1) .vt-paragraph,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 4) .vt-paragraph,
+    .vt-collection-list .vt-collection-card--mobile-small .vt-paragraph {
+      font-size: 0.875rem !important;
+      line-height: 1.35 !important;
+    }
+
+    /* Card đang BÉ ở desktop (5 cột: 4n + 2, 4n + 3) -> về mobile lại TO */
+    .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card,
+    .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 2),
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 3),
+    .vt-collection-list .vt-collection-card--mobile-large {
+      min-height: 480px !important;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card > .relative.z-10,
+    .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card > .relative.z-10,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 2) > .relative.z-10,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 3) > .relative.z-10,
+    .vt-collection-list .vt-collection-card--mobile-large > .relative.z-10 {
+      padding: 1.75rem !important;
+      gap: 0.875rem !important;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card .vt-heading,
+    .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card .vt-heading,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 2) .vt-heading,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 3) .vt-heading,
+    .vt-collection-list .vt-collection-card--mobile-large .vt-heading {
+      font-size: clamp(1.625rem, 5.5vw, 2rem) !important;
+    }
+
+    .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card .vt-paragraph,
+    .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card .vt-paragraph,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 2) .vt-paragraph,
+    .vt-collection-list > .vt-collection-card:nth-child(4n + 3) .vt-paragraph,
+    .vt-collection-list .vt-collection-card--mobile-large .vt-paragraph {
+      font-size: 1rem !important;
+      line-height: 1.45 !important;
+    }
+  }
+
+  /* Theme Editor support: ensure shopify-block wrappers stretch full height in grid */
+  .vt-collection-list > shopify-block {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Scoped typography for dynamically rendered cards inside vt-collection-list */
+  .vt-collection-list .vt-collection-card .vt-heading-h3 {
+    color: #FFFFFF !important;
+    font-family: var(--vt-font-family-heading) !important;
+    font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 1.2rem + 1vw, 2rem)) !important;
+    font-weight: var(--vt-font-heading-weight, 500) !important;
+    letter-spacing: -0.02em !important;
+    line-height: var(--vt-font-heading-3-line-height, 1.2) !important;
+  }
+
+  .vt-collection-list .vt-collection-card .vt-paragraph-medium {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem) !important;
+    font-weight: 300 !important;
+    line-height: 1.4 !important;
+  }
+
+  .vt-collection-list .vt-collection-card .vt-button--link-light {
+    color: #FFFFFF !important;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .vt-collection-list .vt-collection-card .vt-button-icon {
+    width: 1.625rem;
+    height: 1.625rem;
+    border-radius: 50%;
+    background-color: #FFFFFF !important;
+    color: #003225 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .vt-collection-list .vt-collection-card .vt-button-icon svg {
+    width: 0.75rem;
+    height: 0.625rem;
+    color: #003225 !important;
+    fill: currentColor;
+  }
+
+  .vt-collection-list .vt-collection-card:hover .vt-button-icon {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vt-collection-list .vt-collection-card:hover .vt-button-icon {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection grid",
+  "tag": null,
+  "settings": [
+    {
+      "type": "collection_list",
+      "id": "collection_list",
+      "label": "Collections"
+    }
+  ],
+  "blocks": [
+    { "type": "collection-card" }
+  ],
+  "presets": [
+    {
+      "name": "Collection grid",
+      "blocks": [
+        {
+          "id": "collection_card",
+          "type": "collection-card",
+          "static": true,
+          "blocks": [
+            {
+              "type": "collection-title",
+              "settings": {
+                "heading_size": "vt-heading-h3",
+                "heading_tag": "h3"
+              }
+            },
+            {
+              "type": "collection-paragraph",
+              "settings": {
+                "paragraph_size": "vt-paragraph-medium"
+              }
+            },
+            {
+              "type": "collection-button",
+              "settings": {
+                "button_label": "DISCOVER",
+                "button_style": "link-light"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
