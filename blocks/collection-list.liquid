@@ -1,5 +1,5 @@
 {% doc %}
-  Renders a collection grid layout.
+  Renders a collection list layout.
   - When 'Collections' (collection_list) setting is selected, dynamically repeats cards for each collection.
   - Fallback renders child collection-card blocks if collection_list is empty.
   - Follows asymmetric 7/5 - 5/7 column pattern on desktop, 2-column on tablet, 1-column on mobile.
@@ -201,7 +201,7 @@
 
 {% schema %}
 {
-  "name": "Collection grid",
+  "name": "Collection list",
   "tag": null,
   "settings": [
     {
@@ -215,7 +215,7 @@
   ],
   "presets": [
     {
-      "name": "Collection grid",
+      "name": "Collection list",
       "blocks": [
         {
           "id": "collection_card",
