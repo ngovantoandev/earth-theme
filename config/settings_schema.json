@@ -8,6 +8,51 @@
 		"theme_support_url": "https://support.shopify.com/"
 	},
 	{
+		"name": "Logo and favicon",
+		"settings": [
+			{
+				"type": "image_picker",
+				"id": "logo",
+				"label": "Default logo"
+			},
+			{
+				"type": "image_picker",
+				"id": "transparent_logo",
+				"label": "Transparent logo"
+			},
+			{
+				"type": "image_picker",
+				"id": "favicon",
+				"label": "Favicon",
+				"info": "Display at 32x32px"
+			},
+			{
+				"type": "header",
+				"content": "Logo width"
+			},
+			{
+				"type": "range",
+				"id": "logo_width",
+				"min": 40,
+				"max": 300,
+				"step": 5,
+				"unit": "px",
+				"label": "Desktop logo width",
+				"default": 85
+			},
+			{
+				"type": "range",
+				"id": "mobile_logo_width",
+				"min": 30,
+				"max": 200,
+				"step": 5,
+				"unit": "px",
+				"label": "Mobile logo width",
+				"default": 70
+			}
+		]
+	},
+	{
 		"name": "t:general.typography.name",
 		"settings": [
 			{
@@ -1207,42 +1252,15 @@
 		"name": "t:general.colors.name",
 		"settings": [
 			{
-				"type": "header",
-				"content": "t:general.colors.global_defaults.header"
-			},
-			{
-				"type": "color",
-				"id": "background_color",
-				"default": "#003225",
-				"label": "t:general.colors.global_defaults.background.label"
-			},
-			{
-				"type": "color",
-				"id": "foreground_color",
-				"default": "#F8F9DC",
-				"label": "t:general.colors.global_defaults.foreground.label"
-			},
-			{
-				"type": "header",
-				"content": "t:general.colors.palette.header"
-			},
-			{
-				"type": "color",
-				"id": "color_primary",
-				"default": "#224E09",
-				"label": "t:general.colors.palette.primary.label"
-			},
-			{
-				"type": "color",
-				"id": "color_secondary",
-				"default": "#71CC3B",
-				"label": "t:general.colors.palette.secondary.label"
-			},
-			{
-				"type": "color",
-				"id": "color_accent",
-				"default": "#EAE060",
-				"label": "t:general.colors.palette.highlight.label"
+				"type": "color_palette",
+				"id": "colors",
+				"default": {
+					"background": "#003225",
+					"foreground": "#F8F9DC",
+					"primary": "#224E09",
+					"secondary": "#71CC3B",
+					"highlight": "#EAE060"
+				}
 			}
 		]
 	},

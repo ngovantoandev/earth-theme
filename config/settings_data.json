@@ -10,6 +10,13 @@
 {
   "current": {
     "heading_font_family": "dm_sans_n4",
+    "colors": {
+      "background": "#003225",
+      "foreground": "#F8F9DC",
+      "primary": "#224E09",
+      "secondary": "#71CC3B",
+      "highlight": "#EAE060"
+    },
     "color_primary": "#224E09",
     "color_secondary": "#71CC3B",
     "color_accent": "#EAE060",

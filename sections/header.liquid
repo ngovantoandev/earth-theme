@@ -92,6 +92,18 @@
             <span class="{{ desktop_logo_class }}" aria-hidden="true">{{ 'icon-Earth-logo.svg' | inline_asset_content }}</span>
           {%- endif -%}
 
+          {%- if settings.transparent_logo != blank -%}
+            {%- assign trans_logo_alt = settings.transparent_logo.alt | default: shop.name | escape -%}
+            {%- assign trans_logo_height = logo_width | divided_by: settings.transparent_logo.aspect_ratio | round -%}
+            {{ settings.transparent_logo | image_url: width: 600 | image_tag: 
+              class: 'earth-header__logo-img earth-header__logo-img--transparent', 
+              alt: trans_logo_alt, 
+              width: logo_width,
+              height: trans_logo_height,
+              loading: 'eager'
+            }}
+          {%- endif -%}
+
           {%- if settings.mobile_logo != blank -%}
             {%- assign mobile_logo_alt = settings.mobile_logo.alt | default: shop.name | escape -%}
             {%- assign mobile_logo_height = mobile_logo_width | divided_by: settings.mobile_logo.aspect_ratio | round -%}
@@ -727,6 +739,16 @@
       top: 50% !important;
       transform: translate(-50%, -50%) !important;
     }
+  }
+
+  .earth-header__logo-img--transparent {
+    display: none !important;
+  }
+  .earth-header-wrapper.is-transparent .earth-header__logo-img:not(.earth-header__logo-img--transparent) {
+    display: none !important;
+  }
+  .earth-header-wrapper.is-transparent .earth-header__logo-img--transparent {
+    display: block !important;
   }
 {% endstylesheet %}
 

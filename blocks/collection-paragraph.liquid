@@ -52,13 +52,71 @@
 
 {% liquid
   assign current_col = closest.collection | default: col | default: collection
-  assign desc_text = block.settings.text
-  if current_col.description != blank
-    if desc_text == blank or desc_text contains 'paragraph' or desc_text contains 'Paragraph' or desc_text contains 'From farm to wardrobe' or desc_text contains 'Share information'
-      assign desc_text = current_col.description | strip_html | truncatewords: 15
+  assign source = block.settings.content_source | default: 'auto'
+  assign words_limit = block.settings.truncate_words | default: 18
+
+  assign has_custom_text = false
+  if block.settings.text != blank and block.settings.text != 't:blocks.paragraph.settings.text.default'
+    assign has_custom_text = true
+    if block.settings.text contains 'Share information' or block.settings.text contains 'From farm to wardrobe' or block.settings.text contains 'Discover our latest'
+      assign has_custom_text = false
     endif
-  elsif desc_text contains 'Share information'
-    assign desc_text = '<p>From farm to wardrobe</p>'
+  endif
+
+  assign desc_text = ''
+
+  if current_col != blank and current_col.title != blank
+    case source
+      when 'description'
+        if current_col.description != blank
+          assign col_desc = current_col.description | strip_html | strip
+          if col_desc != blank
+            assign truncated_desc = col_desc | truncatewords: words_limit
+            assign desc_text = '<p>' | append: truncated_desc | append: '</p>'
+          endif
+        endif
+        if desc_text == blank
+          if has_custom_text
+            assign desc_text = block.settings.text
+          else
+            assign desc_text = '<p>Explore the ' | append: current_col.title | append: ' collection</p>'
+          endif
+        endif
+
+      when 'product_count'
+        assign count = current_col.all_products_count | default: current_col.products_count | default: 0
+        assign desc_text = '<p>' | append: count | append: ' products</p>'
+
+      when 'custom'
+        assign desc_text = block.settings.text
+
+      else
+        # 'auto' mode: Prioritize real collection description, fallback to product count or title
+        if current_col.description != blank
+          assign col_desc = current_col.description | strip_html | strip
+          if col_desc != blank
+            assign truncated_desc = col_desc | truncatewords: words_limit
+            assign desc_text = '<p>' | append: truncated_desc | append: '</p>'
+          endif
+        endif
+
+        if desc_text == blank
+          if current_col.all_products_count != blank and current_col.all_products_count > 0
+            assign desc_text = '<p>' | append: current_col.all_products_count | append: ' products</p>'
+          elsif has_custom_text
+            assign desc_text = block.settings.text
+          else
+            assign desc_text = '<p>Explore the ' | append: current_col.title | append: ' collection</p>'
+          endif
+        endif
+    endcase
+  else
+    # Fallback when no collection is connected (preview / placeholder mode)
+    if has_custom_text
+      assign desc_text = block.settings.text
+    else
+      assign desc_text = '<p>From farm to wardrobe</p>'
+    endif
   endif
 %}
 
@@ -152,10 +210,33 @@
     "settings":
     [
         {
+            "type": "select",
+            "id": "content_source",
+            "label": "Content source",
+            "options": [
+                { "value": "auto", "label": "Auto (Collection description / Products count)" },
+                { "value": "description", "label": "Collection description" },
+                { "value": "product_count", "label": "Product count" },
+                { "value": "custom", "label": "Custom text" }
+            ],
+            "default": "auto"
+        },
+        {
+            "type": "range",
+            "id": "truncate_words",
+            "min": 5,
+            "max": 60,
+            "step": 1,
+            "unit": "w",
+            "default": 18,
+            "label": "Max words for description",
+            "visible_if": "{{ block.settings.content_source != 'product_count' and block.settings.content_source != 'custom' }}"
+        },
+        {
             "type": "richtext",
             "id": "text",            
             "default": "t:blocks.paragraph.settings.text.default",
-            "label": "t:blocks.paragraph.settings.text.label"
+            "label": "Custom text / Fallback"
         },      
         {
             "type": "header",
@@ -390,8 +471,10 @@
     "presets":
     [
         {
-            "name": "t:blocks.paragraph.presets.name",
+            "name": "Collection text",
             "settings":{
+                "content_source": "auto",
+                "truncate_words": 18,
                 "text": "<p>Discover our latest collection of premium goods designed for modern living. Enjoy free shipping on orders over $50.</p>",
                 "paragraph_size": "vt-paragraph-medium",
                 "paragraph_alignment": "text-left",
