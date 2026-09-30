@@ -14,13 +14,16 @@
     "next_announcement": "Next announcement",
     "pause_announcements": "Pause announcements",
     "play_announcements": "Play announcements",
-    "close_announcement": "Close announcement"
-  },
-  "general": {
-    "accessibility": {
-      "skip_to_text": "Skip to content"
-    }
-  },
+    "close_announcement": "Close announcement",    
+    "skip_to_text": "Skip to content",    
+    "column_layout":{
+      "column_label": "Column {{ number }}",
+      "aria_label": "Column layout",
+      "carousel_role_description": "carousel",
+      "slide_role_description": "slide",
+      "slide_label": "{{ index }} of {{ total }}"
+    }    
+  }, 
   "404": {
     "title": "404",
     "not_found": "Page not found.",

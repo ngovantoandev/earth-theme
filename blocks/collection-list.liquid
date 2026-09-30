@@ -14,7 +14,11 @@
 {%- endif -%}
 
 <div
-  class="vt-collection-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8 w-full"
+  class="vt-collection-list w-full"
+  style="
+    --vt-collection-gap-desktop: {{ block.settings.gap_desktop | default: 30 }}px;
+    --vt-collection-gap-mobile: {{ block.settings.gap_mobile | default: 16 }}px;
+  "
   {{ block.shopify_attributes }}
 >
   {%- for item in items_to_loop -%}
@@ -34,6 +38,8 @@
   .vt-collection-list {
     width: 100%;
     box-sizing: border-box;
+    display: grid;
+    gap: var(--vt-collection-gap-mobile, 16px);
   }
 
   /* Desktop Asymmetric 12-column grid layout: 7/5 then 5/7 pattern */
@@ -41,7 +47,7 @@
     .vt-collection-list {
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 32px;
+      gap: var(--vt-collection-gap-desktop, 32px);
     }
 
     .vt-collection-list > *:nth-child(4n + 1),
@@ -60,7 +66,7 @@
     .vt-collection-list {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
+      gap: var(--vt-collection-gap-mobile, 24px);
     }
 
     .vt-collection-list > * {
@@ -73,7 +79,7 @@
     .vt-collection-list {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: var(--vt-collection-gap-mobile, 20px);
     }
 
     .vt-collection-list > * {
@@ -208,6 +214,30 @@
       "type": "collection_list",
       "id": "collection_list",
       "label": "Collections"
+    },
+    {
+      "type": "header",
+      "content": "Grid Spacing"
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop gap",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile gap",
+      "default": 16
     }
   ],
   "blocks": [
@@ -216,6 +246,10 @@
   "presets": [
     {
       "name": "Collection list",
+      "settings": {
+        "gap_desktop": 30,
+        "gap_mobile": 16
+      },
       "blocks": [
         {
           "id": "collection_card",

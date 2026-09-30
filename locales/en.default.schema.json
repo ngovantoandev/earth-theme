@@ -322,26 +322,8 @@
 		},
 		"colors": {
 			"name": "Colors",
-			"palette": {
-				"header": "Theme Color Palette",
-				"primary": {
-					"label": "Primary Color"
-				},
-				"secondary": {
-					"label": "Secondary Color"
-				},
-				"highlight": {
-					"label": "Highlight Color"
-				}
-			},
 			"global_defaults": {
-				"header": "Global",
-				"background": {
-					"label": "Background Color"
-				},
-				"foreground": {
-					"label": "Foreground Color"
-				}
+				"header": "Color palette"				
 			}
 		},
 		"buttons": {
@@ -523,7 +505,7 @@
 		"404": "Not found",
 		"article": "Article",
 		"block": "Block",
-		"blog": "Blog",
+		"blog": "Blog",		
 		"cart": "Cart",
 		"collection": "Collection",
 		"collections": "Collections",
@@ -534,7 +516,7 @@
 		"custom_section": "Custom section",
 		"headings": "Headings",
 		"footer": "Footer",
-		"group": "Group",
+		"group": "Stack",
 		"header": "Header",
 		"layout": "Layout",
 		"main": "Main",
@@ -553,31 +535,36 @@
 	},
 	"labels": {
 		"alignment": "Alignment",
+		"position": "Position",
 		"background": "Background",
 		"foreground": "Foreground",
-		"gap_desktop": "Gap (desktop)",
-		"gap_mobile": "Gap (mobile)",
 		"grid_gap": "Grid spacing",
 		"grid_item_width": "Grid item width",
 		"input_corner_radius": "Input corner radius",
-		"layout_direction": "Layout direction",
+		"layout_direction": "Direction",
 		"menu": "Menu",
 		"customer_account_menu": "Customer account menu",
 		"padding": "Padding",
 		"page_margin_desktop": "Page spacing (desktop)",
 		"page_margin_mobile": "Page spacing (mobile)",
 		"page_width": "Page width",
-		"position": "Position",
 		"show_payment_icons": "Show payment icons",
-		"spacing": "Spacing",
 		"text_style": "Text style",
-		"text": "Text"
+		"text": "Text",
+		"gap_desktop": "Gap (desktop)",
+		"gap_mobile": "Gap (mobile)"
 	},
 	"options": {
+		"position": {
+			"top": "Top",
+			"center": "Center",
+			"bottom": "Bottom",
+			"stretch": "Stretch"			
+		},
 		"alignment": {
 			"left": "Left",
 			"center": "Center",
-			"right": "Right"
+			"right": "Right"			
 		},
 		"direction": {
 			"horizontal": "Horizontal",
@@ -586,17 +573,7 @@
 		"heading_tag": {
 			"label": "Heading tag",
 			"info": "Specify heading code types for SEO and search engines for crawling purposes."
-		},
-		"page_width": {
-			"narrow": "Narrow",
-			"wide": "Wide"
-		},
-		"position": {
-			"top": "Top",
-			"center": "Center",
-			"bottom": "Bottom",
-			"stretch": "Stretch"
-		},
+		},		
 		"size": {
 			"large": "Large",
 			"small": "Small"
@@ -621,7 +598,7 @@
 					"content": "Appearance"
 				},
 				"background_color": {
-					"label": "Background color"
+					"label": "Background"
 				},
 				"text_color": {
 					"label": "Text color"
@@ -712,13 +689,13 @@
 					}
 				},
 				"desktop_content_alignment": {
-					"label": "Desktop content alignment"
+					"label": "Alignment (desktop)"
 				},
 				"mobile_content_alignment": {
-					"label": "Mobile content alignment"
+					"label": "Alignment (mobile)"
 				},
 				"heading_width": {
-					"label": "Heading width",
+					"label": "Width",
 					"options__1": {
 						"label": "Small"
 					},
@@ -729,7 +706,7 @@
 						"label": "Large"
 					},
 					"options__4": {
-						"label": "Full page width"
+						"label": "Full"
 					}
 				},
 				"gap_space": {
@@ -743,31 +720,31 @@
 					"label": "Gap (mobile)"
 				},
 				"header_colors": {
-					"content": "Colors"
+					"content": "Color"
 				},
 				"background_color": {
-					"label": "Background color"
+					"label": "Background"
 				},
 				"text_color": {
-					"label": "Text color"
+					"label": "Heading"
 				},
 				"header_section": {
-					"content": "Section"
+					"content": "Padding"
 				},
 				"padding_top": {
-					"label": "Top padding"
+					"label": "Top"
 				},
 				"padding_bottom": {
-					"label": "Bottom padding"
+					"label": "Bottom"
 				},
 				"enable_custom_mobile_padding": {
 					"label": "Custom for mobile"
 				},
 				"padding_top_mobile": {
-					"label": "Top padding (mobile)"
+					"label": "Top (mobile)"
 				},
 				"padding_bottom_mobile": {
-					"label": "Bottom padding (mobile)"
+					"label": "Bottom (mobile)"
 				},
 				"show_section_divider": {
 					"label": "Show section divider"
@@ -775,7 +752,7 @@
 				"divider_color": {
 					"label": "Divider color"
 				},
-				"make_section_full_width": {
+				"make_section_page_width": {
 					"label": "Make section full width"
 				}
 			}
@@ -814,7 +791,7 @@
 					}
 				},
 				"heading_alignment": {
-					"label": "Heading alignment",
+					"label": "Alignment",
 					"options__1": {
 						"label": "Left"
 					},
@@ -926,7 +903,7 @@
 					}
 				},
 				"sub_heading_alignment": {
-					"label": "Sub heading alignment",
+					"label": "Alignment",
 					"options__1": {
 						"label": "Left"
 					},
@@ -1034,7 +1011,7 @@
 					}
 				},
 				"paragraph_alignment": {
-					"label": "Paragraph alignment",
+					"label": "Alignment",
 					"options__1": {
 						"label": "Left"
 					},
@@ -1046,7 +1023,7 @@
 					}
 				},
 				"paragraph_max_width": {
-					"label": "Paragraph max width"
+					"label": "Max width"
 				},
 				"header_animation": {
 					"content": "Animations"
@@ -1231,204 +1208,154 @@
 				"name": "Button"
 			}
 		},
-		"icon":
-{
-    "name": "Icon",
-    "settings":
-    {
-        "icon":
-        {
-            "label": "Icon",
-            "options__1":
-            {
-                "label": "Leaf"
-            },
-            "options__2":
-            {
-                "label": "Carbon"
-            },
-            "options__3":
-            {
-                "label": "Tree"
-            },
-            "options__4":
-            {
-                "label": "Zero emissions"
-            },
-            "options__5":
-            {
-                "label": "Quality"
-            },
-            "options__6":
-            {
-                "label": "Drop"
-            },
-            "options__7":
-            {
-                "label": "Ecology"
-            },
-            "options__8":
-            {
-                "label": "Arrow left"
-            },
-            "options__9":
-            {
-                "label": "Arrow right"
-            },
-            "options__10":
-            {
-                "label": "Close"
-            },
-			"options__11":
-			{
-				"label": "Flower"
+		"icon": {
+			"name": "Icon",
+			"settings": {
+				"icon": {
+					"label": "Icon",
+					"options__1": {
+						"label": "Leaf"
+					},
+					"options__2": {
+						"label": "Carbon"
+					},
+					"options__3": {
+						"label": "Tree"
+					},
+					"options__4": {
+						"label": "Zero emissions"
+					},
+					"options__5": {
+						"label": "Quality"
+					},
+					"options__6": {
+						"label": "Drop"
+					},
+					"options__7": {
+						"label": "Ecology"
+					},
+					"options__8": {
+						"label": "Arrow left"
+					},
+					"options__9": {
+						"label": "Arrow right"
+					},
+					"options__10": {
+						"label": "Close"
+					},
+					"options__11": {
+						"label": "Flower"
+					}					
+				},
+				"icon_size_desktop": {
+					"label": "Icon size desktop"
+				},
+				"icon_size_mobile": {
+					"label": "Icon size mobile"
+				},
+				"icon_color": {
+					"label": "Icon color"
+				},
+				"header_box": {
+					"content": "Icon box"
+				},
+				"show_box": {
+					"label": "Show box icon"
+				},
+				"box_bg_color": {
+					"label": "Background"
+				},
+				"box_size_desktop": {
+					"label": "Box size desktop"
+				},
+				"box_size_mobile": {
+					"label": "Box size mobile"
+				},
+				"box_radius": {
+					"label": "Box style",
+					"options__1": {
+						"label": "Circle"
+					},
+					"options__2": {
+						"label": "Square"
+					},
+					"options__3": {
+						"label": "Rounded square"
+					}
+				},
+				"icon_animation": {
+					"content": "Animations"
+				},
+				"animation_type": {
+					"label": "Type",
+					"options__1": {
+						"label": "None"
+					},
+					"options__2": {
+						"label": "Fade"
+					},
+					"options__3": {
+						"label": "Slide"
+					},
+					"options__4": {
+						"label": "Float"
+					},
+					"options__5": {
+						"label": "Blur"
+					}
+				},
+				"animation_direction": {
+					"label": "Direction",
+					"options__1": {
+						"label": "From left"
+					},
+					"options__2": {
+						"label": "From right"
+					},
+					"options__3": {
+						"label": "From top"
+					},
+					"options__4": {
+						"label": "From bottom"
+					}
+				},
+				"animation_duration": {
+					"label": "Duration"
+				},
+				"animation_delay": {
+					"label": "Delay"
+				},
+				"animation_easing": {
+					"label": "Easing",
+					"options__1": {
+						"label": "Linear"
+					},
+					"options__2": {
+						"label": "Ease-out sine"
+					},
+					"options__3": {
+						"label": "Ease-in sine"
+					},
+					"options__4": {
+						"label": "Ease-in-out sine"
+					},
+					"options__5": {
+						"label": "Ease-in cubic"
+					},
+					"options__6": {
+						"label": "Ease-out cubic"
+					},
+					"options__7": {
+						"label": "Ease-in-out cubic"
+					}
+				},
+				"animation_blur_intensity": {
+					"label": "Blur intensity"
+				}
+			},
+			"presets": {
+				"name": "Icon"
 			}
-        },
-        "icon_size_desktop":
-        {
-            "label": "Icon size desktop"
-        },
-        "icon_size_mobile":
-        {
-            "label": "Icon size mobile"
-        },
-        "icon_color":
-        {
-            "label": "Icon color"
-        },
-        "header_box":
-        {
-            "content": "Icon box"
-        },
-        "show_box":
-        {
-            "label": "Show box icon"
-        },
-        "box_bg_color":
-        {
-            "label": "Background color"
-        },
-        "box_size_desktop":
-        {
-            "label": "Box size desktop"
-        },
-        "box_size_mobile":
-        {
-            "label": "Box size mobile"
-        },
-        "box_radius":
-        {
-            "label": "Box style",
-            "options__1":
-            {
-                "label": "Circle"
-            },
-            "options__2":
-            {
-                "label": "Square"
-            },
-            "options__3":
-            {
-                "label": "Rounded square"
-            }
-        },
-        "icon_animation":
-        {
-            "content": "Animations"
-        },
-        "animation_type":
-        {
-            "label": "Type",
-            "options__1":
-            {
-                "label": "None"
-            },
-            "options__2":
-            {
-                "label": "Fade"
-            },
-            "options__3":
-            {
-                "label": "Slide"
-            },
-            "options__4":
-            {
-                "label": "Float"
-            },
-            "options__5":
-            {
-                "label": "Blur"
-            }
-        },
-        "animation_direction":
-        {
-            "label": "Direction",
-            "options__1":
-            {
-                "label": "From left"
-            },
-            "options__2":
-            {
-                "label": "From right"
-            },
-            "options__3":
-            {
-                "label": "From top"
-            },
-            "options__4":
-            {
-                "label": "From bottom"
-            }
-        },
-        "animation_duration":
-        {
-            "label": "Duration"
-        },
-        "animation_delay":
-        {
-            "label": "Delay"
-        },
-        "animation_easing":
-        {
-            "label": "Easing",
-            "options__1":
-            {
-                "label": "Linear"
-            },
-            "options__2":
-            {
-                "label": "Ease-out sine"
-            },
-            "options__3":
-            {
-                "label": "Ease-in sine"
-            },
-            "options__4":
-            {
-                "label": "Ease-in-out sine"
-            },
-            "options__5":
-            {
-                "label": "Ease-in cubic"
-            },
-            "options__6":
-            {
-                "label": "Ease-out cubic"
-            },
-            "options__7":
-            {
-                "label": "Ease-in-out cubic"
-            }
-        },
-        "animation_blur_intensity":
-        {
-            "label": "Blur intensity"
-        }
-    },
-    "presets":
-    {
-        "name": "Icon"
-    }
-}
+		}
 	}
 }

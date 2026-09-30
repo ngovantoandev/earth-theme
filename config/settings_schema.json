@@ -1225,26 +1225,6 @@
 				"unit": "px",
 				"label": "t:labels.page_width",
 				"default": 1170
-			},
-			{
-				"type": "range",
-				"id": "min_page_margin",
-				"min": 12,
-				"max": 100,				
-				"step": 1,
-				"unit": "px",
-				"label": "t:labels.page_margin_desktop",
-				"default": 33
-			},
-			{
-				"type": "range",
-				"id": "min_page_margin_mobile",
-				"min": 12,
-				"max": 100,
-				"step": 1,
-				"unit": "px",
-				"label": "t:labels.page_margin_mobile",
-				"default": 20
 			}
 		]
 	},
@@ -1252,14 +1232,19 @@
 		"name": "t:general.colors.name",
 		"settings": [
 			{
+				"type": "header",
+				"content": "t:general.colors.global_defaults.header"
+			},
+			{
 				"type": "color_palette",
-				"id": "colors",
+				"id": "color_palette",
 				"default": {
-					"background": "#003225",
-					"foreground": "#F8F9DC",
+					"background": "#F8F9DC",
+					"foreground": "#003225",
 					"primary": "#224E09",
 					"secondary": "#71CC3B",
-					"highlight": "#EAE060"
+					"accent": "#EAE060",
+					"cactus_green": "#34601B"					
 				}
 			}
 		]

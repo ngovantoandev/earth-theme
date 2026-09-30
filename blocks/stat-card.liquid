@@ -520,7 +520,7 @@
         { "value": "fill", "label": "Fill" },
         { "value": "custom", "label": "Custom" }
       ],
-      "default": "fill"
+      "default": "fit"
     },
     {
       "type": "range",
@@ -542,7 +542,7 @@
         { "value": "fill", "label": "Fill" },
         { "value": "custom", "label": "Custom" }
       ],
-      "default": "fill"
+      "default": "fit"
     },
     {
       "type": "range",
@@ -724,7 +724,7 @@
       "visible_if": "{{ block.settings.animation_type == 'blur' }}"
     }   
   ],
-  "blocks": [ { "type": "icons" }, { "type": "heading" }, {"type": "paragraph"}, {"type": "heading-group"}, {"type": "group"}, {"type": "sub-heading"}, {"type": "badge"}, {"type": "button"},],       
+  "blocks": [ { "type": "icons" }, { "type": "heading" }, {"type": "paragraph"}, {"type": "heading-group"}, {"type": "stack"}, {"type": "sub-heading"}, {"type": "badge"}, {"type": "button"},],       
   "presets": [
     {
       "name": "Card",
@@ -747,9 +747,9 @@
         "enable_padding_mobile": true,
         "padding_vertical_mobile": 30,
         "padding_horizontal_mobile": 24,
-        "width": "fill",
+        "width": "fit",
         "width_custom": 50,
-        "height": "fill",
+        "height": "fit",
         "min_height": 100,
         "gap": 10,
         "enable_gap_mobile": true,

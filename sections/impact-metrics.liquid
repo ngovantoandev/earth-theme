@@ -71,11 +71,18 @@
 
   /* Ensure shopify-block wrappers stretch full width */
   .vt-impact-metrics__container > .shopify-block,
-  .vt-impact-metrics .group > .shopify-block {
+  .vt-impact-metrics__container > shopify-block,
+  .vt-impact-metrics .group > .shopify-block,
+  .vt-impact-metrics .group > shopify-block {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .vt-impact-metrics__container > vt-column-layout,
+  .vt-impact-metrics__container > .vt-column-layout {
+    width: 100%;
   }
 
   /* Header heading default color and styles */
@@ -237,9 +244,11 @@
       "name": "Impact Metrics",
       "blocks": [
         {
-          "type": "group",
+          "type": "stack",
           "settings": {
-            "layout_direction": "group--vertical",
+            "layout_direction_desktop": "vt-stack--vertical",
+            "layout_direction_tablet": "vt-stack--vertical",
+            "layout_direction_mobile": "vt-stack--vertical",
             "alignment": "center"
           },
           "blocks": [
@@ -309,23 +318,31 @@
           ]
         },
         {
-          "type": "grid-group",
+          "type": "column-layout",
           "settings": {
-            "type": "grid",
-            "desktop_columns": 4,
-            "mobile_columns": "1",
-            "enable_swipe_mobile": true,
-            "show_navigation_desktop": false,
-            "gap_desktop": 30,
-            "gap_mobile": 26,
-            "padding_vertical": 0,
-            "padding_horizontal": 0,
-            "padding_vertical_mobile": 0,
-            "padding_horizontal_mobile": 0
+            "desktop_column_count": 4,
+            "tablet_column_count": 2,
+            "mobile_column_count": 1,
+            "desktop_column_1_width": "lg:w-1/4|25",
+            "desktop_column_2_width": "lg:w-1/4|25",
+            "desktop_column_3_width": "lg:w-1/4|25",
+            "desktop_column_4_width": "lg:w-1/4|25",
+            "tablet_column_1_width": "md:w-1/2|50",
+            "tablet_column_2_width": "md:w-1/2|50",
+            "mobile_column_1_width": "w-5/6|83.3333",
+            "swipe_columns_mobile": true,
+            "desktop_gap_x": "lg:gap-x-7",
+            "desktop_gap_y": "lg:gap-y-8",
+            "tablet_gap_x": "md:gap-x-6",
+            "tablet_gap_y": "md:gap-y-6",
+            "mobile_gap_x": "gap-x-6",
+            "mobile_gap_y": "gap-y-6",
+            "padding_block": 0,
+            "padding_inline": 0,
+            "mobile_padding_block": 0,
+            "mobile_padding_inline": 0
           }
-          
         }
-
       ]
     }
   ]

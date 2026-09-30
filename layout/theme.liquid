@@ -42,12 +42,12 @@
 
   <body class="template-{{ request.page_type | handleize }}">
     <a class="skip-to-content-link visually-hidden" href="#MainContent">
-      {{ 'general.accessibility.skip_to_text' | t }}
+      {{ 'accessibility.skip_to_text' | t }}
     </a>
 
     {% sections 'header-group' %}
 
-    <main id="MainContent" class="vt-content-for-layout" role="main" tabindex="-1">
+    <main id="MainContent" class="vt-content-for-layout overflow-x-clip overflow-y-clip grow" role="main" tabindex="-1">      
       {{ content_for_layout }}
     </main>
 

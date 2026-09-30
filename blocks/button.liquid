@@ -55,7 +55,7 @@
 
 {%- assign vt_style = '' -%}
 
-{%- unless animation_type == 'none' -%}
+{%- unless animation_type == 'none' or request.visual_preview_mode -%}
   {%- assign vt_style = vt_style
     | append: '--vt-duration: '
     | append: block.settings.animation_duration

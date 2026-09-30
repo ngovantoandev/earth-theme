@@ -72,14 +72,7 @@
   }
 
   /* Ensure child block containers stretch full width */
-  .vt-sustainability-goals__container > .shopify-block,
-  .vt-sustainability-goals__container > .vt-grid-group,
-  .vt-sustainability-goals .group > .shopify-block {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  
 
   /* Heading & sub-heading styles at section level */
   .vt-sustainability-goals .vt-heading,
@@ -248,22 +241,29 @@
       "name": "Sustainability Goals",
       "blocks": [
         {
-          "type": "grid-group",
+          "type": "column-layout",
           "settings": {
-            "type": "grid",
-            "desktop_columns": 4,
-            "mobile_columns": "1",
-            "enable_swipe_mobile": true,
-            "show_navigation_desktop": false,
-            "show_navigation_mobile": false,
-            "gap_desktop": 24,
-            "gap_mobile": 16,
-            "offset_desktop": 34,
-            "offset_mobile": 20,
-            "padding_vertical": 0,
-            "padding_horizontal": 0,
-            "padding_vertical_mobile": 0,
-            "padding_horizontal_mobile": 0
+            "desktop_column_count": 4,
+            "tablet_column_count": 2,
+            "mobile_column_count": 1,
+            "desktop_column_1_width": "lg:w-1/4|25",
+            "desktop_column_2_width": "lg:w-1/4|25",
+            "desktop_column_3_width": "lg:w-1/4|25",
+            "desktop_column_4_width": "lg:w-1/4|25",
+            "tablet_column_1_width": "md:w-1/2|50",
+            "tablet_column_2_width": "md:w-1/2|50",
+            "mobile_column_1_width": "w-5/6|83.3333",
+            "swipe_columns_mobile": true,
+            "desktop_gap_x": "lg:gap-x-6",
+            "desktop_gap_y": "lg:gap-y-6",
+            "tablet_gap_x": "md:gap-x-4",
+            "tablet_gap_y": "md:gap-y-4",
+            "mobile_gap_x": "gap-x-4",
+            "mobile_gap_y": "gap-y-4",
+            "padding_block": 0,
+            "padding_inline": 0,
+            "mobile_padding_block": 0,
+            "mobile_padding_inline": 0
           },
           "blocks": [
             {

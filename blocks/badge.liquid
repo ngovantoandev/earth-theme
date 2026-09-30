@@ -100,6 +100,7 @@
 
   .vt-badge.vt-paragraph-custom {    
     font-size: calc(var(--vt-badge-font-size, 12) / 16 * 1rem);
+    padding: .5rem 1.25rem;
   }
 
   .vt-badge--width-fit {
@@ -230,19 +231,19 @@
     {
       "type": "color",
       "id": "bg_color",
-      "label": "Background color",
+      "label": "Background",
       "default": "#EAE060"
     },
     {
       "type": "color",
       "id": "text_color",
-      "label": "Text color",
+      "label": "Text",
       "default": "#003225"
     },
     {
       "type": "color",
       "id": "border_color",
-      "label": "Outline color",
+      "label": "Outline",
       "default": "#003225",
       "visible_if": "{{ block.settings.show_border }}"
     }
