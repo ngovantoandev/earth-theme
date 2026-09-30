@@ -52,7 +52,7 @@
 
 {% liquid
   assign current_col = closest.collection | default: col | default: collection
-  assign source = block.settings.content_source | default: 'auto'
+  assign source = block.settings.content_source | default: 'description'
   assign words_limit = block.settings.truncate_words | default: 18
 
   assign has_custom_text = false
@@ -214,12 +214,11 @@
             "id": "content_source",
             "label": "Content source",
             "options": [
-                { "value": "auto", "label": "Auto (Collection description / Products count)" },
                 { "value": "description", "label": "Collection description" },
                 { "value": "product_count", "label": "Product count" },
                 { "value": "custom", "label": "Custom text" }
             ],
-            "default": "auto"
+            "default": "description"
         },
         {
             "type": "range",
@@ -473,7 +472,7 @@
         {
             "name": "Collection text",
             "settings":{
-                "content_source": "auto",
+                "content_source": "description",
                 "truncate_words": 18,
                 "text": "<p>Discover our latest collection of premium goods designed for modern living. Enjoy free shipping on orders over $50.</p>",
                 "paragraph_size": "vt-paragraph-medium",
