@@ -1241,6 +1241,8 @@
             "settings": {
                 "full_width": true,
                 "bg_color": "#EBF7BE",
+                "heading_color": "#003225",
+                "paragraph_color": "#224E09",
                 "padding_top": 80,
                 "padding_bottom": 96,
                 "padding_horizontal": 34,

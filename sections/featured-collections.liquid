@@ -9,6 +9,8 @@
   id="vtFeaturedCollections-{{ section.id }}"
   style="
     --vt-bg: {{ section.settings.bg_color | default: '#EBF7BE' }};
+    --vt-heading-color: {{ section.settings.heading_color | default: '#003225' }};
+    --vt-paragraph-color: {{ section.settings.paragraph_color | default: '#224E09' }};
     --vt-pt: {{ section.settings.padding_top | default: 80 }}px;
     --vt-pb: {{ section.settings.padding_bottom | default: 96 }}px;
     --vt-ph: {{ section.settings.padding_horizontal | default: 34 }}px;
@@ -58,6 +60,31 @@
     width: 100%;
   }
 
+  /* Heading & Paragraph styling at section level (e.g. for header column-layout / heading-group / stack / paragraph) */
+  .vt-featured-collections .vt-heading,
+  .vt-featured-collections .vt-heading-group,
+  .vt-featured-collections .vt-subheading {
+    color: var(--vt-heading-color, #003225);
+  }
+
+  .vt-featured-collections .vt-heading-group .vt-heading {
+    color: inherit;
+  }
+
+  .vt-featured-collections .vt-paragraph {
+    color: var(--vt-paragraph-color, #224E09);
+  }
+
+  /* Preserve collection cards' own scoped colors */
+  .vt-featured-collections .vt-collection-card .vt-heading {
+    color: #FFFFFF;
+  }
+
+  .vt-featured-collections .vt-collection-card .vt-paragraph,
+  .vt-featured-collections .vt-collection-card .vt-paragraph * {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
   @media screen and (min-width: 769px) and (max-width: 1024px) {
     .vt-featured-collections__container {
       padding-left: clamp(20px, calc(var(--vt-ph, 34px) * 0.8), 34px);
@@ -96,10 +123,26 @@
       "default": true
     },
     {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
       "type": "color",
       "id": "bg_color",
       "label": "Background color",
       "default": "#EBF7BE"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#003225"
+    },
+    {
+      "type": "color",
+      "id": "paragraph_color",
+      "label": "Paragraph color",
+      "default": "#224E09"
     },
     {
       "type": "header",
@@ -199,6 +242,8 @@
       "settings": {
         "full_width": true,
         "bg_color": "#EBF7BE",
+        "heading_color": "#003225",
+        "paragraph_color": "#224E09",
         "padding_top": 80,
         "padding_bottom": 96,
         "padding_horizontal": 34,
