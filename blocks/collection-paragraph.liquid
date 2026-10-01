@@ -56,7 +56,7 @@
   assign words_limit = block.settings.truncate_words | default: 18
 
   assign has_custom_text = false
-  if block.settings.text != blank and block.settings.text != 't:blocks.paragraph.settings.text.default'
+  if block.settings.text != blank and block.settings.text != 't:blocks.paragraph.settings.text.default' and block.settings.text != 't:blocks.collection_paragraph.settings.text.default'
     assign has_custom_text = true
     if block.settings.text contains 'Share information' or block.settings.text contains 'From farm to wardrobe' or block.settings.text contains 'Discover our latest'
       assign has_custom_text = false
@@ -79,7 +79,7 @@
           if has_custom_text
             assign desc_text = block.settings.text
           else
-            assign desc_text = '<p>Explore the ' | append: current_col.title | append: ' collection</p>'
+            assign desc_text = '<p>Discover our latest collection</p>'
           endif
         endif
 
@@ -106,7 +106,7 @@
           elsif has_custom_text
             assign desc_text = block.settings.text
           else
-            assign desc_text = '<p>Explore the ' | append: current_col.title | append: ' collection</p>'
+            assign desc_text = '<p>Discover our latest collection</p>'
           endif
         endif
     endcase
@@ -115,7 +115,7 @@
     if has_custom_text
       assign desc_text = block.settings.text
     else
-      assign desc_text = '<p>From farm to wardrobe</p>'
+      assign desc_text = '<p>Discover our latest collection</p>'
     endif
   endif
 %}
@@ -205,18 +205,18 @@
 
 {% schema %}
 {
-    "name": "Collection paragraph",
+    "name": "t:blocks.collection_paragraph.name",
     "tag": null,
     "settings":
     [
         {
             "type": "select",
             "id": "content_source",
-            "label": "Content source",
+            "label": "t:blocks.collection_paragraph.settings.content_source.label",
             "options": [
-                { "value": "description", "label": "Collection description" },
-                { "value": "product_count", "label": "Product count" },
-                { "value": "custom", "label": "Custom text" }
+                { "value": "description", "label": "t:blocks.collection_paragraph.settings.content_source.description.label" },
+                { "value": "product_count", "label": "t:blocks.collection_paragraph.settings.content_source.product_count.label" },
+                { "value": "custom", "label": "t:blocks.collection_paragraph.settings.content_source.custom.label" }
             ],
             "default": "description"
         },
@@ -228,18 +228,18 @@
             "step": 1,
             "unit": "w",
             "default": 18,
-            "label": "Max words for description",
+            "label": "t:blocks.collection_paragraph.settings.truncate_words.label",
             "visible_if": "{{ block.settings.content_source != 'product_count' and block.settings.content_source != 'custom' }}"
         },
         {
             "type": "richtext",
             "id": "text",            
-            "default": "t:blocks.paragraph.settings.text.default",
-            "label": "Custom text / Fallback"
+            "default": "t:blocks.collection_paragraph.settings.text.default",
+            "label": "t:blocks.collection_paragraph.settings.text.label"
         },      
         {
             "type": "header",
-            "content": "Content"
+            "content": "t:blocks.collection_paragraph.settings.header_content.content"
         }, 
         {
             "type": "select",
@@ -248,27 +248,27 @@
             [
                 {
                     "value": "text-left",
-                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__1.label"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_alignment.options__1.label"
                 },
                 {
                     "value": "text-center",
-                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__2.label"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_alignment.options__2.label"
                 },
                 {
                     "value": "text-right",
-                    "label": "t:blocks.paragraph.settings.paragraph_alignment.options__3.label"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_alignment.options__3.label"
                 },
                 {
                     "value": "text-inherit",
-                    "label": "Inherit"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_alignment.options__4.label"
                 }            
             ],
             "default": "text-inherit",
-            "label": "t:blocks.paragraph.settings.paragraph_alignment.label"
+            "label": "t:blocks.collection_paragraph.settings.paragraph_alignment.label"
         },
         {
             "type": "header",
-            "content": "Size"
+            "content": "t:blocks.collection_paragraph.settings.header_size.content"
         }, 
         {
             "type": "select",
@@ -277,41 +277,41 @@
             [
                 {
                     "value": "vt-paragraph-extra-small",
-                    "label": "t:blocks.paragraph.settings.paragraph_size.options__1.label"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_size.options__1.label"
                 },
                 {
                     "value": "vt-paragraph-small",
-                    "label": "t:blocks.paragraph.settings.paragraph_size.options__2.label"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_size.options__2.label"
                 },
                 {
                     "value": "vt-paragraph-medium",
-                    "label": "t:blocks.paragraph.settings.paragraph_size.options__3.label"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_size.options__3.label"
                 },
                 {
                     "value": "vt-paragraph-large",
-                    "label": "t:blocks.paragraph.settings.paragraph_size.options__4.label"
+                    "label": "t:blocks.collection_paragraph.settings.paragraph_size.options__4.label"
                 }
             ],
             "default": "vt-paragraph-medium",
-            "label": "t:blocks.paragraph.settings.paragraph_size.label"
+            "label": "t:blocks.collection_paragraph.settings.paragraph_size.label"
         },        
         {
             "type": "select",
             "id": "paragraph_width",
-            "label": "Width",
+            "label": "t:blocks.collection_paragraph.settings.paragraph_width.label",
             "options": [
-                { "value": "fit", "label": "Fit" },
-                { "value": "fill", "label": "Fill" },
-                { "value": "max-content", "label": "Max content" },
-                { "value": "min-content", "label": "Min content" },
-                { "value": "custom", "label": "Custom" }
+                { "value": "fit", "label": "t:blocks.collection_paragraph.settings.paragraph_width.fit.label" },
+                { "value": "fill", "label": "t:blocks.collection_paragraph.settings.paragraph_width.fill.label" },
+                { "value": "max-content", "label": "t:blocks.collection_paragraph.settings.paragraph_width.max_content.label" },
+                { "value": "min-content", "label": "t:blocks.collection_paragraph.settings.paragraph_width.min_content.label" },
+                { "value": "custom", "label": "t:blocks.collection_paragraph.settings.paragraph_width.custom.label" }
             ],
             "default": "fit"
         },
         {
             "type": "range",
             "id": "width_custom",
-            "label": "Custom width",
+            "label": "t:blocks.collection_paragraph.settings.width_custom.label",
             "min": 1,
             "max": 100,
             "step": 1,
@@ -322,7 +322,7 @@
         {
             "type": "checkbox",
             "id": "enable_max_width",
-            "label": "Width limit",            
+            "label": "t:blocks.collection_paragraph.settings.enable_max_width.label",            
             "default": false
         },
         {
@@ -333,12 +333,12 @@
             "step": 20,
             "unit": "px",
             "default": 600,
-            "label": "t:blocks.paragraph.settings.paragraph_max_width.label",
+            "label": "t:blocks.collection_paragraph.settings.paragraph_max_width.label",
             "visible_if": "{{ block.settings.enable_max_width == true }}"
         },
         {
             "type": "header",
-            "content": "t:blocks.paragraph.settings.header_animation.content"
+            "content": "t:blocks.collection_paragraph.settings.header_animation.content"
         },
         {
             "type": "select",
@@ -347,27 +347,27 @@
             [
                 {
                     "value": "none",
-                    "label": "t:blocks.paragraph.settings.animation_type.options__1.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_type.options__1.label"
                 },
                 {
                     "value": "fade",
-                    "label": "t:blocks.paragraph.settings.animation_type.options__2.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_type.options__2.label"
                 },
                 {
                     "value": "slide",
-                    "label": "t:blocks.paragraph.settings.animation_type.options__3.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_type.options__3.label"
                 },
                 {
                     "value": "float",
-                    "label": "t:blocks.paragraph.settings.animation_type.options__4.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_type.options__4.label"
                 },
                 {
                     "value": "blur",
-                    "label": "t:blocks.paragraph.settings.animation_type.options__5.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_type.options__5.label"
                 }
             ],
             "default": "none",
-            "label": "t:blocks.paragraph.settings.animation_type.label"
+            "label": "t:blocks.collection_paragraph.settings.animation_type.label"
         },
         {
             "type": "select",
@@ -376,23 +376,23 @@
             [
                 {
                     "value": "from-left",
-                    "label": "t:blocks.paragraph.settings.animation_direction.options__1.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_direction.options__1.label"
                 },
                 {
                     "value": "from-right",
-                    "label": "t:blocks.paragraph.settings.animation_direction.options__2.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_direction.options__2.label"
                 },
                 {
                     "value": "from-top",
-                    "label": "t:blocks.paragraph.settings.animation_direction.options__3.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_direction.options__3.label"
                 },
                 {
                     "value": "from-bottom",
-                    "label": "t:blocks.paragraph.settings.animation_direction.options__4.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_direction.options__4.label"
                 }
             ],
             "default": "from-bottom",
-            "label": "t:blocks.paragraph.settings.animation_direction.label",
+            "label": "t:blocks.collection_paragraph.settings.animation_direction.label",
             "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' }}"
         },
         {
@@ -403,7 +403,7 @@
             "step": 0.1,
             "unit": "s",
             "default": 1.2,
-            "label": "t:blocks.paragraph.settings.animation_duration.label",
+            "label": "t:blocks.collection_paragraph.settings.animation_duration.label",
             "visible_if": "{{ block.settings.animation_type != 'none' }}"
         },
         {
@@ -414,7 +414,7 @@
             "step": 0.1,
             "unit": "s",
             "default": 0.2,
-            "label": "t:blocks.paragraph.settings.animation_delay.label",
+            "label": "t:blocks.collection_paragraph.settings.animation_delay.label",
             "visible_if": "{{ block.settings.animation_type != 'none' }}"
         },
         {
@@ -424,35 +424,35 @@
             [
                 {
                     "value": "linear",
-                    "label": "t:blocks.paragraph.settings.animation_easing.options__1.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_easing.options__1.label"
                 },
                 {
                     "value": "ease-out-sine",
-                    "label": "t:blocks.paragraph.settings.animation_easing.options__2.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_easing.options__2.label"
                 },
                 {
                     "value": "ease-in-sine",
-                    "label": "t:blocks.paragraph.settings.animation_easing.options__3.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_easing.options__3.label"
                 },
                 {
                     "value": "ease-in-out-sine",
-                    "label": "t:blocks.paragraph.settings.animation_easing.options__4.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_easing.options__4.label"
                 },
                 {
                     "value": "ease-in-cubic",
-                    "label": "t:blocks.paragraph.settings.animation_easing.options__5.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_easing.options__5.label"
                 },
                 {
                     "value": "ease-out-cubic",
-                    "label": "t:blocks.paragraph.settings.animation_easing.options__6.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_easing.options__6.label"
                 },
                 {
                     "value": "ease-in-out-cubic",
-                    "label": "t:blocks.paragraph.settings.animation_easing.options__7.label"
+                    "label": "t:blocks.collection_paragraph.settings.animation_easing.options__7.label"
                 }
             ],
             "default": "ease-out-sine",
-            "label": "t:blocks.paragraph.settings.animation_easing.label",
+            "label": "t:blocks.collection_paragraph.settings.animation_easing.label",
             "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' or block.settings.animation_type == 'blur' }}"
         },
         {
@@ -463,14 +463,14 @@
             "step": 1,
             "unit": "px",
             "default": 5,
-            "label": "t:blocks.paragraph.settings.animation_blur_intensity.label",
+            "label": "t:blocks.collection_paragraph.settings.animation_blur_intensity.label",
             "visible_if": "{{ block.settings.animation_type == 'blur' }}"
         }
     ],
     "presets":
     [
         {
-            "name": "Collection text",
+            "name": "t:blocks.collection_paragraph.presets.name",
             "settings":{
                 "content_source": "description",
                 "truncate_words": 18,

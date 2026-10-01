@@ -113,7 +113,7 @@
   endif
 
   assign btn_label = block.settings.button_label
-  if btn_label == blank or btn_label contains 't:blocks.button'
+  if btn_label == blank or btn_label contains 't:blocks.button' or btn_label contains 't:blocks.collection_button'
     assign btn_label = 'DISCOVER'
   endif
 
@@ -203,27 +203,27 @@
 
 {% schema %}
 {
-    "name": "Collection button",
+    "name": "t:blocks.collection_button.name",
     "tag": null,
     "settings":
     [
         {
             "type": "text",
             "id": "button_label",
-            "default": "t:blocks.button.settings.button_label.name",
-            "label": "t:blocks.button.settings.button_label.label",
-            "info": "t:blocks.button.settings.button_label.info"
+            "default": "t:blocks.collection_button.settings.button_label.default",
+            "label": "t:blocks.collection_button.settings.button_label.label",
+            "info": "t:blocks.collection_button.settings.button_label.info"
         },
         {
             "type": "url",
             "id": "button_link",
-            "label": "t:blocks.button.settings.button_link.label"
+            "label": "t:blocks.collection_button.settings.button_link.label"
         },
         {
             "type": "checkbox",
             "id": "open_in_new_tab",
             "default": false,
-            "label": "t:blocks.button.settings.open_in_new_tab.label"
+            "label": "t:blocks.collection_button.settings.open_in_new_tab.label"
         },
         {
             "type": "select",
@@ -232,31 +232,31 @@
             [
                 {
                     "value": "primary",
-                    "label": "t:blocks.button.settings.button_style.primary.label"
+                    "label": "t:blocks.collection_button.settings.button_style.primary.label"
                 },
                 {
                     "value": "secondary",
-                    "label": "t:blocks.button.settings.button_style.secondary.label"
+                    "label": "t:blocks.collection_button.settings.button_style.secondary.label"
                 },
                 {
                     "value": "outline",
-                    "label": "t:blocks.button.settings.button_style.outline.label"
+                    "label": "t:blocks.collection_button.settings.button_style.outline.label"
                 },
                 {
                     "value": "accent",
-                    "label": "t:blocks.button.settings.button_style.accent.label"
+                    "label": "t:blocks.collection_button.settings.button_style.accent.label"
                 },
                 {
                     "value": "link",
-                    "label": "t:blocks.button.settings.button_style.link.label"
+                    "label": "t:blocks.collection_button.settings.button_style.link.label"
                 },
                 {
                     "value": "link-light",
-                    "label": "t:blocks.button.settings.button_style.link_light.label"
+                    "label": "t:blocks.collection_button.settings.button_style.link_light.label"
                 }
             ],
             "default": "link-light",
-            "label": "t:blocks.button.settings.button_style.label"
+            "label": "t:blocks.collection_button.settings.button_style.label"
         },
         {
             "type": "select",
@@ -265,27 +265,27 @@
             [
                 {
                     "value": "inherit",
-                    "label": "inherit"
+                    "label": "t:blocks.collection_button.settings.button_alignment.inherit.label"
                 },
                 {
                     "value": "left",
-                    "label": "Left"
+                    "label": "t:blocks.collection_button.settings.button_alignment.left.label"
                 },
                 {
                     "value": "center",
-                    "label": "Center"
+                    "label": "t:blocks.collection_button.settings.button_alignment.center.label"
                 },
                 {
                     "value": "right",
-                    "label": "Right"
+                    "label": "t:blocks.collection_button.settings.button_alignment.right.label"
                 }
             ],
             "default": "inherit",
-            "label": "Alignment"
+            "label": "t:blocks.collection_button.settings.button_alignment.label"
         },
         {
             "type": "header",
-            "content": "t:blocks.button.settings.header_animation.content"
+            "content": "t:blocks.collection_button.settings.header_animation.content"
         },
         {
             "type": "select",
@@ -294,27 +294,27 @@
             [
                 {
                     "value": "none",
-                    "label": "t:blocks.button.settings.animation_type.options__1.label"
+                    "label": "t:blocks.collection_button.settings.animation_type.options__1.label"
                 },
                 {
                     "value": "fade",
-                    "label": "t:blocks.button.settings.animation_type.options__2.label"
+                    "label": "t:blocks.collection_button.settings.animation_type.options__2.label"
                 },
                 {
                     "value": "slide",
-                    "label": "t:blocks.button.settings.animation_type.options__3.label"
+                    "label": "t:blocks.collection_button.settings.animation_type.options__3.label"
                 },
                 {
                     "value": "float",
-                    "label": "t:blocks.button.settings.animation_type.options__4.label"
+                    "label": "t:blocks.collection_button.settings.animation_type.options__4.label"
                 },
                 {
                     "value": "blur",
-                    "label": "t:blocks.button.settings.animation_type.options__5.label"
+                    "label": "t:blocks.collection_button.settings.animation_type.options__5.label"
                 }
             ],
-            "default": "slide",
-            "label": "t:blocks.button.settings.animation_type.label"
+            "default": "none",
+            "label": "t:blocks.collection_button.settings.animation_type.label"
         },
         {
             "type": "select",
@@ -323,23 +323,23 @@
             [
                 {
                     "value": "from-left",
-                    "label": "t:blocks.button.settings.animation_direction.options__1.label"
+                    "label": "t:blocks.collection_button.settings.animation_direction.options__1.label"
                 },
                 {
                     "value": "from-right",
-                    "label": "t:blocks.button.settings.animation_direction.options__2.label"
+                    "label": "t:blocks.collection_button.settings.animation_direction.options__2.label"
                 },
                 {
                     "value": "from-top",
-                    "label": "t:blocks.button.settings.animation_direction.options__3.label"
+                    "label": "t:blocks.collection_button.settings.animation_direction.options__3.label"
                 },
                 {
                     "value": "from-bottom",
-                    "label": "t:blocks.button.settings.animation_direction.options__4.label"
+                    "label": "t:blocks.collection_button.settings.animation_direction.options__4.label"
                 }
             ],
             "default": "from-bottom",
-            "label": "t:blocks.button.settings.animation_direction.label",
+            "label": "t:blocks.collection_button.settings.animation_direction.label",
             "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' }}"
         },
         {
@@ -350,7 +350,7 @@
             "step": 0.1,
             "unit": "s",
             "default": 1.2,
-            "label": "t:blocks.button.settings.animation_duration.label",
+            "label": "t:blocks.collection_button.settings.animation_duration.label",
             "visible_if": "{{ block.settings.animation_type != 'none' }}"
         },
         {
@@ -361,7 +361,7 @@
             "step": 0.1,
             "unit": "s",
             "default": 0.2,
-            "label": "t:blocks.button.settings.animation_delay.label",
+            "label": "t:blocks.collection_button.settings.animation_delay.label",
             "visible_if": "{{ block.settings.animation_type != 'none' }}"
         },
         {
@@ -371,35 +371,35 @@
             [
                 {
                     "value": "linear",
-                    "label": "t:blocks.button.settings.animation_easing.options__1.label"
+                    "label": "t:blocks.collection_button.settings.animation_easing.options__1.label"
                 },
                 {
                     "value": "ease-out-sine",
-                    "label": "t:blocks.button.settings.animation_easing.options__2.label"
+                    "label": "t:blocks.collection_button.settings.animation_easing.options__2.label"
                 },
                 {
                     "value": "ease-in-sine",
-                    "label": "t:blocks.button.settings.animation_easing.options__3.label"
+                    "label": "t:blocks.collection_button.settings.animation_easing.options__3.label"
                 },
                 {
                     "value": "ease-in-out-sine",
-                    "label": "t:blocks.button.settings.animation_easing.options__4.label"
+                    "label": "t:blocks.collection_button.settings.animation_easing.options__4.label"
                 },
                 {
                     "value": "ease-in-cubic",
-                    "label": "t:blocks.button.settings.animation_easing.options__5.label"
+                    "label": "t:blocks.collection_button.settings.animation_easing.options__5.label"
                 },
                 {
                     "value": "ease-out-cubic",
-                    "label": "t:blocks.button.settings.animation_easing.options__6.label"
+                    "label": "t:blocks.collection_button.settings.animation_easing.options__6.label"
                 },
                 {
                     "value": "ease-in-out-cubic",
-                    "label": "t:blocks.button.settings.animation_easing.options__7.label"
+                    "label": "t:blocks.collection_button.settings.animation_easing.options__7.label"
                 }
             ],
             "default": "ease-out-sine",
-            "label": "t:blocks.button.settings.animation_easing.label",
+            "label": "t:blocks.collection_button.settings.animation_easing.label",
             "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' or block.settings.animation_type == 'blur' }}"
         },
         {
@@ -410,25 +410,21 @@
             "step": 1,
             "unit": "px",
             "default": 5,
-            "label": "t:blocks.button.settings.animation_blur_intensity.label",
+            "label": "t:blocks.collection_button.settings.animation_blur_intensity.label",
             "visible_if": "{{ block.settings.animation_type == 'blur' }}"
         }
     ],
     "presets":
     [
       {
-        "name": "Collection button",
+        "name": "t:blocks.collection_button.presets.name",
         "settings": {
           "button_label": "Discover",
           "button_link": "shopify://collections/all",
+          "button_alignment": "inherit",
           "open_in_new_tab": false,
           "button_style": "link-light",
-          "animation_type": "slide",
-          "animation_direction": "from-bottom",
-          "animation_duration": 1.2,
-          "animation_delay": 0.2,
-          "animation_easing": "ease-out-sine",
-          "animation_blur_intensity": 5
+          "animation_type": "none"
         }
       }
     ]

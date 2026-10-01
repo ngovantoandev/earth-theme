@@ -13,8 +13,28 @@
   {%- assign is_connected = false -%}
 {%- endif -%}
 
+{%- assign desktop_layout = block.settings.desktop_layout | default: 'asymmetric' -%}
+{%- case desktop_layout -%}
+  {%- when '2_columns' -%}
+    {%- assign desktop_grid_class = 'lg:grid-cols-2 [&>*]:col-span-1' -%}
+  {%- when '3_columns' -%}
+    {%- assign desktop_grid_class = 'lg:grid-cols-3 [&>*]:col-span-1' -%}
+  {%- when '4_columns' -%}
+    {%- assign desktop_grid_class = 'lg:grid-cols-4 [&>*]:col-span-1' -%}
+  {%- else -%}
+    {%- comment -%} Asymmetric 7/5 - 5/7 pattern on 12-column grid {%- endcomment -%}
+    {%- assign desktop_grid_class = 'lg:grid-cols-12 [&>*]:col-span-1 lg:[&>*:nth-child(4n+1)]:col-span-7 lg:[&>*:nth-child(4n+4)]:col-span-7 lg:[&>*:nth-child(4n+2)]:col-span-5 lg:[&>*:nth-child(4n+3)]:col-span-5' -%}
+{%- endcase -%}
+
+{%- assign mobile_columns = block.settings.mobile_columns | default: '1' -%}
+{%- if mobile_columns == '2' -%}
+  {%- assign mobile_grid_class = 'grid-cols-2' -%}
+{%- else -%}
+  {%- assign mobile_grid_class = 'grid-cols-1' -%}
+{%- endif -%}
+
 <div
-  class="vt-collection-list w-full"
+  class="vt-collection-list w-full box-border grid {{ mobile_grid_class }} md:grid-cols-2 {{ desktop_grid_class }} gap-[var(--vt-collection-gap-mobile,16px)] lg:gap-[var(--vt-collection-gap-desktop,30px)] [&>shopify-block]:flex [&>shopify-block]:flex-col [&>shopify-block]:w-full [&>shopify-block]:h-full"
   style="
     --vt-collection-gap-desktop: {{ block.settings.gap_desktop | default: 30 }}px;
     --vt-collection-gap-mobile: {{ block.settings.gap_mobile | default: 16 }}px;
@@ -35,57 +55,8 @@
 </div>
 
 {% stylesheet %}
-  .vt-collection-list {
-    width: 100%;
-    box-sizing: border-box;
-    display: grid;
-    gap: var(--vt-collection-gap-mobile, 16px);
-  }
-
-  /* Desktop Asymmetric 12-column grid layout: 7/5 then 5/7 pattern */
-  @media screen and (min-width: 1024px) {
-    .vt-collection-list {
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: var(--vt-collection-gap-desktop, 32px);
-    }
-
-    .vt-collection-list > *:nth-child(4n + 1),
-    .vt-collection-list > *:nth-child(4n + 4) {
-      grid-column: span 7 / span 7;
-    }
-
-    .vt-collection-list > *:nth-child(4n + 2),
-    .vt-collection-list > *:nth-child(4n + 3) {
-      grid-column: span 5 / span 5;
-    }
-  }
-
-  /* Tablet 2 equal columns */
-  @media screen and (min-width: 768px) and (max-width: 1023px) {
-    .vt-collection-list {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--vt-collection-gap-mobile, 24px);
-    }
-
-    .vt-collection-list > * {
-      grid-column: span 1 / span 1;
-    }
-  }
-
   /* Mobile: Odd items on desktop (1, 3, 5...) -> về mobile BÉ, Even items (2, 4, 6...) -> về mobile TO */
   @media screen and (max-width: 768px) {
-    .vt-collection-list {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--vt-collection-gap-mobile, 20px);
-    }
-
-    .vt-collection-list > * {
-      grid-column: span 1 / span 1;
-    }
-
     .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card,
     .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 1),
@@ -135,14 +106,6 @@
       font-size: 1rem;
       line-height: 1.45;
     }
-  }
-
-  /* Theme Editor support: ensure shopify-block wrappers stretch full height in grid */
-  .vt-collection-list > shopify-block {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
   }
 
   /* Scoped typography for dynamically rendered cards inside vt-collection-list */
@@ -217,6 +180,50 @@
     },
     {
       "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        {
+          "value": "asymmetric",
+          "label": "Asymmetric (7 / 5 - 5 / 7 cols)"
+        },
+        {
+          "value": "2_columns",
+          "label": "2 Columns"
+        },
+        {
+          "value": "3_columns",
+          "label": "3 Columns"
+        },
+        {
+          "value": "4_columns",
+          "label": "4 Columns"
+        }
+      ],
+      "default": "asymmetric"
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "options": [
+        {
+          "value": "1",
+          "label": "1 Column"
+        },
+        {
+          "value": "2",
+          "label": "2 Columns"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
       "content": "Grid Spacing"
     },
     {
@@ -247,6 +254,8 @@
     {
       "name": "Collection list",
       "settings": {
+        "desktop_layout": "asymmetric",
+        "mobile_columns": "1",
         "gap_desktop": 30,
         "gap_mobile": 16
       },
@@ -283,4 +292,5 @@
   ]
 }
 {% endschema %}
+
 

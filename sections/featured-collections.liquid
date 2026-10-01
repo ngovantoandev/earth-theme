@@ -8,7 +8,7 @@
   class="vt-featured-collections{% if section.settings.full_width %} vt-featured-collections--full-width{% endif %}"
   id="vtFeaturedCollections-{{ section.id }}"
   style="
-    --vt-bg: {{ section.settings.bg_color | default: '#EBF7BE' }};
+    --vt-bg: {{ section.settings.bg_color | default: '#EAE060' }};
     --vt-heading-color: {{ section.settings.heading_color | default: '#003225' }};
     --vt-paragraph-color: {{ section.settings.paragraph_color | default: '#224E09' }};
     --vt-pt: {{ section.settings.padding_top | default: 80 }}px;
@@ -29,7 +29,7 @@
 {% stylesheet %}
   .vt-featured-collections {
     width: 100%;
-    background-color: var(--vt-bg, #EBF7BE);
+    background-color: var(--vt-bg, #EAE060);
     padding-top: var(--vt-pt, 80px);
     padding-bottom: var(--vt-pb, 96px);
     box-sizing: border-box;
@@ -130,7 +130,7 @@
       "type": "color",
       "id": "bg_color",
       "label": "Background color",
-      "default": "#EBF7BE"
+      "default": "#EAE060"
     },
     {
       "type": "color",
@@ -241,7 +241,7 @@
       "name": "Featured collections",
       "settings": {
         "full_width": true,
-        "bg_color": "#EBF7BE",
+        "bg_color": "#EAE060",
         "heading_color": "#003225",
         "paragraph_color": "#224E09",
         "padding_top": 80,

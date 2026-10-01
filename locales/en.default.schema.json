@@ -510,6 +510,9 @@
 		"collection": "Collection",
 		"collections": "Collections",
 		"collection_card": "Collection card",
+		"collection_button": "Collection button",
+		"collection_paragraph": "Collection paragraph",
+		"collection_title": "Collection title",
 		"collections_grid": "Collections grid",
 		"column": "Column",
 		"content": "Content",
@@ -1355,6 +1358,446 @@
 			},
 			"presets": {
 				"name": "Icon"
+			}
+		},
+		"collection_button": {
+			"name": "Collection button",
+			"settings": {
+				"button_label": {
+					"label": "Button label",
+					"default": "Discover",
+					"info": "Leave the label blank to hide the button."
+				},
+				"button_link": {
+					"label": "Button link"
+				},
+				"open_in_new_tab": {
+					"label": "Open link in new tab"
+				},
+				"button_style": {
+					"label": "Button style",
+					"primary": {
+						"label": "Primary"
+					},
+					"secondary": {
+						"label": "Secondary"
+					},
+					"outline": {
+						"label": "Outline"
+					},
+					"accent": {
+						"label": "Accent"
+					},
+					"link": {
+						"label": "Link dark"
+					},
+					"link_light": {
+						"label": "Link light"
+					}
+				},
+				"button_alignment": {
+					"label": "Alignment",
+					"inherit": {
+						"label": "Inherit"
+					},
+					"left": {
+						"label": "Left"
+					},
+					"center": {
+						"label": "Center"
+					},
+					"right": {
+						"label": "Right"
+					}
+				},
+				"header_animation": {
+					"content": "Animations"
+				},
+				"animation_type": {
+					"label": "Type",
+					"options__1": {
+						"label": "None"
+					},
+					"options__2": {
+						"label": "Fade"
+					},
+					"options__3": {
+						"label": "Slide"
+					},
+					"options__4": {
+						"label": "Float"
+					},
+					"options__5": {
+						"label": "Blur"
+					}
+				},
+				"animation_direction": {
+					"label": "Direction",
+					"options__1": {
+						"label": "From left"
+					},
+					"options__2": {
+						"label": "From right"
+					},
+					"options__3": {
+						"label": "From top"
+					},
+					"options__4": {
+						"label": "From bottom"
+					}
+				},
+				"animation_duration": {
+					"label": "Duration"
+				},
+				"animation_delay": {
+					"label": "Delay"
+				},
+				"animation_easing": {
+					"label": "Easing",
+					"options__1": {
+						"label": "Linear"
+					},
+					"options__2": {
+						"label": "Ease-out sine"
+					},
+					"options__3": {
+						"label": "Ease-in sine"
+					},
+					"options__4": {
+						"label": "Ease-in-out sine"
+					},
+					"options__5": {
+						"label": "Ease-in cubic"
+					},
+					"options__6": {
+						"label": "Ease-out cubic"
+					},
+					"options__7": {
+						"label": "Ease-in-out cubic"
+					}
+				},
+				"animation_blur_intensity": {
+					"label": "Blur intensity"
+				}
+			},
+			"presets": {
+				"name": "Collection button"
+			}
+		},
+		"collection_paragraph": {
+			"name": "Collection paragraph",
+			"settings": {
+				"content_source": {
+					"label": "Content source",
+					"description": {
+						"label": "Collection description"
+					},
+					"product_count": {
+						"label": "Product count"
+					},
+					"custom": {
+						"label": "Custom text"
+					}
+				},
+				"truncate_words": {
+					"label": "Max words for description"
+				},
+				"text": {
+					"label": "Custom text / Fallback",
+					"default": "<p>Discover our latest collection</p>"
+				},
+				"header_content": {
+					"content": "Content"
+				},
+				"paragraph_alignment": {
+					"label": "Alignment",
+					"options__1": {
+						"label": "Left"
+					},
+					"options__2": {
+						"label": "Center"
+					},
+					"options__3": {
+						"label": "Right"
+					},
+					"options__4": {
+						"label": "Inherit"
+					}
+				},
+				"header_size": {
+					"content": "Size"
+				},
+				"paragraph_size": {
+					"label": "Paragraph size",
+					"options__1": {
+						"label": "Extra Small"
+					},
+					"options__2": {
+						"label": "Small"
+					},
+					"options__3": {
+						"label": "Medium"
+					},
+					"options__4": {
+						"label": "Large"
+					}
+				},
+				"paragraph_width": {
+					"label": "Width",
+					"fit": {
+						"label": "Fit"
+					},
+					"fill": {
+						"label": "Fill"
+					},
+					"max_content": {
+						"label": "Max content"
+					},
+					"min_content": {
+						"label": "Min content"
+					},
+					"custom": {
+						"label": "Custom"
+					}
+				},
+				"width_custom": {
+					"label": "Custom width"
+				},
+				"enable_max_width": {
+					"label": "Width limit"
+				},
+				"paragraph_max_width": {
+					"label": "Max width"
+				},
+				"header_animation": {
+					"content": "Animations"
+				},
+				"animation_type": {
+					"label": "Type",
+					"options__1": {
+						"label": "None"
+					},
+					"options__2": {
+						"label": "Fade"
+					},
+					"options__3": {
+						"label": "Slide"
+					},
+					"options__4": {
+						"label": "Float"
+					},
+					"options__5": {
+						"label": "Blur"
+					}
+				},
+				"animation_direction": {
+					"label": "Direction",
+					"options__1": {
+						"label": "From left"
+					},
+					"options__2": {
+						"label": "From right"
+					},
+					"options__3": {
+						"label": "From top"
+					},
+					"options__4": {
+						"label": "From bottom"
+					}
+				},
+				"animation_duration": {
+					"label": "Duration"
+				},
+				"animation_delay": {
+					"label": "Delay"
+				},
+				"animation_easing": {
+					"label": "Easing",
+					"options__1": {
+						"label": "Linear"
+					},
+					"options__2": {
+						"label": "Ease-out sine"
+					},
+					"options__3": {
+						"label": "Ease-in sine"
+					},
+					"options__4": {
+						"label": "Ease-in-out sine"
+					},
+					"options__5": {
+						"label": "Ease-in cubic"
+					},
+					"options__6": {
+						"label": "Ease-out cubic"
+					},
+					"options__7": {
+						"label": "Ease-in-out cubic"
+					}
+				},
+				"animation_blur_intensity": {
+					"label": "Blur intensity"
+				}
+			},
+			"presets": {
+				"name": "Collection paragraph"
+			}
+		},
+		"collection_title": {
+			"name": "Collection title",
+			"settings": {
+				"heading": {
+					"label": "Heading",
+					"default": "Collection Title"
+				},
+				"header_content": {
+					"content": "Content"
+				},
+				"heading_alignment": {
+					"label": "Alignment",
+					"options__1": {
+						"label": "Left"
+					},
+					"options__2": {
+						"label": "Center"
+					},
+					"options__3": {
+						"label": "Right"
+					},
+					"options__4": {
+						"label": "Inherit"
+					}
+				},
+				"header_size": {
+					"content": "Size"
+				},
+				"heading_size": {
+					"label": "Heading size",
+					"options__1": {
+						"label": "Hero"
+					},
+					"options__2": {
+						"label": "Heading 1"
+					},
+					"options__3": {
+						"label": "Heading 2"
+					},
+					"options__4": {
+						"label": "Heading 3"
+					},
+					"options__5": {
+						"label": "Heading 4"
+					},
+					"options__6": {
+						"label": "Heading 5"
+					},
+					"options__7": {
+						"label": "Heading 6"
+					}
+				},
+				"heading_tag": {
+					"label": "Heading tag",
+					"info": "Specify heading code types for SEO and search engines for crawling purposes."
+				},
+				"heading_width": {
+					"label": "Width",
+					"fit": {
+						"label": "Fit"
+					},
+					"fill": {
+						"label": "Fill"
+					},
+					"max_content": {
+						"label": "Max content"
+					},
+					"min_content": {
+						"label": "Min content"
+					},
+					"custom": {
+						"label": "Custom"
+					}
+				},
+				"width_custom": {
+					"label": "Custom width"
+				},
+				"enable_max_width": {
+					"label": "Width limit"
+				},
+				"heading_max_width": {
+					"label": "Max width"
+				},
+				"header_animation": {
+					"content": "Animations"
+				},
+				"animation_type": {
+					"label": "Type",
+					"options__1": {
+						"label": "None"
+					},
+					"options__2": {
+						"label": "Fade"
+					},
+					"options__3": {
+						"label": "Slide"
+					},
+					"options__4": {
+						"label": "Float"
+					},
+					"options__5": {
+						"label": "Blur"
+					}
+				},
+				"animation_direction": {
+					"label": "Direction",
+					"options__1": {
+						"label": "From left"
+					},
+					"options__2": {
+						"label": "From right"
+					},
+					"options__3": {
+						"label": "From top"
+					},
+					"options__4": {
+						"label": "From bottom"
+					}
+				},
+				"animation_duration": {
+					"label": "Duration"
+				},
+				"animation_delay": {
+					"label": "Delay"
+				},
+				"animation_easing": {
+					"label": "Easing",
+					"options__1": {
+						"label": "Linear"
+					},
+					"options__2": {
+						"label": "Ease-out sine"
+					},
+					"options__3": {
+						"label": "Ease-in sine"
+					},
+					"options__4": {
+						"label": "Ease-in-out sine"
+					},
+					"options__5": {
+						"label": "Ease-in cubic"
+					},
+					"options__6": {
+						"label": "Ease-out cubic"
+					},
+					"options__7": {
+						"label": "Ease-in-out cubic"
+					}
+				},
+				"animation_blur_intensity": {
+					"label": "Blur intensity"
+				}
+			},
+			"presets": {
+				"name": "Collection title"
 			}
 		}
 	}

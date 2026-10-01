@@ -73,8 +73,67 @@
   {%- assign card_zoom_class = '' -%}
 {%- endif -%}
 
+{%- comment -%}
+  Build animation classes and custom properties
+{%- endcomment -%}
+{%- assign animation_type = block.settings.animation_type | default: 'none' -%}
+{%- assign vt_anim_classes = '' -%}
+{%- assign vt_anim_style = '' -%}
+
+{%- unless animation_type == 'none' or request.visual_preview_mode -%}
+  {%- assign vt_anim_classes = 'vt-animate vt-animate--' | append: animation_type -%}
+  {%- if animation_type == 'slide' or animation_type == 'float' -%}
+    {%- assign vt_anim_classes = vt_anim_classes
+      | append: ' vt-animate--dir-'
+      | append: block.settings.animation_direction
+    -%}
+  {%- endif -%}
+
+  {%- assign vt_anim_style = vt_anim_style
+    | append: ' --vt-duration: '
+    | append: block.settings.animation_duration | default: 1.2
+    | append: 's;'
+  -%}
+
+  {%- assign vt_anim_style = vt_anim_style
+    | append: ' --vt-delay: '
+    | append: block.settings.animation_delay | default: 0.2
+    | append: 's;'
+  -%}
+
+  {%- if animation_type == 'slide' or animation_type == 'float' or animation_type == 'blur' -%}
+    {%- case block.settings.animation_easing -%}
+      {%- when 'linear' -%}
+        {%- assign vt_easing_value = 'linear' -%}
+      {%- when 'ease-out-sine' -%}
+        {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
+      {%- when 'ease-in-sine' -%}
+        {%- assign vt_easing_value = 'cubic-bezier(0.12, 0, 0.39, 0)' -%}
+      {%- when 'ease-in-out-sine' -%}
+        {%- assign vt_easing_value = 'cubic-bezier(0.37, 0, 0.63, 1)' -%}
+      {%- when 'ease-in-cubic' -%}
+        {%- assign vt_easing_value = 'cubic-bezier(0.32, 0, 0.67, 0)' -%}
+      {%- when 'ease-out-cubic' -%}
+        {%- assign vt_easing_value = 'cubic-bezier(0.33, 1, 0.68, 1)' -%}
+      {%- when 'ease-in-out-cubic' -%}
+        {%- assign vt_easing_value = 'cubic-bezier(0.65, 0, 0.35, 1)' -%}
+      {%- else -%}
+        {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
+    {%- endcase -%}
+    {%- assign vt_anim_style = vt_anim_style | append: ' --vt-easing: ' | append: vt_easing_value | append: ';' -%}
+  {%- endif -%}
+
+  {%- if animation_type == 'blur' -%}
+    {%- assign vt_anim_style = vt_anim_style
+      | append: ' --vt-blur: '
+      | append: block.settings.animation_blur_intensity | default: 5
+      | append: 'px;'
+    -%}
+  {%- endif -%}
+{%- endunless -%}
+
 <div
-  class="vt-collection-card {{ size_class }} {{ card_zoom_class }} group relative isolate overflow-hidden flex flex-col {{ v_class_mobile }} {{ v_class_desktop }} text-white min-h-[420px] lg:min-h-[532px] w-full"
+  class="vt-collection-card {{ size_class }} {{ card_zoom_class }} {{ vt_anim_classes }} group relative isolate overflow-hidden flex flex-col {{ v_class_mobile }} {{ v_class_desktop }} text-white min-h-[420px] lg:min-h-[532px] w-full"
   style="
     --vt-card-pad-desktop: {{ block.settings.padding_desktop | default: 32 }}px;
     --vt-card-pad-mobile: {{ block.settings.padding_mobile | default: 20 }}px;
@@ -84,6 +143,7 @@
     --vt-ov-opacity: {{ block.settings.overlay_opacity | default: 45 | divided_by: 100.0 }};
     --vt-btn-justify-m: {{ justify_mobile }};
     --vt-btn-justify-d: {{ justify_desktop }};
+    {{ vt_anim_style }}
   "
   {{ block.shopify_attributes }}
 >
@@ -565,6 +625,85 @@
       "unit": "px",
       "label": "Gap between blocks (Mobile)",
       "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Animations"
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "fade", "label": "Fade" },
+        { "value": "slide", "label": "Slide" },
+        { "value": "float", "label": "Float" },
+        { "value": "blur", "label": "Blur" }
+      ],
+      "default": "none",
+      "label": "Type"
+    },
+    {
+      "type": "select",
+      "id": "animation_direction",
+      "options": [
+        { "value": "from-left", "label": "From left" },
+        { "value": "from-right", "label": "From right" },
+        { "value": "from-top", "label": "From top" },
+        { "value": "from-bottom", "label": "From bottom" }
+      ],
+      "default": "from-bottom",
+      "label": "Direction",
+      "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' }}"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "min": 0.1,
+      "max": 3,
+      "step": 0.1,
+      "unit": "s",
+      "default": 1.2,
+      "label": "Duration",
+      "visible_if": "{{ block.settings.animation_type != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "animation_delay",
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "unit": "s",
+      "default": 0.2,
+      "label": "Delay",
+      "visible_if": "{{ block.settings.animation_type != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "animation_easing",
+      "options": [
+        { "value": "linear", "label": "Linear" },
+        { "value": "ease-out-sine", "label": "Ease-out sine" },
+        { "value": "ease-in-sine", "label": "Ease-in sine" },
+        { "value": "ease-in-out-sine", "label": "Ease-in-out sine" },
+        { "value": "ease-in-cubic", "label": "Ease-in cubic" },
+        { "value": "ease-out-cubic", "label": "Ease-out cubic" },
+        { "value": "ease-in-out-cubic", "label": "Ease-in-out cubic" }
+      ],
+      "default": "ease-out-sine",
+      "label": "Easing",
+      "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' or block.settings.animation_type == 'blur' }}"
+    },
+    {
+      "type": "range",
+      "id": "animation_blur_intensity",
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 5,
+      "label": "Blur intensity",
+      "visible_if": "{{ block.settings.animation_type == 'blur' }}"
     }
   ],
   "presets": [
@@ -582,7 +721,13 @@
         "content_position_mobile": "bottom",
         "content_alignment_mobile": "left",
         "padding_mobile": 20,
-        "gap_mobile": 12
+        "gap_mobile": 12,
+        "animation_type": "none",
+        "animation_direction": "from-bottom",
+        "animation_duration": 1.2,
+        "animation_delay": 0.2,
+        "animation_easing": "ease-out-sine",
+        "animation_blur_intensity": 5
       },
       "blocks": [
         {
@@ -596,7 +741,7 @@
         {
           "type": "collection-paragraph",
           "settings": {
-            "text": "<p>From farm to wardrobe</p>",
+            "text": "<p>Discover our latest collection</p>",
             "paragraph_size": "vt-paragraph-medium"
           }
         },

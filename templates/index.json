@@ -1240,7 +1240,7 @@
             "type": "featured-collections",
             "settings": {
                 "full_width": true,
-                "bg_color": "#EBF7BE",
+                "bg_color": "#EAE060",
                 "heading_color": "#003225",
                 "paragraph_color": "#224E09",
                 "padding_top": 80,
@@ -1264,7 +1264,7 @@
                         "mobile_gap_y": "gap-y-6",
                         "padding_block": 0,
                         "padding_inline": 0,
-                        "swipe_columns_mobile": true,
+                        "swipe_columns_mobile": false,
                         "desktop_column_1_width": "lg:w-7/12|58.3333",
                         "desktop_column_2_width": "lg:w-5/12|41.6667"
                     },
@@ -1331,9 +1331,15 @@
                                 "paragraph_block": {
                                     "type": "paragraph",
                                     "settings": {
-                                        "paragraph": "Where fashion meets purpose: recycled fabrics, reduced impact, endless wear.",
+                                        "text": "<p>Where fashion meets purpose: recycled fabrics, reduced impact, endless wear.</p>",
                                         "paragraph_size": "vt-paragraph-medium",
-                                        "paragraph_alignment": "text-inherit"
+                                        "paragraph_alignment": "text-inherit",
+                                        "animation_type": "slide",
+                                        "animation_direction": "from-bottom",
+                                        "animation_duration": 1,
+                                        "animation_delay": 0.2,
+                                        "animation_easing": "ease-out-sine",
+                                        "animation_blur_intensity": 5
                                     }
                                 },
                                 "button_block": {
@@ -1374,33 +1380,50 @@
                         "collection_card": {
                             "type": "collection-card",
                             "static": true,
-                            "settings": {},
+                            "settings": {
+                                "padding_desktop": 32,
+                                "padding_mobile": 20,
+                                "overlay_opacity": 45,
+                                "content_position_desktop": "bottom",
+                                "content_position_mobile": "bottom",
+                                "content_alignment_desktop": "left",
+                                "content_alignment_mobile": "left",
+                                "enable_hover_zoom": true,
+                                "animation_type": "slide",
+                                "animation_direction": "from-bottom",
+                                "animation_duration": 1,
+                                "animation_delay": 0.2,
+                                "animation_easing": "ease-out-sine",
+                                "animation_blur_intensity": 5
+                            },
                             "blocks": {
-                                "heading": {
+                                "heading_collection_card": {
                                     "type": "collection-title",
                                     "settings": {
                                         "heading_size": "vt-heading-h3",
                                         "heading_tag": "h3"
                                     }
                                 },
-                                "paragraph": {
+                                "paragraph_collection_card": {
                                     "type": "collection-paragraph",
                                     "settings": {
                                         "paragraph_size": "vt-paragraph-medium"
                                     }
                                 },
-                                "button": {
+                                "button_collection_card": {
                                     "type": "collection-button",
                                     "settings": {
                                         "button_label": "DISCOVER",
-                                        "button_style": "link-light"
+                                        "button_style": "link-light",
+                                        "button_alignment": "inherit",
+                                        "animation_type": "none"
                                     }
                                 }
                             },
                             "block_order": [
-                                "heading",
-                                "paragraph",
-                                "button"
+                                "heading_collection_card",
+                                "paragraph_collection_card",
+                                "button_collection_card"
                             ]
                         }
                     },
