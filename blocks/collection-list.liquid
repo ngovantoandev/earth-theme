@@ -38,6 +38,10 @@
   style="
     --vt-collection-gap-desktop: {{ block.settings.gap_desktop | default: 30 }}px;
     --vt-collection-gap-mobile: {{ block.settings.gap_mobile | default: 16 }}px;
+    --vt-collection-pv-desktop: {{ block.settings.padding_vertical | default: 0 }}px;
+    --vt-collection-ph-desktop: {{ block.settings.padding_horizontal | default: 0 }}px;
+    --vt-collection-pv-mobile: {{ block.settings.padding_vertical_mobile | default: 0 }}px;
+    --vt-collection-ph-mobile: {{ block.settings.padding_horizontal_mobile | default: 0 }}px;
   "
   {{ block.shopify_attributes }}
 >
@@ -55,8 +59,21 @@
 </div>
 
 {% stylesheet %}
+  .vt-collection-list {
+    padding-top: var(--vt-collection-pv-desktop, 0px);
+    padding-bottom: var(--vt-collection-pv-desktop, 0px);
+    padding-left: var(--vt-collection-ph-desktop, 0px);
+    padding-right: var(--vt-collection-ph-desktop, 0px);
+  }
+
   /* Mobile: Odd items on desktop (1, 3, 5...) -> về mobile BÉ, Even items (2, 4, 6...) -> về mobile TO */
   @media screen and (max-width: 768px) {
+    .vt-collection-list {
+      padding-top: var(--vt-collection-pv-mobile, 0px);
+      padding-bottom: var(--vt-collection-pv-mobile, 0px);
+      padding-left: var(--vt-collection-ph-mobile, 0px);
+      padding-right: var(--vt-collection-ph-mobile, 0px);
+    }
     .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card,
     .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 1),
@@ -245,6 +262,54 @@
       "unit": "px",
       "label": "Mobile gap",
       "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Desktop Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_vertical_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Vertical padding",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Horizontal padding",
+      "default": 0
     }
   ],
   "blocks": [
@@ -257,7 +322,11 @@
         "desktop_layout": "asymmetric",
         "mobile_columns": "1",
         "gap_desktop": 30,
-        "gap_mobile": 16
+        "gap_mobile": 16,
+        "padding_vertical": 0,
+        "padding_horizontal": 0,
+        "padding_vertical_mobile": 0,
+        "padding_horizontal_mobile": 0
       },
       "blocks": [
         {
