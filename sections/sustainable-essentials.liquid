@@ -1,0 +1,333 @@
+{%- comment -%}
+  Section: Sustainable Essentials
+  Container wrapper for theme blocks (stack, heading-group, product-cards, column-layout, etc.).
+  Supports full width, theme color tokens, and responsive section padding.
+{%- endcomment -%}
+
+<div
+  class="vt-sustainable-essentials{% if section.settings.full_width %} vt-sustainable-essentials--full-width{% endif %}"
+  id="vtSustainableEssentials-{{ section.id }}"
+  style="
+    --vt-bg: {{ section.settings.bg_color | default: '#F8F9DC' }};
+    --vt-heading-color: {{ section.settings.heading_color | default: '#003225' }};
+    --vt-paragraph-color: {{ section.settings.paragraph_color | default: '#224E09' }};
+    --vt-pt: {{ section.settings.padding_top | default: 80 }}px;
+    --vt-pb: {{ section.settings.padding_bottom | default: 96 }}px;
+    --vt-ph: {{ section.settings.padding_horizontal | default: 34 }}px;
+    --vt-pt-mobile: {{ section.settings.padding_top_mobile | default: 48 }}px;
+    --vt-pb-mobile: {{ section.settings.padding_bottom_mobile | default: 48 }}px;
+    --vt-ph-mobile: {{ section.settings.padding_horizontal_mobile | default: 20 }}px;
+    --vt-block-gap: {{ section.settings.block_gap | default: 64 }}px;
+    --vt-block-gap-mobile: {{ section.settings.block_gap_mobile | default: 40 }}px;
+  "
+  {{ section.shopify_attributes }}
+>
+  <div class="vt-sustainable-essentials__container">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .vt-sustainable-essentials {
+    width: 100%;
+    background-color: var(--vt-bg, #F8F9DC);
+    padding-top: var(--vt-pt, 80px);
+    padding-bottom: var(--vt-pb, 96px);
+    box-sizing: border-box;
+    overflow-x: clip;
+  }
+
+  .vt-sustainable-essentials__container {
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding-left: var(--vt-ph, 34px);
+    padding-right: var(--vt-ph, 34px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--vt-block-gap, 64px);
+  }
+
+  .vt-sustainable-essentials--full-width .vt-sustainable-essentials__container {
+    max-width: 100%;
+  }
+
+  /* Support Theme Editor wrappers without altering block layouts or configs */
+  .vt-sustainable-essentials__container > .shopify-block,
+  .vt-sustainable-essentials__container > shopify-block {
+    display: contents;
+  }
+
+  /* Heading & Paragraph styling at section level */
+  .vt-sustainable-essentials .vt-heading,
+  .vt-sustainable-essentials .vt-heading-group,
+  .vt-sustainable-essentials .vt-subheading {
+    color: var(--vt-heading-color, #003225);
+  }
+
+  .vt-sustainable-essentials .vt-heading-group .vt-heading {
+    color: inherit;
+  }
+
+  .vt-sustainable-essentials .vt-paragraph {
+    color: var(--vt-paragraph-color, #224E09);
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    .vt-sustainable-essentials__container {
+      padding-left: clamp(20px, calc(var(--vt-ph, 34px) * 0.8), 34px);
+      padding-right: clamp(20px, calc(var(--vt-ph, 34px) * 0.8), 34px);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-sustainable-essentials {
+      padding-top: var(--vt-pt-mobile, 48px);
+      padding-bottom: var(--vt-pb-mobile, 48px);
+    }
+
+    .vt-sustainable-essentials__container {
+      padding-left: var(--vt-ph-mobile, 20px);
+      padding-right: var(--vt-ph-mobile, 20px);
+      gap: var(--vt-block-gap-mobile, 40px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Sustainable essentials",
+  "tag": "section",
+  "class": "sustainable-essentials-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#EAE060"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#003225"
+    },
+    {
+      "type": "color",
+      "id": "paragraph_color",
+      "label": "Paragraph color",
+      "default": "#224E09"
+    },
+    {
+      "type": "header",
+      "content": "Desktop Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Side padding (left & right)",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "block_gap",
+      "min": 0,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap",
+      "default": 64
+    },
+    {
+      "type": "header",
+      "content": "Mobile Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Side padding (left & right)",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "block_gap_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    { "type": "@theme" },
+    { "type": "@app" }
+  ],
+  "presets": [
+    {
+      "name": "Sustainable essentials",
+      "settings": {
+        "full_width": true,
+        "bg_color": "#F8F9DC",
+        "heading_color": "#003225",
+        "paragraph_color": "#224E09",
+        "padding_top": 80,
+        "padding_bottom": 96,
+        "padding_horizontal": 34,
+        "block_gap": 64,
+        "padding_top_mobile": 48,
+        "padding_bottom_mobile": 48,
+        "padding_horizontal_mobile": 20,
+        "block_gap_mobile": 40
+      },
+      "blocks": [
+        {
+          "type": "stack",
+          "settings": {
+            "layout_direction_desktop": "vt-stack--vertical",
+            "layout_direction_tablet": "vt-stack--vertical",
+            "layout_direction_mobile": "vt-stack--vertical",
+            "alignment": "center",
+            "position": "center",
+            "wrap_content": "nowrap",
+            "width": "fit",
+            "height": "fit",
+            "position_type": "default",
+            "gap_desktop": 28,
+            "gap_mobile": 26
+          },
+          "blocks": [
+            {
+              "type": "heading-group",
+              "settings": {
+                "direction": "horizontal",
+                "alignment": "center",
+                "vertical_alignment": "center",
+                "gap_desktop": 16,
+                "gap_mobile": 12,
+                "width": "fit",
+                "max_width": 1000,
+                "hide_icon_mobile": true
+              },
+              "blocks": [
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "leaf",
+                    "icon_color": "#71CC3B",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 28
+                  }
+                },
+                {
+                  "type": "heading",
+                  "settings": {
+                    "heading": "Sustainable Essentials",
+                    "heading_size": "vt-heading-h1",
+                    "heading_alignment": "text-inherit",
+                    "heading_tag": "h2",
+                    "animation_type": "slide",
+                    "animation_direction": "from-bottom",
+                    "animation_duration": 1,
+                    "animation_delay": 0.2,
+                    "animation_easing": "ease-out-sine",
+                    "animation_blur_intensity": 5
+                  }
+                },
+                {
+                  "type": "icons",
+                  "settings": {
+                    "icon": "leaf",
+                    "icon_color": "#71CC3B",
+                    "icon_size_desktop": 36,
+                    "icon_size_mobile": 28
+                  }
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "settings": {
+                "text": "<p>Every piece designed with purpose – discover the full impact story behind each garment</p>",
+                "paragraph_size": "vt-paragraph-large",
+                "paragraph_alignment": "text-inherit",
+                "enable_max_width": true,
+                "paragraph_max_width": 560,
+                "animation_type": "slide",
+                "animation_direction": "from-bottom",
+                "animation_duration": 1,
+                "animation_delay": 0.4,
+                "animation_easing": "ease-out-sine",
+                "animation_blur_intensity": 5
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
