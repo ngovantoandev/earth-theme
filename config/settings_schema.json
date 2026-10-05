@@ -1224,8 +1224,18 @@
 				"step": 10,
 				"unit": "px",
 				"label": "t:labels.page_width",
-				"default": 1170
-			}
+				"default": 1200
+			},
+			{
+				"type": "range",
+				"id": "page_padding_mobile",
+				"min": 10,
+				"max": 100,
+				"step": 1,
+				"unit": "px",
+				"label": "Padding (mobile)",
+				"default": 20
+			}	
 		]
 	},
 	{

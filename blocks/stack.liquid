@@ -30,10 +30,11 @@
     vt-stack--wrap-{{ block.settings.wrap_content }}
     vt-stack--width-{{ block.settings.width }}
     vt-stack--height-{{ block.settings.height }}
-    {% if block.settings.position_type != 'default' %}vt-stack--{{ block.settings.position_type }}{% endif %}
-  "
+    {% if block.settings.position_type != 'default' %}vt-stack--{{ block.settings.position_type }}{% endif %}"  
   style="
     --vt-stack-gap: {% render 'fluid-clamp', min_px: gap_mobile_px, max_px: gap_desktop_px %};
+    --vt-alignment: {{ block.settings.alignment }};
+    --vt-align: {{ block.settings.alignment }};
     {%- if block.settings.width == 'custom' -%}
       --vt-stack-width: {{ block.settings.width_custom }}%;
     {%- endif -%}
@@ -65,6 +66,25 @@
     padding-inline-end: var(--vt-padding-inline-end, 0);
   }
 
+  /* Text alignment so children with text-align: inherit pick it up */
+  .vt-stack--align-flex-start {
+    text-align: start;
+    --vt-alignment: flex-start;
+    --vt-align: flex-start;
+  }
+
+  .vt-stack--align-center {
+    text-align: center;
+    --vt-alignment: center;
+    --vt-align: center;
+  }
+
+  .vt-stack--align-flex-end {
+    text-align: end;
+    --vt-alignment: flex-end;
+    --vt-align: flex-end;
+  }
+
   /* Responsive direction – mobile first */
   .vt-stack--mobile-horizontal {
     flex-direction: row;
@@ -92,6 +112,100 @@
     .vt-stack--desktop-vertical {
       flex-direction: column;
     }
+  }
+
+  /*
+    Alignment = horizontal placement (left / center / right / space-*)
+    Position  = vertical placement   (top / center / bottom / stretch)
+
+    Mapping swaps based on flex-direction so merchant settings stay consistent.
+  */
+
+  /* ===== Mobile (default) ===== */
+  /* Horizontal (row): alignment → justify-content | position → align-items */
+  .vt-stack--mobile-horizontal.vt-stack--align-flex-start { justify-content: flex-start; }
+  .vt-stack--mobile-horizontal.vt-stack--align-center { justify-content: center; }
+  .vt-stack--mobile-horizontal.vt-stack--align-flex-end { justify-content: flex-end; }
+  .vt-stack--mobile-horizontal.vt-stack--align-space-between { justify-content: space-between; }
+  .vt-stack--mobile-horizontal.vt-stack--align-stretch { justify-content: stretch; }
+  .vt-stack--mobile-horizontal.vt-stack--align-space-around { justify-content: space-around; }
+  .vt-stack--mobile-horizontal.vt-stack--align-space-evenly { justify-content: space-evenly; }
+
+  .vt-stack--mobile-horizontal.vt-stack--position-flex-start { align-items: flex-start; }
+  .vt-stack--mobile-horizontal.vt-stack--position-center { align-items: center; }
+  .vt-stack--mobile-horizontal.vt-stack--position-flex-end { align-items: flex-end; }
+  .vt-stack--mobile-horizontal.vt-stack--position-stretch { align-items: stretch; }
+
+  /* Vertical (column): alignment → align-items | position → justify-content */
+  .vt-stack--mobile-vertical.vt-stack--align-flex-start { align-items: flex-start; }
+  .vt-stack--mobile-vertical.vt-stack--align-center { align-items: center; }
+  .vt-stack--mobile-vertical.vt-stack--align-flex-end { align-items: flex-end; }
+  .vt-stack--mobile-vertical.vt-stack--align-space-between { align-items: space-between; }
+  .vt-stack--mobile-vertical.vt-stack--align-stretch { align-items: stretch; }
+  .vt-stack--mobile-vertical.vt-stack--align-space-around { align-items: space-around; }
+  .vt-stack--mobile-vertical.vt-stack--align-space-evenly { align-items: space-evenly; }
+
+  .vt-stack--mobile-vertical.vt-stack--position-flex-start { justify-content: flex-start; }
+  .vt-stack--mobile-vertical.vt-stack--position-center { justify-content: center; }
+  .vt-stack--mobile-vertical.vt-stack--position-flex-end { justify-content: flex-end; }
+  .vt-stack--mobile-vertical.vt-stack--position-stretch { justify-content: stretch; }
+
+  /* ===== Tablet (≥ 750px) ===== */
+  @media screen and (min-width: 750px) {
+    .vt-stack--tablet-horizontal.vt-stack--align-flex-start { justify-content: flex-start; }
+    .vt-stack--tablet-horizontal.vt-stack--align-center { justify-content: center; }
+    .vt-stack--tablet-horizontal.vt-stack--align-flex-end { justify-content: flex-end; }
+    .vt-stack--tablet-horizontal.vt-stack--align-space-between { justify-content: space-between; }
+    .vt-stack--tablet-horizontal.vt-stack--align-stretch { justify-content: stretch; }
+    .vt-stack--tablet-horizontal.vt-stack--align-space-around { justify-content: space-around; }
+    .vt-stack--tablet-horizontal.vt-stack--align-space-evenly { justify-content: space-evenly; }
+
+    .vt-stack--tablet-horizontal.vt-stack--position-flex-start { align-items: flex-start; }
+    .vt-stack--tablet-horizontal.vt-stack--position-center { align-items: center; }
+    .vt-stack--tablet-horizontal.vt-stack--position-flex-end { align-items: flex-end; }
+    .vt-stack--tablet-horizontal.vt-stack--position-stretch { align-items: stretch; }
+
+    .vt-stack--tablet-vertical.vt-stack--align-flex-start { align-items: flex-start; }
+    .vt-stack--tablet-vertical.vt-stack--align-center { align-items: center; }
+    .vt-stack--tablet-vertical.vt-stack--align-flex-end { align-items: flex-end; }
+    .vt-stack--tablet-vertical.vt-stack--align-space-between { align-items: space-between; }
+    .vt-stack--tablet-vertical.vt-stack--align-stretch { align-items: stretch; }
+    .vt-stack--tablet-vertical.vt-stack--align-space-around { align-items: space-around; }
+    .vt-stack--tablet-vertical.vt-stack--align-space-evenly { align-items: space-evenly; }
+
+    .vt-stack--tablet-vertical.vt-stack--position-flex-start { justify-content: flex-start; }
+    .vt-stack--tablet-vertical.vt-stack--position-center { justify-content: center; }
+    .vt-stack--tablet-vertical.vt-stack--position-flex-end { justify-content: flex-end; }
+    .vt-stack--tablet-vertical.vt-stack--position-stretch { justify-content: stretch; }
+  }
+
+  /* ===== Desktop (≥ 990px) ===== */
+  @media screen and (min-width: 990px) {
+    .vt-stack--desktop-horizontal.vt-stack--align-flex-start { justify-content: flex-start; }
+    .vt-stack--desktop-horizontal.vt-stack--align-center { justify-content: center; }
+    .vt-stack--desktop-horizontal.vt-stack--align-flex-end { justify-content: flex-end; }
+    .vt-stack--desktop-horizontal.vt-stack--align-space-between { justify-content: space-between; }
+    .vt-stack--desktop-horizontal.vt-stack--align-stretch { justify-content: stretch; }
+    .vt-stack--desktop-horizontal.vt-stack--align-space-around { justify-content: space-around; }
+    .vt-stack--desktop-horizontal.vt-stack--align-space-evenly { justify-content: space-evenly; }
+
+    .vt-stack--desktop-horizontal.vt-stack--position-flex-start { align-items: flex-start; }
+    .vt-stack--desktop-horizontal.vt-stack--position-center { align-items: center; }
+    .vt-stack--desktop-horizontal.vt-stack--position-flex-end { align-items: flex-end; }
+    .vt-stack--desktop-horizontal.vt-stack--position-stretch { align-items: stretch; }
+
+    .vt-stack--desktop-vertical.vt-stack--align-flex-start { align-items: flex-start; }
+    .vt-stack--desktop-vertical.vt-stack--align-center { align-items: center; }
+    .vt-stack--desktop-vertical.vt-stack--align-flex-end { align-items: flex-end; }
+    .vt-stack--desktop-vertical.vt-stack--align-space-between { align-items: space-between; }
+    .vt-stack--desktop-vertical.vt-stack--align-stretch { align-items: stretch; }
+    .vt-stack--desktop-vertical.vt-stack--align-space-around { align-items: space-around; }
+    .vt-stack--desktop-vertical.vt-stack--align-space-evenly { align-items: space-evenly; }
+
+    .vt-stack--desktop-vertical.vt-stack--position-flex-start { justify-content: flex-start; }
+    .vt-stack--desktop-vertical.vt-stack--position-center { justify-content: center; }
+    .vt-stack--desktop-vertical.vt-stack--position-flex-end { justify-content: flex-end; }
+    .vt-stack--desktop-vertical.vt-stack--position-stretch { justify-content: stretch; }
   }
 
   /* Flex wrap */
@@ -234,7 +348,7 @@
         { "value": "flex-end", "label": "t:options.position.bottom" },
         { "value": "stretch", "label": "t:options.position.stretch" }
       ],
-      "default": "stretch"
+      "default": "flex-start"
     },
     {
       "type": "select",
@@ -348,7 +462,7 @@
       "type": "checkbox",
       "id": "enable_padding",
       "label": "Enable padding",
-      "default": false
+      "default": true
     },
     {
       "type": "header",

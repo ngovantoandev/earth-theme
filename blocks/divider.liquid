@@ -1,0 +1,30 @@
+{% doc %}
+  Renders a dividers block with Tailwind CSS to separate content vertically or horizontally for clean, organized web layouts.
+  @example
+  {% content_for 'block', type: 'divider', id: 'divider' %}
+{% enddoc %}
+
+<div 
+  class="vt-divider"
+  {{ block.shopify_attributes }}
+  style=""
+>
+
+</div>
+
+{% stylesheet %}
+
+  
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Divider",
+  "tag": null,  
+  "presets": [
+    {
+      "name": "Divider"      
+    }
+  ]
+}
+{% endschema %}

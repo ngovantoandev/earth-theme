@@ -1,0 +1,784 @@
+{% doc %}
+  Renders a product listing tab component with carousel navigation.
+  - Tabs generated from selected collections (or fallback categories).
+  - Smooth native CSS scroll-snap carousel with peek card on mobile.
+  - Integrates reusable circular navigation with hover reveal and icon rotation.
+{% enddoc %}
+
+{%- liquid
+  assign collections_list = block.settings.collections
+  assign products_limit = block.settings.limit | default: 8
+
+  assign col_desktop = block.settings.columns_desktop | default: 3
+  assign col_mobile = block.settings.columns_mobile | default: 1.2
+  assign gap_desktop = block.settings.gap_desktop
+  if gap_desktop == blank
+    assign gap_desktop = 32
+  endif
+  assign gap_mobile = block.settings.gap_mobile
+  if gap_mobile == blank
+    assign gap_mobile = 16
+  endif
+  assign tab_align = block.settings.tab_alignment | default: 'center'
+
+  # Fallback to default demo tabs when collections setting is not connected
+  assign collections_list = block.settings.collections
+  if collections_list != blank and collections_list.size > 0
+    assign is_connected = true
+    assign tabs_data = collections_list
+  else
+    assign is_connected = false
+    assign demo_tabs = "All,Men's,Women's,New Arrivals,New" | split: ','
+  endif
+  assign track_pad_desktop = block.settings.padding_desktop | default: 0
+  assign track_pad_mobile = block.settings.padding_mobile | default: 20
+  assign arrows_on_hover = true
+  if block.settings.arrows_visibility == 'always'
+    assign arrows_on_hover = false
+  endif
+  assign tab_gap_desktop = block.settings.tab_content_gap_desktop | default: 36
+  assign tab_gap_mobile = block.settings.tab_content_gap_mobile | default: 24
+  assign arrows_offset = block.settings.arrows_offset | default: 0
+  assign arrows_theme = block.settings.arrows_theme | default: 'light'
+-%}
+
+<plt-listing-tab 
+  class="plt-listing-tab w-full block box-border"
+  data-block-id="{{ block.id }}"
+  style="
+    --plt-col-desktop: {{ col_desktop }};
+    --plt-col-mobile: {{ col_mobile }};
+    --plt-gap-desktop: {{ gap_desktop }}px;
+    --plt-gap-mobile: {{ gap_mobile }}px;
+    --plt-pad-desktop: {{ track_pad_desktop }}px;
+    --plt-pad-mobile: {{ track_pad_mobile }}px;
+    --plt-menu-ph-desktop: {{ block.settings.menu_padding_desktop | default: 34 }}px;
+    --plt-menu-ph-mobile: {{ block.settings.menu_padding_mobile | default: 20 }}px;
+    --plt-tab-gap-desktop: {{ tab_gap_desktop }}px;
+    --plt-tab-gap-mobile: {{ tab_gap_mobile }}px;
+    --earth-nav-offset: {{ arrows_offset }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  <!-- ================= Tablist Header ================= -->
+  <div class="plt__tablist-container plt__tablist-container--{{ tab_align }}">
+    <div 
+      class="plt__tablist" 
+      role="tablist" 
+      aria-label="{{ 'products.facets.filter_by_label' | default: 'Collections' }}"
+    >
+      {%- if is_connected -%}
+        {%- for col in tabs_data -%}
+          {% content_for 'block', type: 'menu-tab', id: 'menu-tab', closest.collection: col, collection: col, col: col, is_first: forloop.first %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for tab_name in demo_tabs -%}
+          {% content_for 'block', type: 'menu-tab', id: 'menu-tab', card_index: forloop.index, is_first: forloop.first %}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- ================= Tab Panels (Carousels) ================= -->
+  <div class="plt__panels-wrapper">
+    {%- if is_connected -%}
+      {%- for col in tabs_data -%}
+        {%- assign panel_id = 'plt-panel-' | append: col.id -%}
+        {%- assign track_id = 'plt-track-' | append: col.id -%}
+        
+        <div
+          role="tabpanel"
+          id="{{ panel_id }}"
+          class="plt__panel has-slider-nav{% unless forloop.first %} plt__panel--hidden{% endunless %}"
+          aria-labelledby="plt-tab-{{ col.id }}"
+          {% unless forloop.first %}hidden{% endunless %}
+        >
+          {%- assign col_products_count = col.all_products_count | default: col.products.size | default: 0 -%}
+          {%- if col_products_count > 0 -%}
+            <div 
+              class="plt__track" 
+              id="{{ track_id }}" 
+              data-slider-track
+              tabindex="0"
+            >
+              {%- for product in col.products limit: products_limit -%}
+                <div class="plt__slide" role="listitem">
+                  {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: product, product: product, prod: product %}
+                </div>
+              {%- endfor -%}
+            </div>
+
+            {%- if block.settings.show_arrows -%}
+              {%- assign arrow_classes = '' -%}
+              {%- unless block.settings.show_arrows_mobile -%}
+                {%- assign arrow_classes = 'earth-slider-nav--desktop-only' -%}
+              {%- endunless -%}
+              {% render 'btn-nav-slider', target_id: track_id, layout: 'split', show_on_hover: arrows_on_hover, theme: arrows_theme, class: arrow_classes %}
+            {%- endif -%}
+          {%- else -%}
+            <div class="plt__empty">
+              <p class="plt__empty-text">No products available</p>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for tab_name in demo_tabs -%}
+        {%- assign panel_id = 'plt-panel-demo-' | append: forloop.index -%}
+        {%- assign track_id = 'plt-track-demo-' | append: forloop.index -%}
+
+        <div
+          role="tabpanel"
+          id="{{ panel_id }}"
+          class="plt__panel has-slider-nav{% unless forloop.first %} plt__panel--hidden{% endunless %}"
+          aria-labelledby="plt-tab-demo-{{ forloop.index }}"
+          {% unless forloop.first %}hidden{% endunless %}
+        >
+          <div 
+            class="plt__track" 
+            id="{{ track_id }}" 
+            data-slider-track
+            tabindex="0"
+          >
+            {%- for i in (1..4) -%}
+              <div class="plt__slide" role="listitem" data-demo-index="{{ forloop.index }}">
+                {% content_for 'block', type: 'product-card', id: 'product-card', card_index: forloop.index %}
+              </div>
+            {%- endfor -%}
+          </div>
+
+          {%- if block.settings.show_arrows -%}
+            {%- assign arrow_classes = '' -%}
+            {%- unless block.settings.show_arrows_mobile -%}
+              {%- assign arrow_classes = 'earth-slider-nav--desktop-only' -%}
+            {%- endunless -%}
+            {% render 'btn-nav-slider', target_id: track_id, layout: 'split', show_on_hover: arrows_on_hover, theme: arrows_theme, class: arrow_classes %}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</plt-listing-tab>
+
+{% stylesheet %}
+  /* =========================================================
+     Product Listing Tab (Layout, Tabs & Carousel)
+     ========================================================= */
+  plt-listing-tab.plt-listing-tab {
+    display: flex;
+    flex-direction: column;
+    width: calc(100% + var(--vt-ph, 0px) * 2);
+    margin-left: calc(-1 * var(--vt-ph, 0px));
+    margin-right: calc(-1 * var(--vt-ph, 0px));
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  /* ================= Tablist ================= */
+  .plt__tablist-container {
+    width: 100%;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    box-sizing: border-box;
+    margin-bottom: var(--plt-tab-gap-desktop, 36px);
+    padding-left: var(--plt-menu-ph-desktop, 34px);
+    padding-right: var(--plt-menu-ph-desktop, 34px);
+    scroll-padding-left: var(--plt-menu-ph-desktop, 34px);
+    scroll-padding-right: var(--plt-menu-ph-desktop, 34px);
+  }
+
+  .plt__tablist-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .plt__tablist-container--center {
+    justify-content: center;
+  }
+
+  .plt__tablist-container--left {
+    justify-content: flex-start;
+  }
+
+  .plt__tablist {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    gap: 0;
+    border-bottom: 1px solid var(--color-black, #003225);
+    padding: 0;
+    min-width: max-content;
+  }
+
+  .plt__tab {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 10px var(--plt-tab-item-ph, clamp(18px, 2.5vw, 32px)) 14px;
+    font-family: inherit;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-black, #003225);
+    position: relative;
+    transition: color 0.25s ease;
+    user-select: none;
+    outline: none;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  /* Support collection-title block inside menu-tab */
+  .plt__tab .vt-heading-wrapper {
+    display: inline-flex;
+    width: auto;
+    margin: 0;
+  }
+
+  .plt__tab .vt-heading {
+    color: inherit;
+    display: inline-flex;
+    margin: 0;
+  }
+
+  /* Fallback size only when no specific heading size class is applied */
+  .plt__tab .vt-heading:not([class*="vt-heading-"]):not([class*="vt-hero-"]) {
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .plt__tab:hover {
+    color: var(--color-secondary, #71CC3B);
+  }
+
+  .plt__tab--active {
+    color: var(--color-secondary, #71CC3B);
+  }
+
+  /* Active bottom underline - covers full tab width seamlessly touching adjacent tabs */
+  .plt__tab--active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-secondary, #71CC3B);
+    z-index: 10;
+  }
+
+  .plt__tab:focus-visible {
+    outline: 1px solid var(--color-secondary, #71CC3B);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  /* ================= Panels & Track ================= */
+  .plt__panels-wrapper {
+    width: 100%;
+    position: relative;
+  }
+
+  .plt__panel {
+    position: relative;
+    width: 100%;
+  }
+
+  .plt__panel[hidden],
+  .plt__panel--hidden {
+    display: none !important;
+  }
+
+  .plt__track {
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    gap: var(--plt-gap-desktop, 32px);
+    width: 100%;
+    box-sizing: border-box;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-left: var(--plt-pad-desktop, 0px);
+    padding-right: var(--plt-pad-desktop, 0px);
+    scroll-padding-left: var(--plt-pad-desktop, 0px);
+    scroll-padding-right: var(--plt-pad-desktop, 0px);
+    outline: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .plt__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Slide card width formula */
+  .plt__slide {
+    flex: 0 0 calc((100% - (var(--plt-gap-desktop, 32px) * (var(--plt-col-desktop, 3) - 1))) / var(--plt-col-desktop, 3));
+    min-width: 0;
+    scroll-snap-align: start;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+  }
+
+  /* Ensures last slide keeps its right margin when scrolled to end */
+  .plt__slide:last-child {
+    scroll-snap-align: start end;
+  }
+
+  /* Ensure card and shopify-block wrapper inside stretch full height */
+  .plt__slide > *,
+  .plt__slide > .shopify-block,
+  .plt__slide > shopify-block {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+
+  .plt__slide .vt-product-card {
+    width: 100%;
+    height: 100%;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ================= Empty State ================= */
+  .plt__empty {
+    width: 100%;
+    text-align: center;
+    padding: 60px 20px;
+    box-sizing: border-box;
+  }
+
+  .plt__empty-text {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--color-primary, #224E09);
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  /* ================= Mobile & Responsive ================= */
+  @media screen and (max-width: 1024px) {
+    .plt__slide {
+      flex: 0 0 calc((100% - (var(--plt-gap-desktop, 24px) * (2 - 1))) / 2);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    plt-listing-tab.plt-listing-tab {
+      width: calc(100% + var(--vt-ph-mobile, var(--vt-ph, 0px)) * 2);
+      margin-left: calc(-1 * var(--vt-ph-mobile, var(--vt-ph, 0px)));
+      margin-right: calc(-1 * var(--vt-ph-mobile, var(--vt-ph, 0px)));
+    }
+
+    .plt__tablist-container {
+      justify-content: flex-start;
+      margin-bottom: var(--plt-tab-gap-mobile, 24px);
+      padding-left: var(--plt-menu-ph-mobile, 20px);
+      padding-right: var(--plt-menu-ph-mobile, 20px);
+      scroll-padding-left: var(--plt-menu-ph-mobile, 20px);
+      scroll-padding-right: var(--plt-menu-ph-mobile, 20px);
+    }
+
+    .plt__tablist::after {
+      content: '';
+      display: block;
+      width: var(--plt-menu-ph-mobile, 20px);
+      flex-shrink: 0;
+    }
+
+    .plt__tab {
+      font-size: 1rem;
+      padding: 8px var(--plt-tab-item-ph-mobile, 16px) 12px;
+    }
+
+    .plt__track {
+      gap: var(--plt-gap-mobile, 16px);
+      scroll-padding-inline-start: 20px;
+      padding-left: var(--plt-pad-mobile, 20px);
+      padding-right: var(--plt-pad-mobile, 20px);
+      scroll-padding-left: var(--plt-pad-mobile, 20px);
+      scroll-padding-right: var(--plt-pad-mobile, 20px);
+    }
+
+    /* Peek next card on mobile */
+    .plt__slide {
+      flex: 0 0 calc((100% - var(--plt-gap-mobile, 16px)) / var(--plt-col-mobile, 1.2));
+    }
+
+    .plt__nav-wrapper--desktop-only {
+      display: none !important;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  if (!customElements.get('plt-listing-tab')) {
+    class PltListingTab extends HTMLElement {
+      constructor() {
+        super();
+        this.tabs = [];
+        this.panels = [];
+        this._onTabClick = this._onTabClick.bind(this);
+        this._onKeydown = this._onKeydown.bind(this);
+      }
+
+      connectedCallback() {
+        this.tabs = Array.from(this.querySelectorAll('.plt__tab'));
+        this.panels = Array.from(this.querySelectorAll('.plt__panel'));
+
+        this.tabs.forEach((tab) => {
+          tab.addEventListener('click', this._onTabClick);
+          tab.addEventListener('keydown', this._onKeydown);
+        });
+
+        // Theme Editor reload support
+        document.addEventListener('shopify:block:select', (event) => {
+          if (event.target === this) {
+            this.updateLayout();
+          }
+        });
+      }
+
+      _onTabClick(event) {
+        const clickedTab = event.currentTarget;
+        const targetIndex = this.tabs.indexOf(clickedTab);
+        if (targetIndex !== -1) {
+          this.activateTab(targetIndex);
+        }
+      }
+
+      _onKeydown(event) {
+        const currentTab = event.currentTarget;
+        const currentIndex = this.tabs.indexOf(currentTab);
+        let nextIndex = currentIndex;
+
+        switch (event.key) {
+          case 'ArrowRight':
+            nextIndex = (currentIndex + 1) % this.tabs.length;
+            break;
+          case 'ArrowLeft':
+            nextIndex = (currentIndex - 1 + this.tabs.length) % this.tabs.length;
+            break;
+          case 'Home':
+            nextIndex = 0;
+            break;
+          case 'End':
+            nextIndex = this.tabs.length - 1;
+            break;
+          default:
+            return;
+        }
+
+        event.preventDefault();
+        this.tabs[nextIndex].focus();
+        this.activateTab(nextIndex);
+      }
+
+      activateTab(index) {
+        if (!this.tabs[index]) return;
+
+        this.tabs.forEach((tab, i) => {
+          const isActive = i === index;
+          tab.classList.toggle('plt__tab--active', isActive);
+          tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          tab.setAttribute('tabindex', isActive ? '0' : '-1');
+
+          if (isActive) {
+            tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          }
+        });
+
+        this.panels.forEach((panel, i) => {
+          const isCurrent = i === index;
+          panel.classList.toggle('plt__panel--hidden', !isCurrent);
+          if (isCurrent) {
+            panel.removeAttribute('hidden');
+            const track = panel.querySelector('.plt__track');
+            if (track) {
+              track.scrollLeft = 0;
+              // Trigger slider nav update
+              const nav = panel.querySelector('earth-slider-nav');
+              if (nav && typeof nav.updateState === 'function') {
+                window.setTimeout(() => nav.updateState(), 60);
+              }
+            }
+          } else {
+            panel.setAttribute('hidden', '');
+          }
+        });
+
+        // Dispatch custom tab-change event
+        this.dispatchEvent(new CustomEvent('plt:tab-change', {
+          bubbles: true,
+          detail: { index, tab: this.tabs[index] }
+        }));
+      }
+
+      updateLayout() {
+        const activeIndex = this.tabs.findIndex((t) => t.classList.contains('plt__tab--active'));
+        if (activeIndex !== -1) {
+          this.activateTab(activeIndex);
+        }
+      }
+
+      disconnectedCallback() {
+        this.tabs.forEach((tab) => {
+          tab.removeEventListener('click', this._onTabClick);
+          tab.removeEventListener('keydown', this._onKeydown);
+        });
+      }
+    }
+
+    customElements.define('plt-listing-tab', PltListingTab);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Products listing tab",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collections"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections tabs",
+      "limit": 8
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Products limit per tab",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Layout & Carousel"
+    },
+    {
+      "type": "select",
+      "id": "tab_alignment",
+      "label": "Tab alignment",
+      "options": [
+        { "value": "center", "label": "Center" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns (mobile)",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.2
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "label": "Desktop gap",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Mobile gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Horizontal menu tab spacing"
+    },
+    {
+      "type": "range",
+      "id": "menu_padding_desktop",
+      "label": "Tab menu padding (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "menu_padding_mobile",
+      "label": "Tab menu padding (mobile)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Gap"
+    },
+    {
+      "type": "range",
+      "id": "tab_content_gap_desktop",
+      "label": "Space below tabs (desktop)",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "tab_content_gap_mobile",
+      "label": "Space below tabs (mobile)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Product carousel track spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_desktop",
+      "label": "Horizontal padding (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "padding_mobile",
+      "label": "Horizontal padding (mobile)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Navigation arrows"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "arrows_visibility",
+      "label": "Arrows visibility",
+      "options": [
+        { "value": "hover", "label": "Show on hover" },
+        { "value": "always", "label": "Always visible" }
+      ],
+      "default": "hover"
+    },
+    {
+      "type": "select",
+      "id": "arrows_theme",
+      "label": "Arrow button style",
+      "options": [
+        { "value": "light", "label": "Light / Cream (Green on hover)" },
+        { "value": "green", "label": "Solid green" }
+      ],
+      "default": "light"
+    },
+    {
+      "type": "range",
+      "id": "arrows_offset",
+      "label": "Arrow button offset",
+      "min": -20,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows_mobile",
+      "label": "Show arrows on mobile",
+      "default": false
+    }
+  ],
+  "blocks": [
+    { "type": "@theme" }
+  ],
+  "presets": [
+    {
+      "name": "Products listing tab",
+      "settings": {
+        "tab_alignment": "center",
+        "columns_desktop": 3,
+        "columns_mobile": 1.2,
+        "gap_desktop": 32,
+        "gap_mobile": 16,
+        "menu_padding_desktop": 34,
+        "menu_padding_mobile": 20,
+        "padding_desktop": 34,
+        "padding_mobile": 20,
+        "show_arrows": true,
+        "arrows_visibility": "hover",
+        "arrows_theme": "light",
+        "arrows_offset": 0,
+        "show_arrows_mobile": false
+      },
+      "blocks": [
+        {
+          "type": "menu-tab",
+          "id": "menu-tab",
+          "static": true,
+          "blocks": [
+            {
+              "type": "collection-title",
+              "settings": {
+                "heading_tag": "span",
+                "heading_size": "vt-heading-h4"
+              }
+            }
+          ]
+        },
+        {
+          "type": "product-card",
+          "id": "product-card",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

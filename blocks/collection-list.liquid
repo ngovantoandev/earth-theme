@@ -13,25 +13,9 @@
   {%- assign is_connected = false -%}
 {%- endif -%}
 
-{%- assign desktop_layout = block.settings.desktop_layout | default: 'asymmetric' -%}
-{%- case desktop_layout -%}
-  {%- when '2_columns' -%}
-    {%- assign desktop_grid_class = 'lg:grid-cols-2 [&>*]:col-span-1' -%}
-  {%- when '3_columns' -%}
-    {%- assign desktop_grid_class = 'lg:grid-cols-3 [&>*]:col-span-1' -%}
-  {%- when '4_columns' -%}
-    {%- assign desktop_grid_class = 'lg:grid-cols-4 [&>*]:col-span-1' -%}
-  {%- else -%}
-    {%- comment -%} Asymmetric 7/5 - 5/7 pattern on 12-column grid {%- endcomment -%}
-    {%- assign desktop_grid_class = 'lg:grid-cols-12 [&>*]:col-span-1 lg:[&>*:nth-child(4n+1)]:col-span-7 lg:[&>*:nth-child(4n+4)]:col-span-7 lg:[&>*:nth-child(4n+2)]:col-span-5 lg:[&>*:nth-child(4n+3)]:col-span-5' -%}
-{%- endcase -%}
-
-{%- assign mobile_columns = block.settings.mobile_columns | default: '1' -%}
-{%- if mobile_columns == '2' -%}
-  {%- assign mobile_grid_class = 'grid-cols-2' -%}
-{%- else -%}
-  {%- assign mobile_grid_class = 'grid-cols-1' -%}
-{%- endif -%}
+{%- comment -%} Asymmetric 7/5 - 5/7 pattern on 12-column grid {%- endcomment -%}
+{%- assign desktop_grid_class = 'lg:grid-cols-12 [&>*]:col-span-1 lg:[&>*:nth-child(4n+1)]:col-span-7 lg:[&>*:nth-child(4n+4)]:col-span-7 lg:[&>*:nth-child(4n+2)]:col-span-5 lg:[&>*:nth-child(4n+3)]:col-span-5' -%}
+{%- assign mobile_grid_class = 'grid-cols-1' -%}
 
 <div
   class="vt-collection-list w-full box-border grid {{ mobile_grid_class }} md:grid-cols-2 {{ desktop_grid_class }} gap-[var(--vt-collection-gap-mobile,16px)] lg:gap-[var(--vt-collection-gap-desktop,30px)] [&>shopify-block]:flex [&>shopify-block]:flex-col [&>shopify-block]:w-full [&>shopify-block]:h-full"
@@ -66,7 +50,7 @@
     padding-right: var(--vt-collection-ph-desktop, 0px);
   }
 
-  /* Mobile: Odd items on desktop (1, 3, 5...) -> về mobile BÉ, Even items (2, 4, 6...) -> về mobile TO */
+  /* Mobile: Desktop nhiều cột (7 cols: card 1 & 4) -> Mobile BÉ; Desktop ít cột (5 cols: card 2 & 3) -> Mobile TO */
   @media screen and (max-width: 768px) {
     .vt-collection-list {
       padding-top: var(--vt-collection-pv-mobile, 0px);
@@ -74,6 +58,8 @@
       padding-left: var(--vt-collection-ph-mobile, 0px);
       padding-right: var(--vt-collection-ph-mobile, 0px);
     }
+
+    /* Card BÉ trên mobile (Desktop 7 cột: Card 1 & 4) */
     .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card,
     .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 1),
@@ -82,23 +68,7 @@
       min-height: 280px;
     }
 
-    .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card .vt-heading,
-    .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card .vt-heading,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 1) .vt-heading,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 4) .vt-heading,
-    .vt-collection-list .vt-collection-card--mobile-small .vt-heading {
-      font-size: clamp(1.25rem, 4.5vw, 1.5rem);
-    }
-
-    .vt-collection-list > *:nth-child(4n + 1) .vt-collection-card .vt-paragraph,
-    .vt-collection-list > *:nth-child(4n + 4) .vt-collection-card .vt-paragraph,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 1) .vt-paragraph,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 4) .vt-paragraph,
-    .vt-collection-list .vt-collection-card--mobile-small .vt-paragraph {
-      font-size: 0.875rem;
-      line-height: 1.35;
-    }
-
+    /* Card TO trên mobile (Desktop 5 cột: Card 2 & 3) */
     .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card,
     .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card,
     .vt-collection-list > .vt-collection-card:nth-child(4n + 2),
@@ -107,39 +77,33 @@
       min-height: 480px;
     }
 
-    .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card .vt-heading,
-    .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card .vt-heading,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 2) .vt-heading,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 3) .vt-heading,
-    .vt-collection-list .vt-collection-card--mobile-large .vt-heading {
-      font-size: clamp(1.625rem, 5.5vw, 2rem);
+    .vt-collection-list .vt-collection-card__content {
+      padding: var(--vt-card-pad-mobile, 20px);
+      gap: var(--vt-card-gap-mobile, 12px);
     }
 
-    .vt-collection-list > *:nth-child(4n + 2) .vt-collection-card .vt-paragraph,
-    .vt-collection-list > *:nth-child(4n + 3) .vt-collection-card .vt-paragraph,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 2) .vt-paragraph,
-    .vt-collection-list > .vt-collection-card:nth-child(4n + 3) .vt-paragraph,
-    .vt-collection-list .vt-collection-card--mobile-large .vt-paragraph {
-      font-size: 1rem;
-      line-height: 1.45;
+    /* Fallback default heading size on mobile if no specific size class override */
+    .vt-collection-list .vt-collection-card .vt-heading:not([class*="vt-heading-"]):not([class*="vt-hero-"]) {
+      font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 5vw, 1.875rem));
+      line-height: var(--vt-font-heading-3-line-height, 1.25);
     }
-  }
 
-  /* Scoped typography for dynamically rendered cards inside vt-collection-list */
-  .vt-collection-list .vt-collection-card .vt-heading-h3 {
-    color: #FFFFFF;
-    font-family: var(--vt-font-family-heading);
-    font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 1.2rem + 1vw, 2rem));
-    font-weight: var(--vt-font-heading-weight, 500);
-    letter-spacing: -0.02em;
-    line-height: var(--vt-font-heading-3-line-height, 1.2);
-  }
+    /* Fallback default paragraph size on mobile if no specific size class override */
+    .vt-collection-list .vt-collection-card .vt-paragraph:not([class*="vt-paragraph-"]) {
+      font-size: var(--vt-font-body-size, 0.9375rem);
+      line-height: var(--vt-font-body-line-height, 1.45);
+    }
 
-  .vt-collection-list .vt-collection-card .vt-paragraph-medium {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
-    font-weight: 300;
-    line-height: 1.4;
+    .vt-collection-list .vt-collection-card .vt-button,
+    .vt-collection-list .vt-collection-card .vt-button--link,
+    .vt-collection-list .vt-collection-card .vt-button--link-light {
+      font-size: 0.875rem;
+    }
+
+    .vt-collection-list .vt-collection-card .vt-button .vt-button-icon {
+      width: 1.625rem;
+      height: 1.625rem;
+    }
   }
 
   .vt-collection-list .vt-collection-card .vt-button--link-light {
@@ -195,50 +159,7 @@
       "id": "collection_list",
       "label": "Collections"
     },
-    {
-      "type": "header",
-      "content": "Layout"
-    },
-    {
-      "type": "select",
-      "id": "desktop_layout",
-      "label": "Desktop layout",
-      "options": [
-        {
-          "value": "asymmetric",
-          "label": "Asymmetric (7 / 5 - 5 / 7 cols)"
-        },
-        {
-          "value": "2_columns",
-          "label": "2 Columns"
-        },
-        {
-          "value": "3_columns",
-          "label": "3 Columns"
-        },
-        {
-          "value": "4_columns",
-          "label": "4 Columns"
-        }
-      ],
-      "default": "asymmetric"
-    },
-    {
-      "type": "select",
-      "id": "mobile_columns",
-      "label": "Mobile columns",
-      "options": [
-        {
-          "value": "1",
-          "label": "1 Column"
-        },
-        {
-          "value": "2",
-          "label": "2 Columns"
-        }
-      ],
-      "default": "1"
-    },
+
     {
       "type": "header",
       "content": "Grid Spacing"
@@ -319,8 +240,6 @@
     {
       "name": "Collection list",
       "settings": {
-        "desktop_layout": "asymmetric",
-        "mobile_columns": "1",
         "gap_desktop": 30,
         "gap_mobile": 16,
         "padding_vertical": 0,
@@ -330,31 +249,7 @@
       },
       "blocks": [
         {
-          "id": "collection_card",
-          "type": "collection-card",
-          "static": true,
-          "blocks": [
-            {
-              "type": "collection-title",
-              "settings": {
-                "heading_size": "vt-heading-h3",
-                "heading_tag": "h3"
-              }
-            },
-            {
-              "type": "collection-paragraph",
-              "settings": {
-                "paragraph_size": "vt-paragraph-medium"
-              }
-            },
-            {
-              "type": "collection-button",
-              "settings": {
-                "button_label": "DISCOVER",
-                "button_style": "link-light"
-              }
-            }
-          ]
+          "type": "collection-card"
         }
       ]
     }

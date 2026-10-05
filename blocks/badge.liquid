@@ -1,5 +1,6 @@
 {% doc %}
-  Renders a pill badge with custom text, background color, text color, size presets, and custom font size.
+  Renders a pill badge with custom text, background/text color, size presets,
+  and scroll-in animation (disabled in the theme editor preview).
 
   @example
   {% content_for 'block', type: 'badge', id: 'badge' %}
@@ -48,13 +49,88 @@
     {%- endif -%}
   {%- endif -%}
 
+  {%- comment -%}
+    Build animation classes
+  {%- endcomment -%}
+
+  {%- assign vt_animation_type = block.settings.animation_type -%}
+  {%- assign vt_anim_classes = '' -%}
+
+  {%- unless vt_animation_type == 'none' or request.visual_preview_mode -%}
+    {%- assign vt_anim_classes = 'vt-animate vt-animate--' | append: vt_animation_type -%}
+
+    {%- if vt_animation_type == 'slide' or vt_animation_type == 'float' -%}
+      {%- assign vt_anim_classes = vt_anim_classes
+        | append: ' vt-animate--dir-'
+        | append: block.settings.animation_direction
+      -%}
+    {%- endif -%}
+  {%- endunless -%}
+
+  {%- comment -%}
+    Build animation CSS custom properties
+  {%- endcomment -%}
+
+  {%- unless vt_animation_type == 'none' or request.visual_preview_mode -%}
+    {%- assign vt_style = vt_style
+      | append: ' --vt-duration: '
+      | append: block.settings.animation_duration
+      | append: 's;'
+    -%}
+
+    {%- assign vt_style = vt_style | append: ' --vt-delay: ' | append: block.settings.animation_delay | append: 's;' -%}
+
+    {%- if vt_animation_type == 'slide' or vt_animation_type == 'float' or vt_animation_type == 'blur' -%}
+      {%- case block.settings.animation_easing -%}
+        {%- when 'linear' -%}
+          {%- assign vt_easing_value = 'linear' -%}
+
+        {%- when 'ease-out-sine' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
+
+        {%- when 'ease-in-sine' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.12, 0, 0.39, 0)' -%}
+
+        {%- when 'ease-in-out-sine' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.37, 0, 0.63, 1)' -%}
+
+        {%- when 'ease-in-cubic' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.32, 0, 0.67, 0)' -%}
+
+        {%- when 'ease-out-cubic' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.33, 1, 0.68, 1)' -%}
+
+        {%- when 'ease-in-out-cubic' -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.65, 0, 0.35, 1)' -%}
+
+        {%- else -%}
+          {%- assign vt_easing_value = 'cubic-bezier(0.61, 1, 0.88, 1)' -%}
+      {%- endcase -%}
+
+      {%- assign vt_style = vt_style | append: ' --vt-easing: ' | append: vt_easing_value | append: ';' -%}
+    {%- endif -%}
+
+    {%- if vt_animation_type == 'blur' -%}
+      {%- assign vt_style = vt_style
+        | append: ' --vt-blur: '
+        | append: block.settings.animation_blur_intensity
+        | append: 'px;'
+      -%}
+    {%- endif -%}
+  {%- endunless -%}
+
   <div
-    class="{{ vt_classes }}"
-    {% if vt_style != '' %}
-      style="{{ vt_style | strip }}"
-    {% endif %}
+    class="
+      {{ vt_classes }}
+      {{ vt_anim_classes }}
+    "
+    style="
+      {{ vt_style | strip }}
+      --vt-badge-gap: {% render 'fluid-clamp', min_px: block.settings.gap, max_px: block.settings.gap, unit: 'rem' %};
+    "
     {{ block.shopify_attributes }}
   >
+    {% content_for 'blocks' %}
     {{ block.settings.text }}
   </div>
 {%- endif -%}
@@ -63,9 +139,10 @@
   .vt-badge {
     display: inline-flex;
     align-items: center;
-    justify-content: center;    
-    background-color: var(--vt-badge-bg);
-    color: var(--vt-badge-color);
+    justify-content: center;
+    gap: var(--vt-badge-gap, .375rem);
+    background-color: var(--vt-badge-bg, var(--vt-color-accent));
+    color: var(--vt-badge-color, var(--vt-foreground-color));
     font-family: var(--vt-font-family-body);
     line-height: 1.3;
     white-space: nowrap;
@@ -74,7 +151,7 @@
     border-radius: var(--vt-badge-radius, 50%);
     border-style: solid;
     border-width: var(--vt-badge-border-width, 0);
-    border-color: var(--vt-badge-border-color, transparent);
+    border-color: var(--vt-badge-border-color, var(--vt-color-accent));
     box-sizing: border-box;
   }
 
@@ -124,11 +201,14 @@
 {
   "name": "Badge",
   "tag": null,
+  "blocks": [
+    {"type": "icons"}
+  ],
   "settings": [
     {
       "type": "inline_richtext",
       "id": "text",
-      "label": "Text",
+      "label": "Content",
       "default": "Badge label"
     },
     {
@@ -147,7 +227,7 @@
       "id": "show_border",
       "label": "Badge with outline",
       "default": false
-    },
+    },    
     {
       "type": "header",
       "content": "Size"
@@ -194,7 +274,7 @@
     {
       "type": "select",
       "id": "width",
-      "label": "Width",
+      "label": "Badge width",
       "options": [
         { "value": "fit", "label": "Fit" },
         { "value": "fill", "label": "Fill" },
@@ -220,9 +300,19 @@
       "max": 3,
       "step": 0.5,
       "unit": "px",
-      "label": "Outline size",
+      "label": "Outline thickness",
       "default": 1,
       "visible_if": "{{ block.settings.show_border }}"
+    },    
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 2,
+      "max": 26,
+      "step": 2,
+      "unit": "px",
+      "default": 6,
+      "label": "Gap"
     },
     {
       "type": "header",
@@ -246,11 +336,110 @@
       "label": "Outline",
       "default": "#003225",
       "visible_if": "{{ block.settings.show_border }}"
+    },
+    {
+      "type": "header",
+      "content": "t:blocks.heading.settings.header_animation.content"
+    },
+    {
+      "type": "select",
+      "id": "animation_type",
+      "options": [
+        { "value": "none", "label": "t:blocks.heading.settings.animation_type.options__1.label" },
+        { "value": "fade", "label": "t:blocks.heading.settings.animation_type.options__2.label" },
+        { "value": "slide", "label": "t:blocks.heading.settings.animation_type.options__3.label" },
+        { "value": "float", "label": "t:blocks.heading.settings.animation_type.options__4.label" },
+        { "value": "blur", "label": "t:blocks.heading.settings.animation_type.options__5.label" }
+      ],
+      "default": "none",
+      "label": "t:blocks.heading.settings.animation_type.label"
+    },
+    {
+      "type": "select",
+      "id": "animation_direction",
+      "options": [
+        { "value": "from-left", "label": "t:blocks.heading.settings.animation_direction.options__1.label" },
+        { "value": "from-right", "label": "t:blocks.heading.settings.animation_direction.options__2.label" },
+        { "value": "from-top", "label": "t:blocks.heading.settings.animation_direction.options__3.label" },
+        { "value": "from-bottom", "label": "t:blocks.heading.settings.animation_direction.options__4.label" }
+      ],
+      "default": "from-bottom",
+      "label": "t:blocks.heading.settings.animation_direction.label",
+      "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' }}"
+    },
+    {
+      "type": "range",
+      "id": "animation_duration",
+      "min": 0.1,
+      "max": 3,
+      "step": 0.1,
+      "unit": "s",
+      "default": 1.2,
+      "label": "t:blocks.heading.settings.animation_duration.label",
+      "visible_if": "{{ block.settings.animation_type != 'none' }}"
+    },
+    {
+      "type": "range",
+      "id": "animation_delay",
+      "min": 0,
+      "max": 2,
+      "step": 0.1,
+      "unit": "s",
+      "default": 0.2,
+      "label": "t:blocks.heading.settings.animation_delay.label",
+      "visible_if": "{{ block.settings.animation_type != 'none' }}"
+    },
+    {
+      "type": "select",
+      "id": "animation_easing",
+      "options": [
+        { "value": "linear", "label": "t:blocks.heading.settings.animation_easing.options__1.label" },
+        { "value": "ease-out-sine", "label": "t:blocks.heading.settings.animation_easing.options__2.label" },
+        { "value": "ease-in-sine", "label": "t:blocks.heading.settings.animation_easing.options__3.label" },
+        { "value": "ease-in-out-sine", "label": "t:blocks.heading.settings.animation_easing.options__4.label" },
+        { "value": "ease-in-cubic", "label": "t:blocks.heading.settings.animation_easing.options__5.label" },
+        { "value": "ease-out-cubic", "label": "t:blocks.heading.settings.animation_easing.options__6.label" },
+        { "value": "ease-in-out-cubic", "label": "t:blocks.heading.settings.animation_easing.options__7.label" }
+      ],
+      "default": "ease-out-sine",
+      "label": "t:blocks.heading.settings.animation_easing.label",
+      "visible_if": "{{ block.settings.animation_type == 'slide' or block.settings.animation_type == 'float' or block.settings.animation_type == 'blur' }}"
+    },
+    {
+      "type": "range",
+      "id": "animation_blur_intensity",
+      "min": 5,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "default": 5,
+      "label": "t:blocks.heading.settings.animation_blur_intensity.label",
+      "visible_if": "{{ block.settings.animation_type == 'blur' }}"
     }
   ],
   "presets": [
     {
-      "name": "Badge"
+      "name": "Badge",
+      "settings": {
+        "text": "Label",
+        "radius": "3.125rem",
+        "badge_size": "vt-paragraph-small",
+        "font_size": 16,
+        "width": "fit",
+        "width_custom": 50,
+        "show_border": false,
+        "border_size": 1,
+        "bg_color": "#EAE060",
+        "text_color": "#003225",
+        "border_color": "#003225",
+        "gap": 4,
+        "animation_type": "slide",
+        "animation_direction": "from-bottom",
+        "animation_duration": 1.2,
+        "animation_delay": 0.2,
+        "animation_easing": "ease-out-sine",
+        "animation_blur_intensity": 5
+      }
     }
   ]
 }

@@ -4,8 +4,12 @@
   Supports full width, theme color tokens, and responsive section padding.
 {%- endcomment -%}
 
+{%- liquid
+  assign make_section_page_width = section.settings.make_section_page_width
+-%}
+
 <div
-  class="vt-featured-collections{% if section.settings.full_width %} vt-featured-collections--full-width{% endif %}"
+  class="vt-featured-collections{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
   id="vtFeaturedCollections-{{ section.id }}"
   style="
     --vt-bg: {{ section.settings.bg_color | default: '#EAE060' }};
@@ -20,8 +24,9 @@
     --vt-block-gap: {{ section.settings.block_gap | default: 64 }}px;
     --vt-block-gap-mobile: {{ section.settings.block_gap_mobile | default: 40 }}px;
   "
+  {{ section.shopify_attributes }}
 >
-  <div class="vt-featured-collections__container">
+  <div class="vt-featured-collections__container{% if make_section_page_width %} vt-page-width{% endif %}">
     {% content_for 'blocks' %}
   </div>
 </div>
@@ -35,20 +40,22 @@
     box-sizing: border-box;
   }
 
+  .vt-featured-collections.vt-page-full-width {
+    padding-left: var(--vt-ph, 34px);
+    padding-right: var(--vt-ph, 34px);
+  }
+
   .vt-featured-collections__container {
     width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
-    padding-left: var(--vt-ph, 34px);
-    padding-right: var(--vt-ph, 34px);
-    max-width: 1200px;
     display: flex;
     flex-direction: column;
     gap: var(--vt-block-gap, 64px);
   }
 
-  .vt-featured-collections--full-width .vt-featured-collections__container {
-    max-width: 100% !important;
+  .vt-featured-collections__container:not(.vt-page-width) {
+    max-width: 100%;
   }
 
   /* Ensure child block containers stretch full width */
@@ -86,7 +93,7 @@
   }
 
   @media screen and (min-width: 769px) and (max-width: 1024px) {
-    .vt-featured-collections__container {
+    .vt-featured-collections.vt-page-full-width {
       padding-left: clamp(20px, calc(var(--vt-ph, 34px) * 0.8), 34px);
       padding-right: clamp(20px, calc(var(--vt-ph, 34px) * 0.8), 34px);
     }
@@ -98,9 +105,12 @@
       padding-bottom: var(--vt-pb-mobile, 48px);
     }
 
-    .vt-featured-collections__container {
+    .vt-featured-collections.vt-page-full-width {
       padding-left: var(--vt-ph-mobile, 20px);
       padding-right: var(--vt-ph-mobile, 20px);
+    }
+
+    .vt-featured-collections__container {
       gap: var(--vt-block-gap-mobile, 40px);
     }
   }
@@ -118,8 +128,8 @@
     },
     {
       "type": "checkbox",
-      "id": "full_width",
-      "label": "Make section full width",
+      "id": "make_section_page_width",
+      "label": "t:sections.rich_text.settings.make_section_page_width.label",
       "default": true
     },
     {
@@ -240,7 +250,7 @@
     {
       "name": "Featured collections",
       "settings": {
-        "full_width": true,
+        "make_section_page_width": true,
         "bg_color": "#EAE060",
         "heading_color": "#003225",
         "paragraph_color": "#224E09",

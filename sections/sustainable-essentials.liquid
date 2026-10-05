@@ -4,8 +4,12 @@
   Supports full width, theme color tokens, and responsive section padding.
 {%- endcomment -%}
 
+{%- liquid
+  assign make_section_page_width = section.settings.make_section_page_width
+-%}
+
 <div
-  class="vt-sustainable-essentials{% if section.settings.full_width %} vt-sustainable-essentials--full-width{% endif %}"
+  class="vt-sustainable-essentials{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
   id="vtSustainableEssentials-{{ section.id }}"
   style="
     --vt-bg: {{ section.settings.bg_color | default: '#F8F9DC' }};
@@ -22,7 +26,7 @@
   "
   {{ section.shopify_attributes }}
 >
-  <div class="vt-sustainable-essentials__container">
+  <div class="vt-sustainable-essentials__container{% if make_section_page_width %} vt-page-width{% endif %}">
     {% content_for 'blocks' %}
   </div>
 </div>
@@ -37,19 +41,22 @@
     overflow-x: clip;
   }
 
+  .vt-sustainable-essentials.vt-page-full-width {
+    padding-left: var(--vt-ph, 34px);
+    padding-right: var(--vt-ph, 34px);
+  }
+
   .vt-sustainable-essentials__container {
     width: 100%;
     margin: 0 auto;
     box-sizing: border-box;
-    padding-left: var(--vt-ph, 34px);
-    padding-right: var(--vt-ph, 34px);
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--vt-block-gap, 64px);
   }
 
-  .vt-sustainable-essentials--full-width .vt-sustainable-essentials__container {
+  .vt-sustainable-essentials__container:not(.vt-page-width) {
     max-width: 100%;
   }
 
@@ -75,7 +82,7 @@
   }
 
   @media screen and (min-width: 769px) and (max-width: 1024px) {
-    .vt-sustainable-essentials__container {
+    .vt-sustainable-essentials.vt-page-full-width {
       padding-left: clamp(20px, calc(var(--vt-ph, 34px) * 0.8), 34px);
       padding-right: clamp(20px, calc(var(--vt-ph, 34px) * 0.8), 34px);
     }
@@ -87,9 +94,12 @@
       padding-bottom: var(--vt-pb-mobile, 48px);
     }
 
-    .vt-sustainable-essentials__container {
+    .vt-sustainable-essentials.vt-page-full-width {
       padding-left: var(--vt-ph-mobile, 20px);
       padding-right: var(--vt-ph-mobile, 20px);
+    }
+
+    .vt-sustainable-essentials__container {
       gap: var(--vt-block-gap-mobile, 40px);
     }
   }
@@ -107,8 +117,8 @@
     },
     {
       "type": "checkbox",
-      "id": "full_width",
-      "label": "Make section full width",
+      "id": "make_section_page_width",
+      "label": "t:sections.rich_text.settings.make_section_page_width.label",
       "default": true
     },
     {
@@ -230,7 +240,7 @@
     {
       "name": "Sustainable essentials",
       "settings": {
-        "full_width": true,
+        "make_section_page_width": true,
         "bg_color": "#F8F9DC",
         "heading_color": "#003225",
         "paragraph_color": "#224E09",
@@ -325,6 +335,9 @@
               }
             }
           ]
+        },
+        {
+          "type": "product-listing-tab"
         }
       ]
     }

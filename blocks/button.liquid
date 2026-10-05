@@ -105,7 +105,7 @@
 
 {%- if block.settings.button_label != blank -%}
   <div class="vt-buttons">
-    <a
+    <a aria-label="{{ block.settings.button_label }}"
       {% if block.settings.button_link == blank %}
         role="link"
         aria-disabled="true"
@@ -130,12 +130,12 @@
 
       {{ block.shopify_attributes }}
     >
-      <span class="vt-button-label">
+      <span class="vt-button-label" data-label="{{ block.settings.button_label }}">
         {{ block.settings.button_label }}
       </span>
 
       {% if block.settings.button_style == 'link' or block.settings.button_style == 'link-light' %}
-        <span
+        <span role="button"
           class="vt-button-icon vt-button__arrow"
           aria-hidden="true"
         >
@@ -339,7 +339,7 @@
       {
         "name": "t:blocks.button.presets.name",
         "settings": {
-          "button_label": "Shop now",
+          "button_label": "Button label",
           "button_link": "shopify://collections/all",
           "open_in_new_tab": false,
           "button_style": "primary",

@@ -4,7 +4,7 @@
   scroll-triggered entrance animation.
 
   @example
-  {% content_for 'block', type: 'stat-card', id: 'stat-card' %}
+  {% content_for 'block', type: 'card', id: 'card' %}
 {% enddoc %}
 
 {% liquid
@@ -114,8 +114,7 @@
   endif
 %}
 
-<div
-  id="vt-card-{{ block.id }}"
+<div  
   class="{{ vt_class_list }}"
   style="
     --vt-bg: {{ block.settings.background_color }};
@@ -137,6 +136,7 @@
 
     {%- if block.settings.height == 'custom' %}
     --vt-min-height: {% render 'fluid-clamp', min_px: block.settings.min_height, max_px: block.settings.min_height %};
+    --vt-min-height-mobile: {% render 'fluid-clamp', min_px: block.settings.min_height_mobile, max_px: block.settings.min_height_mobile %};
     {%- endif %}
 
     {%- if vt_animate_classes != blank %}
@@ -233,6 +233,13 @@
   .vt-card--height-custom {
     height: auto;
     min-height: var(--vt-min-height, auto);
+  }
+
+  /* Hide first/last child (icon blocks) on mobile */
+  @media screen and (max-width: 749px) {
+    .vt-card--height-custom {
+      min-height: var(--vt-min-height-mobile, auto);
+    }
   }
 
   .vt-card__content {
@@ -466,7 +473,7 @@
       "max": 64,
       "step": 1,
       "unit": "px",
-      "label": "Vertical",
+      "label": "Vertical (desktop)",
       "default": 36
     },
     {
@@ -476,7 +483,7 @@
       "max": 48,
       "step": 1,
       "unit": "px",
-      "label": "Horizontal",
+      "label": "Horizontal (desktop)",
       "default": 24
     },
     {
@@ -504,7 +511,7 @@
       "step": 1,
       "unit": "px",
       "label": "Horizontal (mobile)",
-      "default": 26,
+      "default": 20,
       "visible_if": "{{ block.settings.enable_padding_mobile == true }}"
     },
     {
@@ -547,14 +554,25 @@
     {
       "type": "range",
       "id": "min_height",
-      "label": "Min height",
-      "min": 50,
-      "max": 450,
+      "label": "Min height (desktop)",
+      "min": 250,
+      "max": 750,
       "step": 5,
       "unit": "px",
-      "default": 100,
+      "default": 250,
       "visible_if": "{{ block.settings.height == 'custom' }}"
     },
+    {
+      "type": "range",
+      "id": "min_height_mobile",
+      "label": "Min height (mobile)",
+      "min": 250,
+      "max": 750,
+      "step": 5,
+      "unit": "px",
+      "default": 250,
+      "visible_if": "{{ block.settings.height == 'custom' }}"
+    },    
     {
       "type": "header",
       "content": "Gap"
@@ -724,7 +742,7 @@
       "visible_if": "{{ block.settings.animation_type == 'blur' }}"
     }   
   ],
-  "blocks": [ { "type": "icons" }, { "type": "heading" }, {"type": "paragraph"}, {"type": "heading-group"}, {"type": "stack"}, {"type": "sub-heading"}, {"type": "badge"}, {"type": "button"},],       
+  "blocks": [ { "type": "icons" }, { "type": "heading" }, {"type": "paragraph"}, {"type": "heading-group"}, {"type": "stack"}, {"type": "sub-heading"}, {"type": "badge"}, {"type": "button"}],       
   "presets": [
     {
       "name": "Card",
@@ -750,7 +768,8 @@
         "width": "fit",
         "width_custom": 50,
         "height": "fit",
-        "min_height": 100,
+        "min_height": 250,
+        "min_height_mobile": 250,
         "gap": 10,
         "enable_gap_mobile": true,
         "gap_mobile": 5,

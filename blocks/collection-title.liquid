@@ -5,12 +5,14 @@
   {% content_for 'block', type: 'heading', id: 'heading' %}
 {% enddoc %}
 
-{%- assign current_col = closest.collection | default: col | default: collection -%}
-{%- assign title_text = block.settings.heading -%}
+{%- assign current_col = closest.collection | default: collection | default: col -%}
+
 {%- if current_col.title != blank -%}
-  {%- if title_text == blank or title_text == 'Heading' or title_text contains 'heading' or title_text contains 'Heading' or title_text == 'Organic Essentials' or title_text == 'Collection Title' or title_text == 't:blocks.collection_title.settings.heading.default' -%}
-    {%- assign title_text = current_col.title -%}
-  {%- endif -%}
+  {%- assign title_text = current_col.title -%}
+{%- elsif default_title != blank -%}
+  {%- assign title_text = default_title -%}
+{%- else -%}
+  {%- assign title_text = block.settings.heading | default: 'Collection title' -%}
 {%- endif -%}
 
 {%- if title_text != blank -%}
@@ -88,6 +90,7 @@
       {%- if block.settings.heading_width == 'custom' %}--vt-heading-width: {{ block.settings.width_custom }}%;{% endif -%}
       {%- if block.settings.enable_max_width %}--vt-heading-max-width: {% render 'fluid-clamp', min_px: block.settings.heading_max_width, max_px: block.settings.heading_max_width %};{% endif -%}
     "
+    {{ block.shopify_attributes }}
   >
     {%- case heading_tag -%}
       {%- when 'h1' -%}
@@ -96,7 +99,6 @@
           {% if vt_style != '' %}
             style="{{ vt_style | strip }}"
           {% endif %}
-          {{ block.shopify_attributes }}
         >
           {{ title_text }}
         </h1>
@@ -106,7 +108,6 @@
           {% if vt_style != '' %}
             style="{{ vt_style | strip }}"
           {% endif %}
-          {{ block.shopify_attributes }}
         >
           {{ title_text }}
         </h2>
@@ -116,7 +117,6 @@
           {% if vt_style != '' %}
             style="{{ vt_style | strip }}"
           {% endif %}
-          {{ block.shopify_attributes }}
         >
           {{ title_text }}
         </h3>
@@ -126,7 +126,6 @@
           {% if vt_style != '' %}
             style="{{ vt_style | strip }}"
           {% endif %}
-          {{ block.shopify_attributes }}
         >
           {{ title_text }}
         </h4>
@@ -136,7 +135,6 @@
           {% if vt_style != '' %}
             style="{{ vt_style | strip }}"
           {% endif %}
-          {{ block.shopify_attributes }}
         >
           {{ title_text }}
         </h5>
@@ -146,7 +144,6 @@
           {% if vt_style != '' %}
             style="{{ vt_style | strip }}"
           {% endif %}
-          {{ block.shopify_attributes }}
         >
           {{ title_text }}
         </h6>
@@ -217,16 +214,16 @@
   "name": "t:blocks.collection_title.name",
   "tag": null,
   "settings": [
-    {
-      "type": "inline_richtext",
-      "id": "heading",
-      "default": "t:blocks.collection_title.settings.heading.default",
-      "label": "t:blocks.collection_title.settings.heading.label"
-    },
-    {
-      "type": "header",
-      "content": "t:blocks.collection_title.settings.header_content.content"
-    },
+    // {
+    //   "type": "inline_richtext",
+    //   "id": "heading",
+    //   "default": "t:blocks.collection_title.settings.heading.default",
+    //   "label": "t:blocks.collection_title.settings.heading.label"
+    // },
+    // {
+    //   "type": "header",
+    //   "content": "t:blocks.collection_title.settings.header_content.content"
+    // },
     {
       "type": "select",
       "id": "heading_alignment",
@@ -398,10 +395,10 @@
     {
       "name": "t:blocks.collection_title.presets.name",
       "settings":{
-        "heading": "Collection Title",
-        "heading_size": "vt-heading-h2",
+        // "heading": "Collection Title",
+        "heading_size": "vt-heading-h3",
         "heading_alignment": "text-inherit",        
-        "heading_tag": "h2",
+        "heading_tag": "h3",
         "heading_width": "fit",
         "width_custom": 100,
         "enable_max_width": false,

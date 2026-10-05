@@ -756,7 +756,7 @@
 					"label": "Divider color"
 				},
 				"make_section_page_width": {
-					"label": "Make section full width"
+					"label": "Apply max width"
 				}
 			}
 		}

@@ -92,7 +92,7 @@
     overrides it.
   {%- endcomment -%}
   <div class="vt-column-layout__viewport">
-    <div class="vt-column-layout__list grid {{ gap_classes }}">
+    <div class="vt-column-layout__list grid {{ gap_classes }}" style="--vt-columns-position: {{ block.settings.vertical_alignment }};">
       {%- if block.blocks.size > 0 -%}
         {% content_for "blocks" %}
       {%- elsif is_editor -%}
@@ -122,8 +122,9 @@
     --vt-gap: var(--vt-gap-mobile, 0px);
   }
 
-  .vt-column-layout__list {
+  .vt-column-layout__list {    
     grid-template-columns: var(--vt-grid-mobile, 1fr);
+    align-items: var(--vt-columns-position);
   }
 
   .vt-column-layout__list > * {
@@ -2512,7 +2513,7 @@
       "step": 4,
       "unit": "px",
       "default": 0,
-      "label": "Top (desktop)"       
+      "label": "Vertical (desktop)"       
     },
     {
       "type": "range",
@@ -2522,7 +2523,7 @@
       "step": 4,
       "unit": "px",
       "default": 0,
-      "label": "Bottom (desktop)"
+      "label": "Horizontal (desktop)"
     },
     {
       "type": "range",
@@ -2543,15 +2544,44 @@
       "unit": "px",
       "default": 0,
       "label": "Horizontal (mobile)"      
+    },
+    {
+      "type": "header",
+      "content": "Align columns",
+      "info": "Choose how columns align vertically"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",      
+      "options": [
+        {
+          "value": "stretch",
+          "label": "Stretch (equal height)"
+        },
+        {
+          "value": "flex-start",
+          "label": "Top (natural height)"
+        },
+        {
+          "value": "center",
+          "label": "Middle"
+        },
+        {
+          "value": "flex-end",
+          "label": "Bottom"
+        }
+      ],
+      "default": "flex-start"
     }    
   ],
-  "blocks": [{ "type": "@theme" }],
+  "blocks": [{ "type": "card" }, { "type": "heading-group" }, { "type": "stack" }],
   "presets": [    
     {
       "name": "Column layout",
-      "blocks": [
-        { "type": "@theme" }      
-      ] 
+      "settings": {
+        
+      }      
     },
     {
       "name": "t:general.column",

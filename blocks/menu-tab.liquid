@@ -1,0 +1,128 @@
+{% doc %}
+  Renders a menu tab button in the product listing tablist.
+  Accepts collection-title child block.
+{% enddoc %}
+
+{%- liquid
+  assign current_col = closest.collection | default: collection | default: col
+  if current_col != blank and current_col.title != blank
+    assign tab_id = 'plt-tab-' | append: current_col.id
+    assign panel_id = 'plt-panel-' | append: current_col.id
+    assign col_handle = current_col.handle
+    assign col_title = current_col.title
+  else
+    assign demo_idx = card_index | default: 1
+    assign tab_id = 'plt-tab-demo-' | append: demo_idx
+    assign panel_id = 'plt-panel-demo-' | append: demo_idx
+    assign col_handle = 'demo-' | append: demo_idx
+    assign demo_titles = "All,Men's,Women's,New Arrivals,New" | split: ','
+    assign title_idx = demo_idx | minus: 1
+    assign col_title = demo_titles[title_idx] | default: 'Collection'
+  endif
+-%}
+
+{%- if is_first or forloop.first -%}
+  <style>
+    .plt-listing-tab .plt__tablist-container {
+      --plt-menu-ph-desktop: {{ block.settings.padding_horizontal_desktop | default: 34 }}px;
+      --plt-menu-ph-mobile: {{ block.settings.padding_horizontal_mobile | default: 20 }}px;
+    }
+    .plt-listing-tab .plt__tab {
+      --plt-tab-item-ph: {{ block.settings.item_padding_horizontal | default: 24 }}px;
+      --plt-tab-item-ph-mobile: {{ block.settings.item_padding_horizontal_mobile | default: 16 }}px;
+    }
+  </style>
+{%- endif -%}
+
+<button
+  type="button"
+  role="tab"
+  id="{{ tab_id }}"
+  class="plt__tab{% if is_first %} plt__tab--active{% endif %}"
+  aria-controls="{{ panel_id }}"
+  aria-selected="{% if is_first %}true{% else %}false{% endif %}"
+  tabindex="{% if is_first %}0{% else %}-1{% endif %}"
+  data-collection="{{ col_handle }}"
+  {{ block.shopify_attributes }}
+  >
+  {% content_for 'block', type: 'collection-title', id: 'collection-title', closest.collection: current_col, collection: current_col, col: current_col, default_title: col_title %}
+  </button>
+  
+  {% schema %}
+{
+  "name": "Menu tab",
+  "tag": null,
+  "blocks": [
+    { "type": "collection-title" }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Horizontal padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_desktop",
+      "label": "Horizontal padding (desktop)",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "padding_horizontal_mobile",
+      "label": "Horizontal padding (mobile)",
+      "min": 0,
+      "max": 50,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Tab item padding"
+    },
+    {
+      "type": "range",
+      "id": "item_padding_horizontal",
+      "label": "Item padding (desktop)",
+      "min": 8,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "item_padding_horizontal_mobile",
+      "label": "Item padding (mobile)",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "presets": [
+    {
+      "name": "Menu tab",
+      "settings": {
+        "padding_horizontal_desktop": 34,
+        "padding_horizontal_mobile": 20,
+        "item_padding_horizontal": 24,
+        "item_padding_horizontal_mobile": 16
+      },
+      "blocks": [
+        {
+          "type": "collection-title",
+          "settings": {
+            "heading_size": "vt-heading-h4"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

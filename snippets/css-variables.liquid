@@ -232,13 +232,6 @@
     =============================================
     {% endcomment %}
 
-    {% assign page_margin_mobile = settings.min_page_margin_mobile | default: 20 %}
-    {% assign page_margin_desktop = settings.min_page_margin | default: 34 %}
-    {% assign page_margin_range = page_margin_desktop | minus: page_margin_mobile %}
-    {% assign page_margin_vw = page_margin_range | times: 100.0 | divided_by: fluid_viewport_range %}
-    {% assign page_margin_offset = page_margin_range | times: fluid_viewport_start | divided_by: fluid_viewport_range %}
-    {% assign page_margin_base = page_margin_mobile | minus: page_margin_offset %}
-
   
     :root {
 
@@ -616,43 +609,57 @@
         --font-product-grid--size: {{ settings.product_grid_base_size | default: 16 }}px;
         --font-product-grid--transform: {% if settings.product_grid_capitalize %}uppercase{% else %}none{% endif %};
 
-        /* Layout */
-        
-        --vt-page-width: {{ settings.max_page_width }}px;        
-        --vt-page-margin-desktop: {{ page_margin_desktop | divided_by: 16.0 | round: 4 }}rem;
-        --vt-page-margin-mobile: {{ page_margin_mobile | divided_by: 16.0 | round: 4 }}rem;
-        --vt-page-spacing-desktop: {{ page_margin_desktop }}px;
-        --vt-page-spacing-mobile: {{ page_margin_mobile }}px;
-        --vt-page-margin: clamp(var(--vt-page-margin-mobile), {{ page_margin_base | round: 4 }}px + {{ page_margin_vw | round: 4 }}vw, var(--vt-page-margin-desktop));
+        /* Layout */           
+                
+        --vt-page-width: {{ settings.max_page_width | default: 1200 }}px;        
 
+        /* 3 anchor points for responsive system */
+        --vt-breakpoint-mobile: 375;
+        --vt-breakpoint-tablet: 1024;
+        --vt-breakpoint-desktop: 1440;
+        --vt-page-padding-mobile: {{ settings.page_padding_mobile | default: 20 }};
+        --vt-page-padding-tablet: 29;
+        --vt-page-padding-desktop: 216;
 
-        /* ==========================================================================
-        Global Component Design Tokens
-        ========================================================================== */
+        /* From mobile → tablet */
+        --vt-pad-slope-1: calc((var(--vt-page-padding-tablet) - var(--vt-page-padding-mobile)) / (var(--vt-breakpoint-tablet) - var(--vt-breakpoint-mobile)));
+        --vt-pad-intercept-1: calc(var(--vt-page-padding-mobile) - var(--vt-pad-slope-1) * var(--vt-breakpoint-mobile));
 
-        /* Cards & Badges */
-        --card-border-radius: {{ settings.card_border_radius | default: 0 }}px;
-        --badge-border-radius: {{ settings.badge_border_radius | default: 20 }}px;
-        --badge-font-size: {{ settings.badge_font_size | default: 13 }}px;
+        /* From tablet → desktop */
+        --vt-pad-slope-2: calc((var(--vt-page-padding-desktop) - var(--vt-page-padding-tablet)) / (var(--vt-breakpoint-desktop) - var(--vt-breakpoint-tablet)));
+        --vt-pad-intercept-2: calc(var(--vt-page-padding-tablet) - var(--vt-pad-slope-2) * var(--vt-breakpoint-tablet));
 
-        /* Responsive Container Padding */
-        --container-padding-desktop: {{ settings.container_padding_desktop | default: 34 }}px;        
-        --container-padding-mobile: {{ settings.container_padding_mobile | default: 20 }}px;
-        --container-padding: var(--container-padding-desktop);
+        /* Default: (mobile → tablet) */
+        --vt-page-padding: clamp(
+          calc(var(--vt-page-padding-mobile) * 1px),
+          calc(var(--vt-pad-intercept-1) * 1px + var(--vt-pad-slope-1) * 100vw),
+          calc(var(--vt-page-padding-tablet) * 1px)
+        );
 
-        /* Slider & Controls */
-        --slider-nav-btn-size: {{ settings.slider_nav_btn_size | default: 48 }}px;
-        --slider-nav-icon-size: {{ settings.slider_nav_icon_size | default: 15 }}px;
+      @media screen and (min-width: 1024px) {
+        --vt-page-padding: clamp(
+          calc(var(--vt-page-padding-tablet) * 1px),
+          calc(var(--vt-pad-intercept-2) * 1px + var(--vt-pad-slope-2) * 100vw),
+          calc(var(--vt-page-padding-desktop) * 1px)
+        );
+      }
+      
+      
+      
 
-        /* ==========================================================================
-        Earth Theme Official Color Palette (from Theme Settings)
-        ========================================================================== */
-        --vt-background-color: {{ settings.color_palette.background }};
-        --vt-foreground-color: {{ settings.color_palette.foreground }};
-        --vt-color-primary: {{ settings.color_palette.primary }};
-        --vt-color-secondary: {{ settings.color_palette.secondary }};
-        --vt-color-accent: {{ settings.color_palette.accent }};
-        --vt-color-cactus-green: {{ settings.color_palette.cactus_green }};
+      /* Slider & Controls */
+      --slider-nav-btn-size: {{ settings.slider_nav_btn_size | default: 48 }}px;
+      --slider-nav-icon-size: {{ settings.slider_nav_icon_size | default: 15 }}px;
+      
+      /* ==========================================================================
+      Earth Theme Official Color Palette (from Theme Settings)
+      ========================================================================== */
+      --vt-background-color: {{ settings.color_palette.background }};
+      --vt-foreground-color: {{ settings.color_palette.foreground }};
+      --vt-color-primary: {{ settings.color_palette.primary }};
+      --vt-color-secondary: {{ settings.color_palette.secondary }};
+      --vt-color-accent: {{ settings.color_palette.accent }};
+      --vt-color-cactus-green: {{ settings.color_palette.cactus_green }};
 
     }
 

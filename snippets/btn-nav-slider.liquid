@@ -1,24 +1,36 @@
 {% comment %}
   Reusable Circular Slider Navigation Arrows Component
   Accepts:
-  - prev_id: {String} Unique ID for Prev button
-  - next_id: {String} Unique ID for Next button
-  - theme: {String} 'green' (default: bright green #71CC3B with dark green icon) or 'light' (cream #F8F9DC with dark icon)
+  - target_id: {String} ID of the scrollable track container to control
+  - prev_id: {String} Optional custom ID for Prev button
+  - next_id: {String} Optional custom ID for Next button
+  - theme: {String} 'green' (default: bright green #71CC3B) or 'light' (cream/white #F8F9DC with subtle border)
   - class: {String} Additional wrapper class
+  - show_on_hover: {Boolean} If true, buttons appear only when hovering container (.has-slider-nav)
   - prev_label: {String} Accessible label for Prev button
   - next_label: {String} Accessible label for Next button
 {% endcomment %}
 
 {%- assign nav_theme = theme | default: 'green' -%}
-{%- # theme-check-disable ValidScopedCSSClass -%}
-<div class="earth-slider-nav earth-slider-nav--{{ nav_theme }} {{ class }}">
+{%- assign nav_layout = layout | default: 'inline' -%}
+{%- assign hover_mode = show_on_hover | default: false -%}
+{%- assign target_track_id = target_id | default: target_track -%}
+
+<earth-slider-nav 
+  class="earth-slider-nav earth-slider-nav--{{ nav_theme }} earth-slider-nav--{{ nav_layout }}{% if hover_mode %} earth-slider-nav--show-on-hover{% endif %} {{ class }}"
+  {% if target_track_id != blank %}data-target-id="{{ target_track_id }}"{% endif %}
+  role="region"
+  aria-label="Carousel navigation"
+>
   <button 
     type="button" 
     class="earth-slider-nav__btn earth-slider-nav__btn--prev" 
     {% if prev_id != blank %}id="{{ prev_id }}"{% endif %}
     aria-label="{{ prev_label | default: 'Previous slide' }}"
   >
-    <img src="{{ 'icon-prev-left.svg' | asset_url }}" width="15" height="15" alt="" class="earth-slider-nav__icon earth-slider-nav__icon--prev" loading="lazy">
+    <svg class="earth-slider-nav__icon earth-slider-nav__icon--prev" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M14.7611 0V1.81557H3.10006L15 13.7155L13.7167 15L1.81557 3.10006V14.7611H0V0H14.7611Z" fill="currentColor"/>
+    </svg>
   </button>
 
   <button 
@@ -27,7 +39,306 @@
     {% if next_id != blank %}id="{{ next_id }}"{% endif %}
     aria-label="{{ next_label | default: 'Next slide' }}"
   >
-    <img src="{{ 'icon-next-right.svg' | asset_url }}" width="15" height="15" alt="" class="earth-slider-nav__icon earth-slider-nav__icon--next" loading="lazy">
+    <svg class="earth-slider-nav__icon earth-slider-nav__icon--next" width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+      <path d="M0.238921 0V1.81557H11.8999L0 13.7155L1.28332 15L13.1844 3.10006V14.7611H15V0H0.238921Z" fill="currentColor"/>
+    </svg>
   </button>
-</div>
-{%- # theme-check-enable ValidScopedCSSClass -%}
+</earth-slider-nav>
+
+<style>
+  /* =========================================================
+     Slider Navigation Base & Layouts
+     ========================================================= */
+  earth-slider-nav.earth-slider-nav {
+    display: inline-flex;
+    z-index: 25;
+  }
+
+  /* Inline layout (side by side in header) */
+  earth-slider-nav.earth-slider-nav--inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Split layout: buttons positioned on the two sides of the track */
+  /* Split layout: buttons positioned on the two sides of the track */
+  earth-slider-nav.earth-slider-nav--split {
+    position: absolute;
+    top: 30%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+    box-sizing: border-box;
+    pointer-events: none !important;
+    transform: translateY(-50%);
+    z-index: 30;
+  }
+
+  earth-slider-nav.earth-slider-nav--split .earth-slider-nav__btn {
+    pointer-events: auto;
+    flex-shrink: 0;
+  }
+
+  earth-slider-nav.earth-slider-nav--split .earth-slider-nav__btn--prev {
+    margin-right: auto;
+    margin-left: var(--earth-nav-offset, 0px);
+  }
+
+  earth-slider-nav.earth-slider-nav--split .earth-slider-nav__btn--next {
+    margin-left: auto;
+    margin-right: var(--earth-nav-offset, 0px);
+  }
+
+  @media screen and (max-width: 1024px) {
+    earth-slider-nav.earth-slider-nav--split {
+      padding: 0 12px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .earth-slider-nav--desktop-only {
+      display: none !important;
+    }
+  }
+
+  .earth-slider-nav__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.25s ease,
+                opacity 0.25s ease,
+                visibility 0.25s;
+    outline: none;
+    box-shadow: 0 4px 14px rgba(0, 50, 37, 0.12);
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Focus visible accessibility */
+  .earth-slider-nav__btn:focus-visible {
+    outline: 2px solid var(--color-black, #003225);
+    outline-offset: 2px;
+  }
+
+  /* Theme: Green (Default - Bright green with dark icon) */
+  .earth-slider-nav--green .earth-slider-nav__btn {
+    background-color: var(--color-secondary, #71CC3B);
+    color: var(--color-black, #003225);
+  }
+
+  .earth-slider-nav--green .earth-slider-nav__btn:hover:not(:disabled) {
+    background-color: #5fb82d;
+    transform: scale(1.06);
+  }
+
+  /* Theme: Light (Cream/white with dark green icon) */
+  .earth-slider-nav--light .earth-slider-nav__btn {
+    background-color: var(--color-white, #F8F9DC);
+    color: var(--color-black, #003225);
+    border: 1px solid rgba(0, 50, 37, 0.12);
+  }
+
+  .earth-slider-nav--light .earth-slider-nav__btn:hover:not(:disabled) {
+    background-color: var(--color-secondary, #71CC3B);
+    border-color: transparent;
+    transform: scale(1.06);
+  }
+
+  /* =========================================================
+     Hover Icon Rotation Effect
+     ========================================================= */
+  .earth-slider-nav__icon {
+    display: block;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* Rotate arrow when button is hovered */
+  .earth-slider-nav__btn--next:hover:not(:disabled) .earth-slider-nav__icon--next {
+    transform: rotate(45deg);
+  }
+
+  .earth-slider-nav__btn--prev:hover:not(:disabled) .earth-slider-nav__icon--prev {
+    transform: rotate(-45deg);
+  }
+
+  /* =========================================================
+     Disabled & Hidden State (At boundary of list)
+     ========================================================= */
+  .earth-slider-nav__btn:disabled,
+  .earth-slider-nav__btn[data-hidden="true"] {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transform: scale(0.8) !important;
+  }
+
+  /* =========================================================
+     Show On Hover Mode
+     ========================================================= */
+  .earth-slider-nav--show-on-hover {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .has-slider-nav:hover .earth-slider-nav--show-on-hover,
+  .has-slider-nav:focus-within .earth-slider-nav--show-on-hover,
+  .earth-slider-nav--show-on-hover:hover,
+  .earth-slider-nav--show-on-hover:focus-within {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+
+<script>
+  if (!customElements.get('earth-slider-nav')) {
+    class EarthSliderNav extends HTMLElement {
+      constructor() {
+        super();
+        this.prevBtn = null;
+        this.nextBtn = null;
+        this.track = null;
+        this._ticking = false;
+
+        this._onScroll = this._onScroll.bind(this);
+        this._onPrev = this._onPrev.bind(this);
+        this._onNext = this._onNext.bind(this);
+        this._onResize = this._onResize.bind(this);
+      }
+
+      connectedCallback() {
+        this.prevBtn = this.querySelector('.earth-slider-nav__btn--prev');
+        this.nextBtn = this.querySelector('.earth-slider-nav__btn--next');
+
+        if (this.prevBtn) this.prevBtn.addEventListener('click', this._onPrev);
+        if (this.nextBtn) this.nextBtn.addEventListener('click', this._onNext);
+
+        this._bindTrack();
+      }
+
+      _bindTrack() {
+        const targetId = this.getAttribute('data-target-id');
+        if (targetId) {
+          this.track = document.getElementById(targetId) || document.querySelector(targetId);
+        }
+
+        // Fallback: search closest parent container
+        if (!this.track) {
+          const parent = this.closest('.has-slider-nav') || this.parentElement;
+          if (parent) {
+            this.track = parent.querySelector('[data-slider-track]') || parent.querySelector('.plt__track') || parent.querySelector('.vt-carousel__track');
+          }
+        }
+
+        if (this.track) {
+          this.track.addEventListener('scroll', this._onScroll, { passive: true });
+          window.addEventListener('resize', this._onResize, { passive: true });
+          // Check initial positions
+          this.updateState();
+          // Re-check after images/content finish layout
+          window.setTimeout(() => this.updateState(), 100);
+          window.setTimeout(() => this.updateState(), 400);
+        }
+      }
+
+      _onScroll() {
+        if (!this._ticking) {
+          window.requestAnimationFrame(() => {
+            this.updateState();
+            this._ticking = false;
+          });
+          this._ticking = true;
+        }
+      }
+
+      _onResize() {
+        this.updateState();
+      }
+
+      updateState() {
+        if (!this.track) return;
+
+        const sl = this.track.scrollLeft;
+        const sw = this.track.scrollWidth;
+        const cw = this.track.clientWidth;
+
+        // If not enough content to scroll, hide both
+        if (sw <= cw + 2) {
+          this._setHidden(this.prevBtn, true);
+          this._setHidden(this.nextBtn, true);
+          return;
+        }
+
+        // At beginning: hide Prev
+        const atStart = sl <= 6;
+        this._setHidden(this.prevBtn, atStart);
+
+        // At end: hide Next
+        const atEnd = Math.ceil(sl + cw) >= sw - 6;
+        this._setHidden(this.nextBtn, atEnd);
+      }
+
+      _setHidden(btn, isHidden) {
+        if (!btn) return;
+        btn.disabled = isHidden;
+        if (isHidden) {
+          btn.setAttribute('data-hidden', 'true');
+        } else {
+          btn.removeAttribute('data-hidden');
+        }
+      }
+
+      _getStep() {
+        if (!this.track) return 300;
+        // Try to get width of one child card/slide
+        const firstCard = this.track.querySelector('.shopify-block, .product-card, .vt-product-card, [role="listitem"]') || this.track.firstElementChild;
+        if (firstCard) {
+          const computed = window.getComputedStyle(this.track);
+          const gap = parseFloat(computed.columnGap || computed.gap || 0);
+          const cardWidth = firstCard.getBoundingClientRect().width;
+          if (cardWidth > 50) {
+            return cardWidth + gap;
+          }
+        }
+        return this.track.clientWidth * 0.8;
+      }
+
+      _onPrev() {
+        if (!this.track) return;
+        const step = this._getStep();
+        this.track.scrollBy({ left: -step, behavior: 'smooth' });
+      }
+
+      _onNext() {
+        if (!this.track) return;
+        const step = this._getStep();
+        this.track.scrollBy({ left: step, behavior: 'smooth' });
+      }
+
+      disconnectedCallback() {
+        if (this.track) {
+          this.track.removeEventListener('scroll', this._onScroll);
+        }
+        window.removeEventListener('resize', this._onResize);
+      }
+    }
+
+    customElements.define('earth-slider-nav', EarthSliderNav);
+  }
+</script>

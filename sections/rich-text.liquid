@@ -1,133 +1,119 @@
-{% style %} 
-  :root {
-    /* Read the section's specific configuration */
+{% comment %}
+  Rich text section with responsive gap, padding, colors, alignment and optional divider.
+  Renders nested theme blocks (heading, paragraph, button).
+{% endcomment %}
+
+{%- liquid
+  assign make_section_page_width = section.settings.make_section_page_width
+
+  if section.settings.enable_custom_mobile_padding
+    assign pad_top_mobile = section.settings.padding_top_mobile
+    assign pad_bottom_mobile = section.settings.padding_bottom_mobile
+    assign pad_left_mobile = section.settings.padding_left_mobile
+    assign pad_right_mobile = section.settings.padding_right_mobile
+  else
+    assign pad_top_mobile = section.settings.padding_top | times: 0.75 | round
+    assign pad_bottom_mobile = section.settings.padding_bottom | times: 0.75 | round
+    assign pad_left_mobile = section.settings.padding_left | times: 0.75 | round
+    assign pad_right_mobile = section.settings.padding_right | times: 0.75 | round
+  endif
+-%}
+
+<div role="region" aria-labelledby="sec-title"
+  id="rich-text-{{ section.id }}"
+  class="vt-rich-text{% unless make_section_page_width %} vt-page-full-width{% endunless %}
+    {{ section.settings.desktop_content_alignment }}
+    {{ section.settings.mobile_content_alignment }}
+    {% if section.settings.show_section_divider %}vt-rich-text--divider{% endif %}
+  "
+  style="
     --vt-bg: {{ section.settings.background_color }};
     --vt-color: {{ section.settings.text_color }};
     --vt-paragraph-color: {{ section.settings.paragraph_color }};
     --vt-divider-color: {{ section.settings.divider_color }};
-  }
-{% endstyle %}
-
-{%- assign vw_mobile = 375 -%}
-{%- assign vw_desktop = 1440 -%}
-{%- assign vw_range = vw_desktop | minus: vw_mobile -%}
-
-{%- if section.settings.enable_custom_mobile_padding -%}
-  {%- assign px_padding_top_mobile = section.settings.padding_top_mobile | times: 1.0 -%}
-  {%- assign px_padding_bottom_mobile = section.settings.padding_bottom_mobile | times: 1.0 -%}
-{%- else -%}
-  {%- assign px_padding_top_mobile = section.settings.padding_top | times: 0.75 -%}
-  {%- assign px_padding_bottom_mobile = section.settings.padding_bottom | times: 0.75 -%}
-{%- endif -%}
-
-{%- assign px_padding_top_desktop = section.settings.padding_top | times: 1.0 -%}
-{%- assign px_padding_bottom_desktop = section.settings.padding_bottom | times: 1.0 -%}
-
-{%- comment -%} ===== TOP ===== {%- endcomment -%}
-{%- assign diff_top_px = px_padding_top_desktop | minus: px_padding_top_mobile -%}
-{%- assign slope_top = diff_top_px | divided_by: vw_range | round: 8 -%}
-{%- assign offset_top_px = vw_mobile | times: slope_top -%}
-{%- assign y_intersect_top_px = px_padding_top_mobile | minus: offset_top_px -%}
-{%- assign y_intersect_top_rem = y_intersect_top_px | divided_by: 16.0 | round: 4 -%}
-{%- assign vw_coefficient_top = slope_top | times: 100 | round: 4 -%}
-
-{%- comment -%} ===== BOTTOM ===== {%- endcomment -%}
-{%- assign diff_bottom_px = px_padding_bottom_desktop | minus: px_padding_bottom_mobile -%}
-{%- assign slope_bottom = diff_bottom_px | divided_by: vw_range | round: 8 -%}
-{%- assign offset_bottom_px = vw_mobile | times: slope_bottom -%}
-{%- assign y_intersect_bottom_px = px_padding_bottom_mobile | minus: offset_bottom_px -%}
-{%- assign y_intersect_bottom_rem = y_intersect_bottom_px | divided_by: 16.0 | round: 4 -%}
-{%- assign vw_coefficient_bottom = slope_bottom | times: 100 | round: 4 -%}
-
-{%- comment -%} REM clamp() {%- endcomment -%}
-{%- assign rem_padding_top_mobile = px_padding_top_mobile | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_padding_top_desktop = px_padding_top_desktop | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_padding_bottom_mobile = px_padding_bottom_mobile | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_padding_bottom_desktop = px_padding_bottom_desktop | divided_by: 16.0 | round: 4 -%}
-
-{%- comment -%} ===== GAP ===== {%- endcomment -%}
-{%- assign px_gap_mobile = section.settings.gap_mobile | times: 1.0 -%}
-{%- assign px_gap_desktop = section.settings.gap | times: 1.0 -%}
-
-{%- assign diff_gap_px = px_gap_desktop | minus: px_gap_mobile -%}
-{%- assign slope_gap = diff_gap_px | divided_by: vw_range | round: 8 -%}
-{%- assign offset_gap_px = vw_mobile | times: slope_gap -%}
-{%- assign y_intersect_gap_px = px_gap_mobile | minus: offset_gap_px -%}
-{%- assign y_intersect_gap_rem = y_intersect_gap_px | divided_by: 16.0 | round: 4 -%}
-{%- assign vw_coefficient_gap = slope_gap | times: 100 | round: 4 -%}
-
-{%- assign rem_gap_mobile = px_gap_mobile | divided_by: 16.0 | round: 4 -%}
-{%- assign rem_gap_desktop = px_gap_desktop | divided_by: 16.0 | round: 4 -%}
-
-{%- assign is_full_width = true -%}
-{%- if section.settings.full_width != nil -%}
-  {%- assign is_full_width = section.settings.full_width -%}
-{%- elsif section.settings.make_section_full_width != nil -%}
-  {%- assign is_full_width = section.settings.make_section_full_width -%}
-{%- elsif section.settings.make_section_page_width != nil -%}
-  {%- assign is_full_width = section.settings.make_section_page_width -%}
-{%- endif -%}
-
-<div
-  id="RichTtextSection-{{ section.id }}"
-  class="vt-rich-text {{ section.settings.desktop_content_alignment }} {{ section.settings.mobile_content_alignment }} {%- if section.settings.show_section_divider %} vt-divider{% endif -%} {%- if is_full_width %} full-width vt-rich-text--full-width{% else %} page-width{% endif -%}"
-  style="--vt-gap: clamp({{ rem_gap_mobile }}rem, calc({{ y_intersect_gap_rem }}rem + {{ vw_coefficient_gap }}vw), {{ rem_gap_desktop }}rem );
-  --vt-padding-top: clamp({{ rem_padding_top_mobile }}rem, calc({{ y_intersect_top_rem }}rem + {{ vw_coefficient_top }}vw), {{ rem_padding_top_desktop }}rem );
-  --vt-padding-bottom: clamp({{ rem_padding_bottom_mobile }}rem, calc({{ y_intersect_bottom_rem }}rem + {{ vw_coefficient_bottom }}vw), {{ rem_padding_bottom_desktop }}rem );"
+    --vt-gap: {% render 'fluid-clamp', min_px: section.settings.gap_mobile, max_px: section.settings.gap %};
+    --vt-padding-block-start: {% render 'fluid-clamp', min_px: pad_top_mobile, max_px: section.settings.padding_top %};
+    --vt-padding-block-end: {% render 'fluid-clamp', min_px: pad_bottom_mobile, max_px: section.settings.padding_bottom %};
+    --vt-padding-inline-start: {% render 'fluid-clamp', min_px: pad_left_mobile, max_px: section.settings.padding_left %};
+    --vt-padding-inline-end: {% render 'fluid-clamp', min_px: pad_right_mobile, max_px: section.settings.padding_right %};
+  "
+  {{ section.shopify_attributes }}
 >
-  <div class="vt-inner">
+  <div class="vt-rich-text__inner{% if make_section_page_width %} vt-page-width{% endif %}">    
     {% content_for 'blocks' %}
   </div>
 </div>
 
 {% stylesheet %}
   .vt-rich-text {
-    width: 100%;
-    box-sizing: border-box;
     color: var(--vt-color, var(--vt-foreground-color));
-    background-color: var(--vt-bg, var(--vt-background-color));
-    padding-top: var(--vt-padding-top);    
-    padding-bottom: var(--vt-padding-bottom);    
+    background-color: var(--vt-bg, var(--vt-background-color));    
+    padding-block-start: var(--vt-padding-block-start);
+    padding-block-end: var(--vt-padding-block-end);    
   }
 
-  .vt-rich-text.full-width,
-  .vt-rich-text--full-width {
+  .vt-rich-text.vt-page-full-width {
+    padding-inline-start: var(--vt-padding-inline-start);
+    padding-inline-end: var(--vt-padding-inline-end);
+  }
+
+  .vt-rich-text__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vt-gap);
     width: 100%;
-    max-width: 100%;
   }
 
-  .vt-rich-text.full-width .vt-inner,
-  .vt-rich-text--full-width .vt-inner {
-    width: 100%;
-    max-width: 100%;
+  /* Divider */
+  .vt-rich-text--divider {
+    border-bottom: 1px solid var(--vt-divider-color, var(--vt-foreground-color));
   }
 
-  .vt-rich-text .vt-inner {
-    width: 100%;
-    box-sizing: border-box;
-    gap: var(--vt-gap);    
-  }  
-
-  .vt-rich-text.vt-divider {
-    border-bottom: 1px solid var(--vt-divider-color);
+  /* Paragraph color override */
+  .vt-rich-text .vt-paragraph {
+    color: var(--vt-paragraph-color, inherit);
   }
 
-  .vt-rich-text:not(.vt-divider) {
-    border-bottom: none;
+  /* Mobile alignment (default) */
+  .vt-rich-text.vt-mobile-left .vt-rich-text__inner {
+    align-items: flex-start;
+    text-align: left;
   }
 
-  .vt-rich-text .vt-paragraph{    
-    color: var(--vt-paragraph-color, var(--vt-color-primary));
-  }  
+  .vt-rich-text.vt-mobile-center .vt-rich-text__inner {
+    align-items: center;
+    text-align: center;
+  }
 
+  .vt-rich-text.vt-mobile-right .vt-rich-text__inner {
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  /* Desktop alignment */
+  @media screen and (min-width: 750px) {
+    .vt-rich-text.vt-desktop-left .vt-rich-text__inner {
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .vt-rich-text.vt-desktop-center .vt-rich-text__inner {
+      align-items: center;
+      text-align: center;
+    }
+
+    .vt-rich-text.vt-desktop-right .vt-rich-text__inner {
+      align-items: flex-end;
+      text-align: right;
+    }
+  }
 {% endstylesheet %}
-
 
 {% schema %}
 {
-  "name": "t:sections.rich_text.name",  
-  "tag": "section",  
-  "class": "rich-text-section",  
+  "name": "t:sections.rich_text.name",
+  "tag": "section",
+  "class": "rich-text-section",
   "settings": [
     {
       "type": "select",
@@ -150,7 +136,7 @@
       ],
       "default": "vt-mobile-center",
       "label": "t:sections.rich_text.settings.mobile_content_alignment.label"
-    },    
+    },
     {
       "type": "header",
       "content": "Gap"
@@ -163,7 +149,7 @@
       "step": 2,
       "unit": "px",
       "default": 36,
-      "label": "t:sections.rich_text.settings.gap.label"      
+      "label": "t:sections.rich_text.settings.gap.label"
     },
     {
       "type": "range",
@@ -182,7 +168,7 @@
     {
       "type": "color",
       "id": "background_color",
-      "default": "#F8F9DC",
+      "default": "#00000000",
       "label": "t:sections.rich_text.settings.background_color.label"
     },
     {
@@ -205,21 +191,41 @@
       "type": "range",
       "id": "padding_top",
       "min": 0,
-      "max": 100,
-      "step": 4,
+      "max": 200,
+      "step": 2,
       "unit": "px",
-      "default": 36,
-      "label": "t:sections.rich_text.settings.padding_top.label"
+      "default": 110,
+      "label": "Top (desktop)"
     },
     {
       "type": "range",
       "id": "padding_bottom",
       "min": 0,
-      "max": 100,
-      "step": 4,
+      "max": 200,
+      "step": 2,
       "unit": "px",
-      "default": 36,
-      "label": "t:sections.rich_text.settings.padding_bottom.label"
+      "default": 110,
+      "label": "Bottom (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 34,
+      "label": "Left (desktop)"
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 34,
+      "label": "Right (desktop)"
     },
     {
       "type": "checkbox",
@@ -232,7 +238,7 @@
       "id": "padding_top_mobile",
       "min": 0,
       "max": 100,
-      "step": 2,
+      "step": 1,
       "unit": "px",
       "default": 32,
       "label": "t:sections.rich_text.settings.padding_top_mobile.label",
@@ -243,10 +249,32 @@
       "id": "padding_bottom_mobile",
       "min": 0,
       "max": 100,
-      "step": 2,
+      "step": 1,
       "unit": "px",
       "default": 32,
       "label": "t:sections.rich_text.settings.padding_bottom_mobile.label",
+      "visible_if": "{{ section.settings.enable_custom_mobile_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "label": "Left (mobile)",
+      "visible_if": "{{ section.settings.enable_custom_mobile_padding }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 20,
+      "label": "Right (mobile)",
       "visible_if": "{{ section.settings.enable_custom_mobile_padding }}"
     },
     {
@@ -263,26 +291,41 @@
       "visible_if": "{{ section.settings.show_section_divider }}"
     },
     {
-      "type": "header",
-      "content": "Section Layout"
-    },
-    {
       "type": "checkbox",
-      "id": "full_width",
+      "id": "make_section_page_width",
       "default": true,
       "label": "t:sections.rich_text.settings.make_section_page_width.label"
     }
-  ], 
+  ],
   "blocks": [
-    { "type": "heading" }, 
-    { "type": "paragraph" }, 
-    { "type": "button" }
+    { "type": "heading" },
+    { "type": "paragraph" },
+    { "type": "button" },
+    { "type": "stack" }
   ],
   "presets": [
     {
       "name": "t:sections.rich_text.name",
       "settings": {
-        "full_width": true
+        "desktop_content_alignment": "vt-desktop-center",
+        "mobile_content_alignment": "vt-mobile-center",
+        "gap": 36,
+        "gap_mobile": 32,
+        "background_color": "#00000000",
+        "text_color": "#003225",
+        "paragraph_color": "#224E09",
+        "padding_top": 110,
+        "padding_bottom": 110,
+        "padding_left": 34,
+        "padding_right": 34,
+        "enable_custom_mobile_padding": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32,
+        "padding_left_mobile": 20,
+        "padding_right_mobile": 20,        
+        "show_section_divider": false,
+        "divider_color": "#003225",
+        "make_section_page_width": true
       },
       "blocks": [
         {
@@ -302,16 +345,43 @@
             "animation_delay": 0.2,
             "animation_easing": "ease-out-sine",
             "animation_blur_intensity": 5
-          }      
+          }
         },
         {
-          "type": "paragraph"          
+          "type": "paragraph",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "paragraph_alignment": "text-inherit",
+            "paragraph_size": "vt-paragraph-medium",
+            "paragraph_width": "fit",
+            "width_custom": 50,
+            "enable_max_width": true,
+            "paragraph_max_width": 720,
+            "animation_type": "slide",
+            "animation_direction": "from-bottom",
+            "animation_duration": 1.2,
+            "animation_delay": 0.2,
+            "animation_easing": "ease-out-sine",
+            "animation_blur_intensity": 5
+          }
         },
-        {          
-          "type": "button"         
+        {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "shopify://collections/all",
+            "open_in_new_tab": false,
+            "button_style": "primary",
+            "animation_type": "slide",
+            "animation_direction": "from-bottom",
+            "animation_duration": 1.2,
+            "animation_delay": 0.2,
+            "animation_easing": "ease-out-sine",
+            "animation_blur_intensity": 5
+          }   
         }
       ]
     }
-  ]  
+  ]
 }
 {% endschema %}
