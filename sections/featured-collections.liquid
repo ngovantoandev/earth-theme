@@ -67,10 +67,10 @@
     width: 100%;
   }
 
-  /* Heading & Paragraph styling at section level (e.g. for header column-layout / heading-group / stack / paragraph) */
-  .vt-featured-collections .vt-heading,
-  .vt-featured-collections .vt-heading-group,
-  .vt-featured-collections .vt-subheading {
+  /* Heading & Paragraph styling at section level (only for elements outside collection cards) */
+  .vt-featured-collections .vt-heading:not(.vt-collection-card *),
+  .vt-featured-collections .vt-heading-group:not(.vt-collection-card *),
+  .vt-featured-collections .vt-subheading:not(.vt-collection-card *) {
     color: var(--vt-heading-color, #003225);
   }
 
@@ -78,18 +78,8 @@
     color: inherit;
   }
 
-  .vt-featured-collections .vt-paragraph {
+  .vt-featured-collections .vt-paragraph:not(.vt-collection-card *) {
     color: var(--vt-paragraph-color, #224E09);
-  }
-
-  /* Preserve collection cards' own scoped colors */
-  .vt-featured-collections .vt-collection-card .vt-heading {
-    color: #FFFFFF;
-  }
-
-  .vt-featured-collections .vt-collection-card .vt-paragraph,
-  .vt-featured-collections .vt-collection-card .vt-paragraph * {
-    color: rgba(255, 255, 255, 0.9);
   }
 
   @media screen and (min-width: 769px) and (max-width: 1024px) {
@@ -288,7 +278,7 @@
                 {
                   "type": "collection-button",
                   "settings": {
-                    "button_label": "DISCOVER",
+                    // "button_label": "DISCOVER",
                     "button_style": "link-light"
                   }
                 }

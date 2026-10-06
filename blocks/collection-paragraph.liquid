@@ -150,6 +150,48 @@
     contain: layout style;
   }
 
+  .vt-paragraph p {
+    margin: 0;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+  }
+
+  /* Size variants */
+  .vt-paragraph.vt-paragraph-extra-small {
+    font-size: var(--vt-font-extra-small-size);
+    font-weight: var(--vt-font-extra-small-weight);
+    line-height: var(--vt-font-extra-small-line-height);
+    letter-spacing: var(--vt-font-extra-small-letter-spacing);
+    text-transform: var(--vt-font-extra-small-text-transform, none);
+  }
+
+  .vt-paragraph.vt-paragraph-small {
+    font-size: var(--vt-font-small-size);
+    font-weight: var(--vt-font-small-weight);
+    line-height: var(--vt-font-small-line-height);
+    letter-spacing: var(--vt-font-small-letter-spacing);
+    text-transform: var(--vt-font-small-text-transform, none);
+  }
+
+  .vt-paragraph.vt-paragraph-medium {
+    font-size: var(--vt-font-body-size);
+    font-weight: var(--vt-font-body-weight);
+    line-height: var(--vt-font-body-line-height);
+    letter-spacing: var(--vt-font-body-letter-spacing);
+    text-transform: var(--vt-font-body-text-transform, none);
+  }
+
+  .vt-paragraph.vt-paragraph-large {
+    font-size: var(--vt-font-large-size);
+    font-weight: var(--vt-font-large-weight);
+    line-height: var(--vt-font-large-line-height);
+    letter-spacing: var(--vt-font-large-letter-spacing);
+    text-transform: var(--vt-font-large-text-transform, none);
+  }
+
   .vt-paragraph.text-inherit {
     text-align: inherit;
     justify-content: inherit;
@@ -208,35 +250,7 @@
     "name": "t:blocks.collection_paragraph.name",
     "tag": null,
     "settings":
-    [
-        {
-            "type": "select",
-            "id": "content_source",
-            "label": "t:blocks.collection_paragraph.settings.content_source.label",
-            "options": [
-                { "value": "description", "label": "t:blocks.collection_paragraph.settings.content_source.description.label" },
-                { "value": "product_count", "label": "t:blocks.collection_paragraph.settings.content_source.product_count.label" },
-                { "value": "custom", "label": "t:blocks.collection_paragraph.settings.content_source.custom.label" }
-            ],
-            "default": "description"
-        },
-        {
-            "type": "range",
-            "id": "truncate_words",
-            "min": 5,
-            "max": 60,
-            "step": 1,
-            "unit": "w",
-            "default": 18,
-            "label": "t:blocks.collection_paragraph.settings.truncate_words.label",
-            "visible_if": "{{ block.settings.content_source != 'product_count' and block.settings.content_source != 'custom' }}"
-        },
-        {
-            "type": "richtext",
-            "id": "text",            
-            "default": "t:blocks.collection_paragraph.settings.text.default",
-            "label": "t:blocks.collection_paragraph.settings.text.label"
-        },      
+    [      
         {
             "type": "header",
             "content": "t:blocks.collection_paragraph.settings.header_content.content"
@@ -472,9 +486,7 @@
         {
             "name": "t:blocks.collection_paragraph.presets.name",
             "settings":{
-                "content_source": "description",
-                "truncate_words": 18,
-                "text": "<p>Discover our latest collection of premium goods designed for modern living. Enjoy free shipping on orders over $50.</p>",
+              
                 "paragraph_size": "vt-paragraph-medium",
                 "paragraph_alignment": "text-left",
                 "paragraph_max_width": 800,

@@ -15,52 +15,28 @@
   {%- assign mobile_size_class = 'vt-collection-card--mobile-large' -%}
 {%- endif -%}
 
-{%- comment -%} Vertical position (Desktop & Mobile) {%- endcomment -%}
-{%- assign v_desktop = block.settings.content_position_desktop | default: 'bottom' -%}
-{%- case v_desktop -%}
+{%- comment -%} Alignment (Unified for Mobile & Desktop) {%- endcomment -%}
+{%- assign v_pos = block.settings.content_position | default: block.settings.content_position_desktop | default: block.settings.content_position_mobile | default: 'bottom' -%}
+{%- case v_pos -%}
   {%- when 'top' -%}
-    {%- assign v_class_desktop = 'lg:justify-start' -%}
+    {%- assign v_class = 'justify-start' -%}
   {%- when 'center' -%}
-    {%- assign v_class_desktop = 'lg:justify-center' -%}
+    {%- assign v_class = 'justify-center' -%}
   {%- else -%}
-    {%- assign v_class_desktop = 'lg:justify-end' -%}
+    {%- assign v_class = 'justify-end' -%}
 {%- endcase -%}
 
-{%- assign v_mobile = block.settings.content_position_mobile | default: 'bottom' -%}
-{%- case v_mobile -%}
-  {%- when 'top' -%}
-    {%- assign v_class_mobile = 'justify-start' -%}
+{%- assign h_align = block.settings.content_alignment | default: block.settings.content_alignment_desktop | default: block.settings.content_alignment_mobile | default: 'left' -%}
+{%- case h_align -%}
   {%- when 'center' -%}
-    {%- assign v_class_mobile = 'justify-center' -%}
-  {%- else -%}
-    {%- assign v_class_mobile = 'justify-end' -%}
-{%- endcase -%}
-
-{%- comment -%} Horizontal alignment (Desktop & Mobile) {%- endcomment -%}
-{%- assign h_desktop = block.settings.content_alignment_desktop | default: 'left' -%}
-{%- case h_desktop -%}
-  {%- when 'center' -%}
-    {%- assign h_class_desktop = 'lg:items-center lg:text-center' -%}
-    {%- assign justify_desktop = 'center' -%}
+    {%- assign h_class = 'items-center text-center' -%}
+    {%- assign justify_btn = 'center' -%}
   {%- when 'right' -%}
-    {%- assign h_class_desktop = 'lg:items-end lg:text-right' -%}
-    {%- assign justify_desktop = 'flex-end' -%}
+    {%- assign h_class = 'items-end text-right' -%}
+    {%- assign justify_btn = 'flex-end' -%}
   {%- else -%}
-    {%- assign h_class_desktop = 'lg:items-start lg:text-left' -%}
-    {%- assign justify_desktop = 'flex-start' -%}
-{%- endcase -%}
-
-{%- assign h_mobile = block.settings.content_alignment_mobile | default: 'left' -%}
-{%- case h_mobile -%}
-  {%- when 'center' -%}
-    {%- assign h_class_mobile = 'items-center text-center' -%}
-    {%- assign justify_mobile = 'center' -%}
-  {%- when 'right' -%}
-    {%- assign h_class_mobile = 'items-end text-right' -%}
-    {%- assign justify_mobile = 'flex-end' -%}
-  {%- else -%}
-    {%- assign h_class_mobile = 'items-start text-left' -%}
-    {%- assign justify_mobile = 'flex-start' -%}
+    {%- assign h_class = 'items-start text-left' -%}
+    {%- assign justify_btn = 'flex-start' -%}
 {%- endcase -%}
 
 {%- if block.settings.enable_hover_zoom != false -%}
@@ -131,7 +107,7 @@
 {%- endunless -%}
 
 <div
-  class="vt-collection-card {{ mobile_size_class }} {{ card_zoom_class }} {{ vt_anim_classes }} group relative isolate overflow-hidden flex flex-col {{ v_class_mobile }} {{ v_class_desktop }} text-white w-full"
+  class="vt-collection-card {{ mobile_size_class }} {{ card_zoom_class }} {{ vt_anim_classes }} group relative isolate overflow-hidden flex flex-col {{ v_class }} w-full"
   style="
     --vt-card-pad-desktop: {{ block.settings.padding_desktop | default: 32 }}px;
     --vt-card-pad-mobile: {{ block.settings.padding_mobile | default: 20 }}px;
@@ -139,8 +115,11 @@
     --vt-card-gap-mobile: {{ block.settings.gap_mobile | default: 12 }}px;
     --vt-ov-color: {{ block.settings.overlay_color | default: '#003225' }};
     --vt-ov-opacity: {{ block.settings.overlay_opacity | default: 45 | divided_by: 100.0 }};
-    --vt-btn-justify-m: {{ justify_mobile }};
-    --vt-btn-justify-d: {{ justify_desktop }};
+    --vt-card-title-color: {{ block.settings.title_color | default: '#FFFFFF' }};
+    --vt-card-paragraph-color: {{ block.settings.paragraph_color | default: 'rgba(255, 255, 255, 0.9)' }};
+    --vt-heading-color: var(--vt-card-title-color);
+    --vt-paragraph-color: var(--vt-card-paragraph-color);
+    --vt-btn-justify: {{ justify_btn }};
     {{ vt_anim_style }}
   "
   {{ block.shopify_attributes }}
@@ -182,7 +161,7 @@
   {%- endif -%}
 
   <!-- Content -->
-  <div class="vt-collection-card__content relative z-10 flex flex-col {{ h_class_mobile }} {{ h_class_desktop }} w-full pointer-events-auto">
+  <div class="vt-collection-card__content relative z-10 flex flex-col {{ h_class }} w-full pointer-events-auto" style="color: var(--vt-card-paragraph-color, rgba(255, 255, 255, 0.9));">
     {% content_for 'blocks', closest.collection: card_collection %}
   </div>
 </div>
@@ -238,29 +217,6 @@
       padding: var(--vt-card-pad-mobile, 20px);
       gap: var(--vt-card-gap-mobile, 12px);
     }
-
-    /* Fallback default heading size on mobile if no specific size class override */
-    .vt-collection-card .vt-heading:not([class*="vt-heading-"]):not([class*="vt-hero-"]) {
-      font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 5vw, 1.875rem));
-      line-height: var(--vt-font-heading-3-line-height, 1.25);
-    }
-
-    /* Fallback default paragraph size on mobile if no specific size class override */
-    .vt-collection-card .vt-paragraph:not([class*="vt-paragraph-"]) {
-      font-size: var(--vt-font-body-size, 0.9375rem);
-      line-height: var(--vt-font-body-line-height, 1.45);
-    }
-
-    .vt-collection-card .vt-button,
-    .vt-collection-card .vt-button--link,
-    .vt-collection-card .vt-button--link-light {
-      font-size: 0.875rem;
-    }
-
-    .vt-collection-card .vt-button .vt-button-icon {
-      width: 1.625rem;
-      height: 1.625rem;
-    }
   }
 
   /* Support Theme Editor <shopify-block> wrappers */
@@ -274,225 +230,93 @@
   .vt-collection-card .vt-buttons {
     width: 100%;
     display: flex;
-    justify-content: var(--vt-btn-justify-m, flex-start);
+    justify-content: var(--vt-btn-justify, flex-start);
   }
 
-  .vt-collection-card__content.items-center .vt-buttons,
-  .vt-collection-card__content.text-center .vt-buttons {
+  .vt-collection-card__content.items-center .vt-buttons {
     justify-content: center;
   }
-  .vt-collection-card__content.items-center .vt-buttons > a,
-  .vt-collection-card__content.text-center .vt-buttons > a {
+  .vt-collection-card__content.items-center .vt-buttons > a {
     margin-inline: auto;
   }
-  .vt-collection-card__content.items-center .vt-heading-wrapper,
-  .vt-collection-card__content.text-center .vt-heading-wrapper {
+  .vt-collection-card__content.items-center .vt-heading-wrapper {
     margin-inline: auto;
     text-align: center;
   }
-  .vt-collection-card__content.items-center .vt-paragraph,
-  .vt-collection-card__content.text-center .vt-paragraph {
+  .vt-collection-card__content.items-center .vt-heading {
+    text-align: center;
+  }
+  .vt-collection-card__content.items-center .vt-paragraph {
     text-align: center;
     justify-content: center;
   }
 
-  .vt-collection-card__content.items-end .vt-buttons,
-  .vt-collection-card__content.text-right .vt-buttons {
+  .vt-collection-card__content.items-end .vt-buttons {
     justify-content: flex-end;
   }
-  .vt-collection-card__content.items-end .vt-buttons > a,
-  .vt-collection-card__content.text-right .vt-buttons > a {
+  .vt-collection-card__content.items-end .vt-buttons > a {
     margin-left: auto;
     margin-right: 0;
   }
-  .vt-collection-card__content.items-end .vt-heading-wrapper,
-  .vt-collection-card__content.text-right .vt-heading-wrapper {
+  .vt-collection-card__content.items-end .vt-heading-wrapper {
     margin-left: auto;
     margin-right: 0;
     text-align: right;
   }
-  .vt-collection-card__content.items-end .vt-paragraph,
-  .vt-collection-card__content.text-right .vt-paragraph {
+  .vt-collection-card__content.items-end .vt-heading {
+    text-align: right;
+  }
+  .vt-collection-card__content.items-end .vt-paragraph {
     text-align: right;
     justify-content: flex-end;
   }
 
-  .vt-collection-card__content.items-start .vt-buttons,
-  .vt-collection-card__content.text-left .vt-buttons {
+  .vt-collection-card__content.items-start .vt-buttons {
     justify-content: flex-start;
   }
-  .vt-collection-card__content.items-start .vt-buttons > a,
-  .vt-collection-card__content.text-left .vt-buttons > a {
+  .vt-collection-card__content.items-start .vt-buttons > a {
     margin-right: auto;
     margin-left: 0;
   }
-  .vt-collection-card__content.items-start .vt-heading-wrapper,
-  .vt-collection-card__content.text-left .vt-heading-wrapper {
+  .vt-collection-card__content.items-start .vt-heading-wrapper {
     margin-right: auto;
     margin-left: 0;
     text-align: left;
   }
-  .vt-collection-card__content.items-start .vt-paragraph,
-  .vt-collection-card__content.text-left .vt-paragraph {
+  .vt-collection-card__content.items-start .vt-heading {
+    text-align: left;
+  }
+  .vt-collection-card__content.items-start .vt-paragraph {
     text-align: left;
     justify-content: flex-start;
   }
 
-  @media screen and (min-width: 1024px) {
-    .vt-collection-card .vt-buttons {
-      justify-content: var(--vt-btn-justify-d, flex-start);
-    }
-
-    .vt-collection-card__content.lg\:items-end .vt-buttons,
-    .vt-collection-card__content.lg\:text-right .vt-buttons {
-      justify-content: flex-end;
-    }
-    .vt-collection-card__content.lg\:items-end .vt-buttons > a,
-    .vt-collection-card__content.lg\:text-right .vt-buttons > a {
-      margin-left: auto;
-      margin-right: 0;
-    }
-    .vt-collection-card__content.lg\:items-end .vt-heading-wrapper,
-    .vt-collection-card__content.lg\:text-right .vt-heading-wrapper {
-      margin-left: auto;
-      margin-right: 0;
-      text-align: right;
-    }
-    .vt-collection-card__content.lg\:items-end .vt-heading,
-    .vt-collection-card__content.lg\:text-right .vt-heading {
-      text-align: right;
-    }
-    .vt-collection-card__content.lg\:items-end .vt-paragraph,
-    .vt-collection-card__content.lg\:text-right .vt-paragraph {
-      text-align: right;
-      justify-content: flex-end;
-    }
-
-    .vt-collection-card__content.lg\:items-center .vt-buttons,
-    .vt-collection-card__content.lg\:text-center .vt-buttons {
-      justify-content: center;
-    }
-    .vt-collection-card__content.lg\:items-center .vt-buttons > a,
-    .vt-collection-card__content.lg\:text-center .vt-buttons > a {
-      margin-inline: auto;
-    }
-    .vt-collection-card__content.lg\:items-center .vt-heading-wrapper,
-    .vt-collection-card__content.lg\:text-center .vt-heading-wrapper {
-      margin-inline: auto;
-      text-align: center;
-    }
-    .vt-collection-card__content.lg\:items-center .vt-heading,
-    .vt-collection-card__content.lg\:text-center .vt-heading {
-      text-align: center;
-    }
-    .vt-collection-card__content.lg\:items-center .vt-paragraph,
-    .vt-collection-card__content.lg\:text-center .vt-paragraph {
-      text-align: center;
-      justify-content: center;
-    }
-
-    .vt-collection-card__content.lg\:items-start .vt-buttons,
-    .vt-collection-card__content.lg\:text-left .vt-buttons {
-      justify-content: flex-start;
-    }
-    .vt-collection-card__content.lg\:items-start .vt-buttons > a,
-    .vt-collection-card__content.lg\:text-left .vt-buttons > a {
-      margin-right: auto;
-      margin-left: 0;
-    }
-    .vt-collection-card__content.lg\:items-start .vt-heading-wrapper,
-    .vt-collection-card__content.lg\:text-left .vt-heading-wrapper {
-      margin-right: auto;
-      margin-left: 0;
-      text-align: left;
-    }
-    .vt-collection-card__content.lg\:items-start .vt-heading,
-    .vt-collection-card__content.lg\:text-left .vt-heading {
-      text-align: left;
-    }
-    .vt-collection-card__content.lg\:items-start .vt-paragraph,
-    .vt-collection-card__content.lg\:text-left .vt-paragraph {
-      text-align: left;
-      justify-content: flex-start;
-    }
-  }
-
-  /* Scoped typography for Heading inside collection card */
+  /* Heading color inside collection card */
   .vt-collection-card .vt-heading,
+  .vt-collection-card .vt-heading-wrapper,
   .vt-collection-card .vt-heading-wrapper h1,
   .vt-collection-card .vt-heading-wrapper h2,
   .vt-collection-card .vt-heading-wrapper h3,
   .vt-collection-card .vt-heading-wrapper h4,
   .vt-collection-card .vt-heading-wrapper h5,
   .vt-collection-card .vt-heading-wrapper h6 {
-    color: #FFFFFF;
-    font-family: var(--vt-font-family-heading);
-    letter-spacing: -0.02em;
+    color: var(--vt-card-title-color, #FFFFFF);
     margin: 0;
   }
 
-  /* Default heading 3 size if no specific size class override */
-  .vt-collection-card .vt-heading:not([class*="vt-heading-"]):not([class*="vt-hero-"]) {
-    font-size: var(--vt-font-heading-3-size, clamp(1.5rem, 1.2rem + 1vw, 2rem));
-    line-height: var(--vt-font-heading-3-line-height, 1.2);
-  }
-
-  /* Scoped typography for paragraph inside collection card */
+  /* Paragraph color inside collection card */
   .vt-collection-card .vt-paragraph,
   .vt-collection-card .vt-paragraph p {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--vt-card-paragraph-color, rgba(255, 255, 255, 0.9));
+  }
+
+  .vt-collection-card .vt-paragraph p {
     margin: 0;
-    font-size: inherit;
-    line-height: inherit;
   }
 
-  .vt-collection-card .vt-paragraph:not([class*="vt-paragraph-"]) {
-    font-size: var(--vt-font-body-size, 1rem);
-    line-height: var(--vt-font-body-line-height, 1.5);
-  }
-
-  /* Scoped CTA button styling inside collection card */
+  /* Scoped CTA button layout inside collection card */
   .vt-collection-card .vt-buttons {
     margin-top: clamp(0.25rem, 0.5vw, 0.75rem);
-  }
-
-  .vt-collection-card .vt-button,
-  .vt-collection-card .vt-button--link,
-  .vt-collection-card .vt-button--link-light {
-    color: #FFFFFF;
-    text-transform: uppercase;
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .vt-collection-card .vt-button .vt-button-icon {
-    width: 1.625rem;
-    height: 1.625rem;
-    border-radius: 50%;
-    background-color: #FFFFFF;
-    color: #003225;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-    flex-shrink: 0;
-  }
-
-  .vt-collection-card .vt-button .vt-button-icon svg {
-    width: 0.75rem;
-    height: 0.625rem;
-    color: #003225;
-    fill: currentColor;
-  }
-
-  .vt-collection-card:hover .vt-button .vt-button-icon,
-  .vt-collection-card .vt-button:hover .vt-button-icon {
-    transform: translateX(4px);
   }
 
   .vt-collection-card--has-zoom:hover .vt-collection-card__image {
@@ -500,8 +324,6 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .vt-collection-card:hover .vt-button .vt-button-icon,
-    .vt-collection-card .vt-button:hover .vt-button-icon,
     .vt-collection-card--has-zoom:hover .vt-collection-card__image {
       transform: none;
     }
@@ -573,12 +395,28 @@
     },
     {
       "type": "header",
-      "content": "Desktop alignment"
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "paragraph_color",
+      "label": "Paragraph color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Alignment"
     },
     {
       "type": "select",
-      "id": "content_position_desktop",
-      "label": "Vertical position (Desktop)",
+      "id": "content_position",
+      "label": "Vertical position",
       "options": [
         { "value": "top", "label": "Top" },
         { "value": "center", "label": "Center" },
@@ -588,8 +426,8 @@
     },
     {
       "type": "select",
-      "id": "content_alignment_desktop",
-      "label": "Horizontal alignment (Desktop)",
+      "id": "content_alignment",
+      "label": "Horizontal alignment",
       "options": [
         { "value": "left", "label": "Left" },
         { "value": "center", "label": "Center" },
@@ -620,32 +458,6 @@
       "unit": "px",
       "label": "Gap between blocks (Desktop)",
       "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Mobile alignment"
-    },
-    {
-      "type": "select",
-      "id": "content_position_mobile",
-      "label": "Vertical position (Mobile)",
-      "options": [
-        { "value": "top", "label": "Top" },
-        { "value": "center", "label": "Center" },
-        { "value": "bottom", "label": "Bottom" }
-      ],
-      "default": "bottom"
-    },
-    {
-      "type": "select",
-      "id": "content_alignment_mobile",
-      "label": "Horizontal alignment (Mobile)",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Center" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "left"
     },
     {
       "type": "header",
@@ -759,12 +571,12 @@
         "enable_overlay": true,
         "overlay_color": "#003225",
         "overlay_opacity": 45,
-        "content_position_desktop": "bottom",
-        "content_alignment_desktop": "left",
+        "title_color": "#F8F9DC",
+        "paragraph_color": "#F8F9DC",
+        "content_position": "bottom",
+        "content_alignment": "left",
         "padding_desktop": 32,
         "gap_desktop": 16,
-        "content_position_mobile": "bottom",
-        "content_alignment_mobile": "left",
         "padding_mobile": 20,
         "gap_mobile": 12,
         "animation_type": "none",
@@ -786,15 +598,13 @@
         {
           "type": "collection-paragraph",
           "settings": {
-            "text": "<p>Discover our latest collection</p>",
+            // "text": "<p>Discover our latest collection</p>",
             "paragraph_size": "vt-paragraph-medium"
           }
         },
         {
           "type": "collection-button",
           "settings": {
-            // "button_label": "Discover",
-            // "button_link": "shopify://collections/all",
             "button_style": "link-light"
           }
         }

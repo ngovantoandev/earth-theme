@@ -1,61 +1,134 @@
 {% doc %}
-  Renders a menu tab button in the product listing tablist.
-  Accepts collection-title child block.
+  Renders the complete menu tablist component in product-listing-tab.
+  Accepts collection-title child block for each tab title.
 {% enddoc %}
 
 {%- liquid
-  assign current_col = closest.collection | default: collection | default: col
-  if current_col != blank and current_col.title != blank
-    assign tab_id = 'plt-tab-' | append: current_col.id
-    assign panel_id = 'plt-panel-' | append: current_col.id
-    assign col_handle = current_col.handle
-    assign col_title = current_col.title
-  else
-    assign demo_idx = card_index | default: 1
-    assign tab_id = 'plt-tab-demo-' | append: demo_idx
-    assign panel_id = 'plt-panel-demo-' | append: demo_idx
-    assign col_handle = 'demo-' | append: demo_idx
-    assign demo_titles = "All,Men's,Women's,New Arrivals,New" | split: ','
-    assign title_idx = demo_idx | minus: 1
-    assign col_title = demo_titles[title_idx] | default: 'Collection'
-  endif
+  assign align = tab_align | default: block.settings.tab_alignment | default: 'center'
 -%}
 
-{%- if is_first or forloop.first -%}
-  <style>
-    .plt-listing-tab .plt__tablist-container {
-      --plt-menu-ph-desktop: {{ block.settings.padding_horizontal_desktop | default: 34 }}px;
-      --plt-menu-ph-mobile: {{ block.settings.padding_horizontal_mobile | default: 20 }}px;
-    }
-    .plt-listing-tab .plt__tab {
-      --plt-tab-item-ph: {{ block.settings.item_padding_horizontal | default: 24 }}px;
-      --plt-tab-item-ph-mobile: {{ block.settings.item_padding_horizontal_mobile | default: 16 }}px;
-    }
-  </style>
-{%- endif -%}
-
-<button
-  type="button"
-  role="tab"
-  id="{{ tab_id }}"
-  class="plt__tab{% if is_first %} plt__tab--active{% endif %}"
-  aria-controls="{{ panel_id }}"
-  aria-selected="{% if is_first %}true{% else %}false{% endif %}"
-  tabindex="{% if is_first %}0{% else %}-1{% endif %}"
-  data-collection="{{ col_handle }}"
+<div
+  class="plt__tablist-container plt__tablist-container--{{ align }}"
+  style="
+    --plt-menu-ph-desktop: {{ block.settings.padding_horizontal_desktop | default: 34 }}px;
+    --plt-menu-ph-mobile: {{ block.settings.padding_horizontal_mobile | default: 20 }}px;
+    --plt-tab-item-ph: {{ block.settings.item_padding_horizontal | default: 24 }}px;
+    --plt-tab-item-ph-mobile: {{ block.settings.item_padding_horizontal_mobile | default: 16 }}px;
+    --plt-tab-color: {{ block.settings.title_color | default: '#003225' }};
+    --plt-tab-active-color: {{ block.settings.active_title_color | default: '#71CC3B' }};
+    --plt-tab-line-color: {{ block.settings.line_color | default: '#003225' }};
+    --plt-tab-active-line-color: {{ block.settings.active_line_color | default: '#71CC3B' }};
+  "
   {{ block.shopify_attributes }}
+>
+  <div 
+    class="plt__tablist" 
+    role="tablist" 
+    aria-label="{{ 'products.facets.filter_by_label' | default: 'Collections' }}"
   >
-  {% content_for 'block', type: 'collection-title', id: 'collection-title', closest.collection: current_col, collection: current_col, col: current_col, default_title: col_title %}
-  </button>
-  
-  {% schema %}
+    {%- if is_connected and tabs_data != blank -%}
+      {%- for col in tabs_data -%}
+        {%- assign tab_id = 'plt-tab-' | append: col.id -%}
+        {%- assign panel_id = 'plt-panel-' | append: col.id -%}
+        <button
+          type="button"
+          role="tab"
+          id="{{ tab_id }}"
+          class="plt__tab{% if forloop.first %} plt__tab--active{% endif %}"
+          aria-controls="{{ panel_id }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+          data-collection="{{ col.handle }}"
+          data-tab-index="{{ forloop.index0 }}"
+        >
+          {% content_for 'block', type: 'collection-title', id: 'collection-title', closest.collection: col, collection: col, col: col, default_title: col.title %}
+        </button>
+      {%- endfor -%}
+    {%- else -%}
+      {%- assign demo_count = demo_tabs | default: (1..4) -%}
+      {%- for i in demo_count -%}
+        {%- assign tab_id = 'plt-tab-demo-' | append: forloop.index -%}
+        {%- assign panel_id = 'plt-panel-demo-' | append: forloop.index -%}
+        <button
+          type="button"
+          role="tab"
+          id="{{ tab_id }}"
+          class="plt__tab{% if forloop.first %} plt__tab--active{% endif %}"
+          aria-controls="{{ panel_id }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+          data-collection="demo-{{ forloop.index }}"
+          data-tab-index="{{ forloop.index0 }}"
+        >
+          {% content_for 'block', type: 'collection-title', id: 'collection-title', default_title: 'Collection title' %}
+        </button>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .plt__tablist {
+    border-bottom: 1px solid var(--plt-tab-line-color, var(--color-black, #003225));
+  }
+
+  .plt__tab {
+    color: var(--plt-tab-color, var(--color-black, #003225));
+  }
+
+  .plt__tab .vt-heading,
+  .plt__tab .vt-heading-wrapper h1,
+  .plt__tab .vt-heading-wrapper h2,
+  .plt__tab .vt-heading-wrapper h3,
+  .plt__tab .vt-heading-wrapper h4,
+  .plt__tab .vt-heading-wrapper h5,
+  .plt__tab .vt-heading-wrapper h6 {
+    color: inherit;
+  }
+
+  .plt__tab:hover,
+  .plt__tab--active {
+    color: var(--plt-tab-active-color, var(--color-secondary, #71CC3B));
+  }
+
+  .plt__tab--active::after {
+    background-color: var(--plt-tab-active-line-color, var(--color-secondary, #71CC3B));
+  }
+{% endstylesheet %}
+
+{% schema %}
 {
   "name": "Menu tab",
   "tag": null,
-  "blocks": [
-    { "type": "collection-title" }
-  ],
   "settings": [
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Collection title color",
+      "default": "#003225"
+    },
+    {
+      "type": "color",
+      "id": "active_title_color",
+      "label": "Active title color",
+      "default": "#71CC3B"
+    },
+    {
+      "type": "color",
+      "id": "line_color",
+      "label": "Line color",
+      "default": "#003225"
+    },
+    {
+      "type": "color",
+      "id": "active_line_color",
+      "label": "Active line color",
+      "default": "#71CC3B"
+    },
     {
       "type": "header",
       "content": "Horizontal padding"
@@ -105,10 +178,19 @@
       "default": 16
     }
   ],
+  "blocks": [
+    {
+      "type": "collection-title"
+    }
+  ],
   "presets": [
     {
       "name": "Menu tab",
       "settings": {
+        "title_color": "#003225",
+        "active_title_color": "#71CC3B",
+        "line_color": "#003225",
+        "active_line_color": "#71CC3B",
         "padding_horizontal_desktop": 34,
         "padding_horizontal_mobile": 20,
         "item_padding_horizontal": 24,
@@ -117,9 +199,8 @@
       "blocks": [
         {
           "type": "collection-title",
-          "settings": {
-            "heading_size": "vt-heading-h4"
-          }
+          "id": "collection-title",
+          "static": true
         }
       ]
     }

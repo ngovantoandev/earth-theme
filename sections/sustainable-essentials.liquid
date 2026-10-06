@@ -12,7 +12,7 @@
   class="vt-sustainable-essentials{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
   id="vtSustainableEssentials-{{ section.id }}"
   style="
-    --vt-bg: {{ section.settings.bg_color | default: '#F8F9DC' }};
+    --vt-bg: {{ section.settings.background_color | default: '#F8F9DC' }};
     --vt-heading-color: {{ section.settings.heading_color | default: '#003225' }};
     --vt-paragraph-color: {{ section.settings.paragraph_color | default: '#224E09' }};
     --vt-pt: {{ section.settings.padding_top | default: 80 }}px;
@@ -127,7 +127,7 @@
     },
     {
       "type": "color",
-      "id": "bg_color",
+      "id": "background_color",
       "label": "Background color",
       "default": "#EAE060"
     },
@@ -241,7 +241,7 @@
       "name": "Sustainable essentials",
       "settings": {
         "make_section_page_width": true,
-        "bg_color": "#F8F9DC",
+        "background_color": "#F8F9DC",
         "heading_color": "#003225",
         "paragraph_color": "#224E09",
         "padding_top": 80,

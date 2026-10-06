@@ -1248,6 +1248,9 @@
 					},
 					"options__11": {
 						"label": "Flower"
+					},
+					"options__12": {
+						"label": "Sparkle"
 					}					
 				},
 				"icon_size_desktop": {

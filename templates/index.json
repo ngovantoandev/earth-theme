@@ -1444,13 +1444,13 @@
                             "type": "collection-card",
                             "static": true,
                             "settings": {
+                                "title_color": "#F8F9DC",
+                                "paragraph_color": "#F8F9DC",
                                 "padding_desktop": 32,
                                 "padding_mobile": 20,
                                 "overlay_opacity": 45,
-                                "content_position_desktop": "bottom",
-                                "content_position_mobile": "bottom",
-                                "content_alignment_desktop": "left",
-                                "content_alignment_mobile": "left",
+                                "content_position": "bottom",
+                                "content_alignment": "left",
                                 "enable_hover_zoom": true,
                                 "animation_type": "slide",
                                 "animation_direction": "from-bottom",
@@ -1502,7 +1502,7 @@
             "type": "sustainable-essentials",
             "settings": {
                 "make_section_page_width": true,
-                "bg_color": "#F8F9DC",
+                "background_color": "#F8F9DC",
                 "heading_color": "#003225",
                 "paragraph_color": "#224E09",
                 "padding_top": 80,
@@ -1629,7 +1629,16 @@
                         "menu-tab": {
                             "type": "menu-tab",
                             "static": true,
-                            "settings": {},
+                            "settings": {
+                                "title_color": "#003225",
+                                "active_title_color": "#71CC3B",
+                                "line_color": "#003225",
+                                "active_line_color": "#71CC3B",
+                                "padding_horizontal_desktop": 34,
+                                "padding_horizontal_mobile": 20,
+                                "item_padding_horizontal": 24,
+                                "item_padding_horizontal_mobile": 16
+                            },
                             "blocks": {
                                 "collection-title": {
                                     "type": "collection-title",

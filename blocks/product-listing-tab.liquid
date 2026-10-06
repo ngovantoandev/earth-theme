@@ -28,7 +28,7 @@
     assign tabs_data = collections_list
   else
     assign is_connected = false
-    assign demo_tabs = "All,Men's,Women's,New Arrivals,New" | split: ','
+    assign demo_tabs = (1..4)
   endif
   assign track_pad_desktop = block.settings.padding_desktop | default: 0
   assign track_pad_mobile = block.settings.padding_mobile | default: 20
@@ -61,23 +61,7 @@
   {{ block.shopify_attributes }}
 >
   <!-- ================= Tablist Header ================= -->
-  <div class="plt__tablist-container plt__tablist-container--{{ tab_align }}">
-    <div 
-      class="plt__tablist" 
-      role="tablist" 
-      aria-label="{{ 'products.facets.filter_by_label' | default: 'Collections' }}"
-    >
-      {%- if is_connected -%}
-        {%- for col in tabs_data -%}
-          {% content_for 'block', type: 'menu-tab', id: 'menu-tab', closest.collection: col, collection: col, col: col, is_first: forloop.first %}
-        {%- endfor -%}
-      {%- else -%}
-        {%- for tab_name in demo_tabs -%}
-          {% content_for 'block', type: 'menu-tab', id: 'menu-tab', card_index: forloop.index, is_first: forloop.first %}
-        {%- endfor -%}
-      {%- endif -%}
-    </div>
-  </div>
+  {% content_for 'block', type: 'menu-tab', id: 'menu-tab', tabs_data: tabs_data, is_connected: is_connected, demo_tabs: demo_tabs, tab_align: tab_align %}
 
   <!-- ================= Tab Panels (Carousels) ================= -->
   <div class="plt__panels-wrapper">
@@ -123,7 +107,7 @@
         </div>
       {%- endfor -%}
     {%- else -%}
-      {%- for tab_name in demo_tabs -%}
+      {%- for i in demo_tabs -%}
         {%- assign panel_id = 'plt-panel-demo-' | append: forloop.index -%}
         {%- assign track_id = 'plt-track-demo-' | append: forloop.index -%}
 
@@ -206,7 +190,7 @@
     align-items: center;
     position: relative;
     gap: 0;
-    border-bottom: 1px solid var(--color-black, #003225);
+    border-bottom: 1px solid var(--plt-tab-line-color, var(--color-black, #003225));
     padding: 0;
     min-width: max-content;
   }
@@ -219,7 +203,7 @@
     font-family: inherit;
     font-size: 1.125rem;
     font-weight: 700;
-    color: var(--color-black, #003225);
+    color: var(--plt-tab-color, var(--color-black, #003225));
     position: relative;
     transition: color 0.25s ease;
     user-select: none;
@@ -248,11 +232,11 @@
   }
 
   .plt__tab:hover {
-    color: var(--color-secondary, #71CC3B);
+    color: var(--plt-tab-active-color, var(--color-secondary, #71CC3B));
   }
 
   .plt__tab--active {
-    color: var(--color-secondary, #71CC3B);
+    color: var(--plt-tab-active-color, var(--color-secondary, #71CC3B));
   }
 
   /* Active bottom underline - covers full tab width seamlessly touching adjacent tabs */
@@ -263,7 +247,7 @@
     left: 0;
     width: 100%;
     height: 1px;
-    background-color: var(--color-secondary, #71CC3B);
+    background-color: var(--plt-tab-active-line-color, var(--color-secondary, #71CC3B));
     z-index: 10;
   }
 
@@ -438,10 +422,32 @@
           tab.addEventListener('keydown', this._onKeydown);
         });
 
-        // Theme Editor reload support
+        // Theme Editor reload & active tab selection support
         document.addEventListener('shopify:block:select', (event) => {
-          if (event.target === this) {
+          const selectedEl = event.target;
+          if (selectedEl === this) {
             this.updateLayout();
+            return;
+          }
+          if (this.contains(selectedEl)) {
+            // If user selected a specific tab button or collection-title inside it
+            const tabBtn = selectedEl.closest('.plt__tab') || selectedEl.querySelector('.plt__tab');
+            if (tabBtn) {
+              const idx = this.tabs.indexOf(tabBtn);
+              if (idx !== -1) {
+                this.activateTab(idx);
+                return;
+              }
+            }
+            // If user selected the menu-tab block wrapper itself
+            if (
+              selectedEl.matches('.plt__tablist-container, .plt__tablist') ||
+              selectedEl.querySelector('.plt__tablist') ||
+              selectedEl.closest('.plt__tablist-container')
+            ) {
+              const activeIdx = this.tabs.findIndex((t) => t.classList.contains('plt__tab--active'));
+              this.activateTab(activeIdx !== -1 ? activeIdx : 0);
+            }
           }
         });
       }
@@ -735,9 +741,6 @@
       "default": false
     }
   ],
-  "blocks": [
-    { "type": "@theme" }
-  ],
   "presets": [
     {
       "name": "Products listing tab",
@@ -761,16 +764,7 @@
         {
           "type": "menu-tab",
           "id": "menu-tab",
-          "static": true,
-          "blocks": [
-            {
-              "type": "collection-title",
-              "settings": {
-                "heading_tag": "span",
-                "heading_size": "vt-heading-h4"
-              }
-            }
-          ]
+          "static": true
         },
         {
           "type": "product-card",
