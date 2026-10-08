@@ -5,10 +5,18 @@
 
 {%- liquid
   assign align = tab_align | default: block.settings.tab_alignment | default: 'center'
+  assign show_line = block.settings.show_line
+  if show_line == nil
+    assign show_line = true
+  endif
+  assign show_active_line = block.settings.show_active_line
+  if show_active_line == nil
+    assign show_active_line = true
+  endif
 -%}
 
 <div
-  class="plt__tablist-container plt__tablist-container--{{ align }}"
+  class="plt__tablist-container plt__tablist-container--{{ align }}{% unless show_line %} plt__tablist-container--no-line{% endunless %}{% unless show_active_line %} plt__tablist-container--no-active-line{% endunless %}"
   style="
     --plt-menu-ph-desktop: {{ block.settings.padding_horizontal_desktop | default: 34 }}px;
     --plt-menu-ph-mobile: {{ block.settings.padding_horizontal_mobile | default: 20 }}px;
@@ -21,8 +29,15 @@
   "
   {{ block.shopify_attributes }}
 >
+  {%- assign tabs_count = 0 -%}
+  {%- if is_connected and tabs_data != blank -%}
+    {%- assign tabs_count = tabs_data.size -%}
+  {%- else -%}
+    {%- assign tabs_count = demo_tabs.size | default: 4 -%}
+  {%- endif -%}
+
   <div 
-    class="plt__tablist" 
+    class="plt__tablist{% if tabs_count == 1 %} plt__tablist--single{% endif %}" 
     role="tablist" 
     aria-label="{{ 'products.facets.filter_by_label' | default: 'Collections' }}"
   >
@@ -72,6 +87,22 @@
     border-bottom: 1px solid var(--plt-tab-line-color, var(--color-black, #003225));
   }
 
+  .plt__tablist--single,
+  .plt__tablist:has(.plt__tab:only-child) {
+    border-bottom-color: var(--plt-tab-active-line-color, var(--color-secondary, #71CC3B));
+  }
+
+  .plt__tablist-container--no-line .plt__tablist,
+  .plt__tablist-container--no-line .plt__tablist--single,
+  .plt__tablist-container--no-line .plt__tablist:has(.plt__tab:only-child) {
+    border-bottom: none !important;
+  }
+
+  .plt__tablist-container--no-active-line .plt__tablist--single,
+  .plt__tablist-container--no-active-line .plt__tablist:has(.plt__tab:only-child) {
+    border-bottom-color: var(--plt-tab-line-color, var(--color-black, #003225));
+  }
+
   .plt__tab {
     color: var(--plt-tab-color, var(--color-black, #003225));
   }
@@ -92,7 +123,17 @@
   }
 
   .plt__tab--active::after {
+    height: 1px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     background-color: var(--plt-tab-active-line-color, var(--color-secondary, #71CC3B));
+    z-index: 10;
+  }
+
+  .plt__tablist-container--no-active-line .plt__tab--active::after {
+    display: none !important;
   }
 {% endstylesheet %}
 
@@ -101,6 +142,22 @@
   "name": "Menu tab",
   "tag": null,
   "settings": [
+    {
+      "type": "header",
+      "content": "Tab lines"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_line",
+      "label": "Show line",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_active_line",
+      "label": "Show active line",
+      "default": true
+    },
     {
       "type": "header",
       "content": "Colors"
@@ -182,6 +239,8 @@
     {
       "name": "Menu tab",
       "settings": {
+        "show_line": true,
+        "show_active_line": true,
         "title_color": "#003225",
         "active_title_color": "#71CC3B",
         "line_color": "#003225",

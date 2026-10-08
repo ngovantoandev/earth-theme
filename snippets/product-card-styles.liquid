@@ -1,0 +1,414 @@
+{% comment %}
+  Reusable Stylesheet Component for Earth Product Card (.vt-product-card)
+  Uses theme CSS variables for color tokens, typography, and responsive spacing.
+  Can be included anywhere in the theme without code duplication.
+{% endcomment %}
+
+{% stylesheet %}
+  /* =========================================================
+     Base Card & Container Sizing
+     ========================================================= */
+  .vt-product-card {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  /* Alignment Modifiers */
+  .vt-product-card--align-left .vt-product-card__content {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .vt-product-card--align-left .vt-product-card__tags,
+  .vt-product-card--align-left .vt-product-card__meta-row {
+    justify-content: flex-start;
+  }
+  .vt-product-card--align-left .vt-product-card__buy-group {
+    align-self: flex-start;
+  }
+
+  .vt-product-card--align-center .vt-product-card__content {
+    text-align: center;
+    align-items: center;
+  }
+  .vt-product-card--align-center .vt-product-card__tags,
+  .vt-product-card--align-center .vt-product-card__meta-row {
+    justify-content: center;
+  }
+  .vt-product-card--align-center .vt-product-card__buy-group {
+    align-self: center;
+  }
+
+  .vt-product-card--align-right .vt-product-card__content {
+    text-align: right;
+    align-items: flex-end;
+  }
+  .vt-product-card--align-right .vt-product-card__tags,
+  .vt-product-card--align-right .vt-product-card__meta-row {
+    justify-content: flex-end;
+  }
+  .vt-product-card--align-right .vt-product-card__buy-group {
+    align-self: flex-end;
+  }
+
+  /* =========================================================
+     1. Media Wrapper & Visual Hover States
+     ========================================================= */
+  .vt-product-card__media-wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    flex-shrink: 0;
+    aspect-ratio: var(--vt-card-aspect-ratio, 2/3);
+    background-color: #f1f2e2;
+    border-radius: 0;
+  }
+
+  .vt-product-card__media-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .vt-product-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--vt-card-object-fit, cover);
+    display: block;
+    transition: transform 0.5s cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .vt-product-card__media-wrapper:hover .vt-product-card__img--primary {
+    transform: scale(1.05);
+  }
+
+  .vt-product-card__img--secondary {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+  }
+
+  .vt-product-card__media-wrapper:hover .vt-product-card__img--secondary {
+    opacity: 1;
+  }
+
+  .vt-product-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f2e2;
+    color: var(--vt-foreground-color, #003225);
+  }
+
+  .vt-product-card__placeholder svg {
+    width: 50%;
+    height: 50%;
+    opacity: 0.35;
+  }
+
+  /* Hover dark overlay */
+  .vt-product-card__overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.3s ease;
+  }
+
+  .vt-product-card__media-wrapper:hover .vt-product-card__overlay {
+    opacity: 1;
+  }
+
+  /* Top Left Impact Badge */
+  .vt-product-card__badge--impact {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    background-color: var(--vt-foreground-color, #003225);
+    color: var(--vt-background-color, #F8F9DC);
+    user-select: none;
+  }
+
+  .vt-product-card__badge--impact svg {
+    color: var(--vt-background-color, #F8F9DC);
+    flex-shrink: 0;
+  }
+
+  .vt-product-card__impact-text {
+    color: var(--vt-background-color, #F8F9DC);
+  }
+
+  /* Bottom Left Metric Chips */
+  .vt-product-card__metrics {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+  }
+
+  .vt-product-card__chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background-color: var(--vt-color-accent, #EAE060);
+    color: var(--vt-color-primary, #224E09);
+  }
+
+  .vt-product-card__chip svg {
+    color: var(--vt-color-primary, #224E09);
+    flex-shrink: 0;
+  }
+
+  .vt-product-card__chip-text {
+    color: inherit;
+  }
+
+  /* =========================================================
+     2. Product Info Section
+     ========================================================= */
+  .vt-product-card__content {
+    padding-top: var(--vt-card-content-spacing-mobile, 12px);
+    row-gap: var(--vt-card-info-gap-mobile, 8px);
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    color: var(--vt-color-primary, #224E09);
+  }
+
+  @media (min-width: 768px) {
+    .vt-product-card__content {
+      padding-top: var(--vt-card-content-spacing, 16px);
+      row-gap: var(--vt-card-info-gap, 12px);
+    }
+  }
+
+  .vt-product-card__title {
+    margin: 0;
+    color: var(--vt-foreground-color, #003225);
+    display: var(--vt-card-title-display, -webkit-box);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--vt-card-title-clamp, 1);
+    overflow: hidden;
+  }
+
+  .vt-product-card__title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .vt-product-card__title a:hover {
+    color: var(--vt-color-secondary, #71CC3B);
+  }
+
+  .vt-product-card__composition {
+    margin: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    opacity: 0.9;
+    color: var(--vt-color-primary, #224E09);
+  }
+
+  /* Tag Pills */
+  .vt-product-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .vt-product-card__tag {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    border: 1px solid var(--vt-foreground-color, #003225);
+    background-color: var(--vt-color-accent, #EAE060);
+    color: var(--vt-color-primary, #224E09);
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  /* Meta Row (Origin & Discount) */
+  .vt-product-card__meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 16px;
+    row-gap: 4px;
+    margin: 0;
+    color: var(--vt-color-primary, #224E09);
+  }
+
+  .vt-product-card__origin {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .vt-product-card__origin svg {
+    color: var(--vt-color-primary, #224E09);
+    flex-shrink: 0;
+  }
+
+  .vt-product-card__discount {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .vt-product-card__discount svg {
+    color: var(--vt-color-primary, #224E09);
+    flex-shrink: 0;
+  }
+
+  /* =========================================================
+     3. Buy Group (Pinned to bottom via mt-auto)
+     ========================================================= */
+  .vt-product-card__buy-group {
+    margin-top: auto;
+    padding-top: var(--vt-card-content-gap-mobile, 12px);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    max-width: 100%;
+    width: fit-content;
+    row-gap: 6px;
+  }
+
+  @media (min-width: 768px) {
+    .vt-product-card__buy-group {
+      padding-top: var(--vt-card-content-gap, 16px);
+      row-gap: 8px;
+    }
+  }
+
+  .vt-product-card__buy-group form {
+    display: inline-flex;
+    margin: 0;
+    max-width: 100%;
+    align-items: stretch;
+  }
+
+  .vt-product-card__price-box {
+    background-color: var(--vt-foreground-color, #003225);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 0;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .vt-product-card__price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--vt-background-color, #F8F9DC);
+    white-space: nowrap;
+  }
+
+  .vt-product-card__compare-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(248, 249, 220, 0.7);
+    text-decoration: line-through;
+    white-space: nowrap;
+  }
+
+  .vt-product-card__add-btn {
+    background-color: var(--vt-color-accent, #EAE060);
+    color: var(--vt-foreground-color, #003225);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background-color 0.15s ease;
+    border-radius: 0;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .vt-product-card__add-btn:hover:not(:disabled) {
+    background-color: #dcd14e;
+  }
+
+  .vt-product-card__add-btn svg {
+    color: var(--vt-foreground-color, #003225);
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+  }
+
+  .vt-product-card__add-btn--disabled,
+  .vt-product-card__add-btn:disabled {
+    background-color: rgba(234, 224, 96, 0.5) !important;
+    color: rgba(0, 50, 37, 0.6) !important;
+    cursor: not-allowed !important;
+  }
+
+  /* Responsive Mobile Tweaks for Buy Group */
+  @media (max-width: 768px) {
+    .vt-product-card__price-box {
+      padding: 7px 10px;
+      gap: 5px;
+    }
+
+    .vt-product-card__price {
+      font-size: 0.875rem;
+    }
+
+    .vt-product-card__compare-price {
+      font-size: 0.8125rem;
+    }
+
+    .vt-product-card__add-btn {
+      padding: 7px 10px;
+      font-size: 0.75rem;
+      letter-spacing: 0.02em;
+      gap: 5px;
+    }
+
+    .vt-product-card__add-btn svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+{% endstylesheet %}

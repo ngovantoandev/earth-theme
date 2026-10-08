@@ -1440,7 +1440,7 @@
                         "gap_mobile": 20
                     },
                     "blocks": {
-                        "collection_card": {
+                        "collection-card": {
                             "type": "collection-card",
                             "static": true,
                             "settings": {
@@ -1612,7 +1612,7 @@
                         "collections": [],
                         "tab_alignment": "center",
                         "columns_desktop": 3,
-                        "columns_mobile": 1.2,
+                        "enable_swipe_mobile": true,
                         "gap_desktop": 10,
                         "gap_mobile": 16,
                         "tab_content_gap_desktop": 36,

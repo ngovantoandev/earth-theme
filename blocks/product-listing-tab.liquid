@@ -7,10 +7,12 @@
 
 {%- liquid
   assign collections_list = block.settings.collections
-  assign products_limit = block.settings.limit | default: 8
 
   assign col_desktop = block.settings.columns_desktop | default: 3
-  assign col_mobile = block.settings.columns_mobile | default: 1.2
+  assign enable_swipe_mobile = block.settings.enable_swipe_mobile
+  if enable_swipe_mobile == nil
+    assign enable_swipe_mobile = true
+  endif
   assign gap_desktop = block.settings.gap_desktop
   if gap_desktop == blank
     assign gap_desktop = 32
@@ -43,11 +45,14 @@
 -%}
 
 <plt-listing-tab 
-  class="plt-listing-tab w-full block box-border"
+  class="plt-listing-tab w-full block box-border{% if enable_swipe_mobile %} plt-listing-tab--swipe-mobile{% else %} plt-listing-tab--stack-mobile{% endif %}"
   data-block-id="{{ block.id }}"
+  data-col-desktop="{{ col_desktop }}"
+  data-swipe-mobile="{{ enable_swipe_mobile }}"
+  data-gap-desktop="{{ gap_desktop }}"
+  data-gap-mobile="{{ gap_mobile }}"
   style="
     --plt-col-desktop: {{ col_desktop }};
-    --plt-col-mobile: {{ col_mobile }};
     --plt-gap-desktop: {{ gap_desktop }}px;
     --plt-gap-mobile: {{ gap_mobile }}px;
     --plt-pad-desktop: {{ track_pad_desktop }}px;
@@ -80,16 +85,18 @@
           {%- assign col_products_count = col.all_products_count | default: col.products.size | default: 0 -%}
           {%- if col_products_count > 0 -%}
             <div 
-              class="plt__track" 
+              class="plt__track swiper" 
               id="{{ track_id }}" 
               data-slider-track
               tabindex="0"
             >
-              {%- for product in col.products limit: products_limit -%}
-                <div class="plt__slide" role="listitem">
-                  {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: product, product: product, prod: product %}
-                </div>
-              {%- endfor -%}
+              <div class="swiper-wrapper">
+                {%- for product in col.products -%}
+                  <div class="plt__slide swiper-slide" role="listitem">
+                    {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: product, product: product, prod: product %}
+                  </div>
+                {%- endfor -%}
+              </div>
             </div>
 
             {%- if block.settings.show_arrows -%}
@@ -99,6 +106,21 @@
               {%- endunless -%}
               {% render 'btn-nav-slider', target_id: track_id, layout: 'split', show_on_hover: arrows_on_hover, theme: arrows_theme, class: arrow_classes %}
             {%- endif -%}
+          {%- elsif request.design_mode -%}
+            <div 
+              class="plt__track swiper" 
+              id="{{ track_id }}" 
+              data-slider-track
+              tabindex="0"
+            >
+              <div class="swiper-wrapper">
+                {%- for i in (1..3) -%}
+                  <div class="plt__slide swiper-slide" role="listitem">
+                    {% content_for 'block', type: 'product-card', id: 'product-card' %}
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
           {%- else -%}
             <div class="plt__empty">
               <p class="plt__empty-text">No products available</p>
@@ -119,16 +141,18 @@
           {% unless forloop.first %}hidden{% endunless %}
         >
           <div 
-            class="plt__track" 
+            class="plt__track swiper" 
             id="{{ track_id }}" 
             data-slider-track
             tabindex="0"
           >
-            {%- for i in (1..4) -%}
-              <div class="plt__slide" role="listitem" data-demo-index="{{ forloop.index }}">
-                {% content_for 'block', type: 'product-card', id: 'product-card', card_index: forloop.index %}
-              </div>
-            {%- endfor -%}
+            <div class="swiper-wrapper">
+              {%- for i in (1..4) -%}
+                <div class="plt__slide swiper-slide" role="listitem" data-demo-index="{{ forloop.index }}">
+                  {% content_for 'block', type: 'product-card', id: 'product-card', card_index: forloop.index %}
+                </div>
+              {%- endfor -%}
+            </div>
           </div>
 
           {%- if block.settings.show_arrows -%}
@@ -245,8 +269,9 @@
     position: absolute;
     bottom: -1px;
     left: 0;
+    right: 0;
     width: 100%;
-    height: 1px;
+    height: 2px;
     background-color: var(--plt-tab-active-line-color, var(--color-secondary, #71CC3B));
     z-index: 10;
   }
@@ -274,42 +299,84 @@
   }
 
   .plt__track {
+    width: 100%;
+    box-sizing: border-box;
+    padding-left: var(--plt-pad-desktop, 0px);
+    padding-right: var(--plt-pad-desktop, 0px);
+    padding-bottom: 4px;
+    outline: none;
+    position: relative;
+  }
+
+  .plt__track.swiper {
+    overflow: hidden;
+  }
+
+  .plt__track .swiper-wrapper {
+    display: flex;
+    align-items: stretch;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  /* Fallback before Swiper is initialized (SSR / no-JS) */
+  .plt__track:not(.swiper-initialized) {
     display: flex;
     align-items: stretch;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     gap: var(--plt-gap-desktop, 32px);
-    width: 100%;
-    box-sizing: border-box;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding-left: var(--plt-pad-desktop, 0px);
-    padding-right: var(--plt-pad-desktop, 0px);
     scroll-padding-left: var(--plt-pad-desktop, 0px);
     scroll-padding-right: var(--plt-pad-desktop, 0px);
-    outline: none;
     -webkit-overflow-scrolling: touch;
   }
 
-  .plt__track::-webkit-scrollbar {
+  .plt__track:not(.swiper-initialized)::-webkit-scrollbar {
     display: none;
   }
 
-  /* Slide card width formula */
-  .plt__slide {
+  .plt__track:not(.swiper-initialized) > .swiper-wrapper {
+    display: flex;
+    align-items: stretch;
+    gap: var(--plt-gap-desktop, 32px);
+    width: 100%;
+  }
+
+  .plt__track:not(.swiper-initialized) .plt__slide {
     flex: 0 0 calc((100% - (var(--plt-gap-desktop, 32px) * (var(--plt-col-desktop, 3) - 1))) / var(--plt-col-desktop, 3));
     min-width: 0;
     scroll-snap-align: start;
+  }
+
+  .plt__track:not(.swiper-initialized) .plt__slide:last-child {
+    scroll-snap-align: start end;
+  }
+
+  /* Swiper active state */
+  .plt__track.swiper-initialized {
+    overflow: hidden;
+  }
+
+  .plt__track.swiper-initialized > .swiper-wrapper {
+    gap: 0 !important;
+  }
+
+  .plt__track.swiper-initialized .plt__slide {
+    flex-shrink: 0;
+    height: auto;
+    box-sizing: border-box;
+  }
+
+  /* Slide card base */
+  .plt__slide {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-self: stretch;
-  }
-
-  /* Ensures last slide keeps its right margin when scrolled to end */
-  .plt__slide:last-child {
-    scroll-snap-align: start end;
+    height: auto;
   }
 
   /* Ensure card and shopify-block wrapper inside stretch full height */
@@ -349,18 +416,16 @@
 
   /* ================= Mobile & Responsive ================= */
   @media screen and (max-width: 1024px) {
-    .plt__slide {
+    .plt__track:not(.swiper-initialized) > .swiper-wrapper {
+      gap: 24px;
+    }
+
+    .plt__track:not(.swiper-initialized) .plt__slide {
       flex: 0 0 calc((100% - (var(--plt-gap-desktop, 24px) * (2 - 1))) / 2);
     }
   }
 
   @media screen and (max-width: 768px) {
-    plt-listing-tab.plt-listing-tab {
-      width: calc(100% + var(--vt-ph-mobile, var(--vt-ph, 0px)) * 2);
-      margin-left: calc(-1 * var(--vt-ph-mobile, var(--vt-ph, 0px)));
-      margin-right: calc(-1 * var(--vt-ph-mobile, var(--vt-ph, 0px)));
-    }
-
     .plt__tablist-container {
       justify-content: flex-start;
       margin-bottom: var(--plt-tab-gap-mobile, 24px);
@@ -370,30 +435,71 @@
       scroll-padding-right: var(--plt-menu-ph-mobile, 20px);
     }
 
-    .plt__tablist::after {
-      content: '';
-      display: block;
-      width: var(--plt-menu-ph-mobile, 20px);
-      flex-shrink: 0;
-    }
-
     .plt__tab {
       font-size: 1rem;
       padding: 8px var(--plt-tab-item-ph-mobile, 16px) 12px;
     }
 
-    .plt__track {
-      gap: var(--plt-gap-mobile, 16px);
-      scroll-padding-inline-start: 20px;
+    /* Swipeable mode (enable_swipe_mobile = true): 1.2 cards with edge peek */
+    plt-listing-tab.plt-listing-tab--swipe-mobile {
+      width: calc(100% + var(--vt-ph-mobile, var(--vt-ph, 0px)) * 2);
+      margin-left: calc(-1 * var(--vt-ph-mobile, var(--vt-ph, 0px)));
+      margin-right: calc(-1 * var(--vt-ph-mobile, var(--vt-ph, 0px)));
+    }
+
+    .plt-listing-tab--swipe-mobile .plt__track {
       padding-left: var(--plt-pad-mobile, 20px);
       padding-right: var(--plt-pad-mobile, 20px);
+      padding-bottom: 8px;
+    }
+
+    .plt-listing-tab--swipe-mobile .plt__track:not(.swiper-initialized) {
+      gap: var(--plt-gap-mobile, 16px);
+      scroll-padding-inline-start: 20px;
       scroll-padding-left: var(--plt-pad-mobile, 20px);
       scroll-padding-right: var(--plt-pad-mobile, 20px);
     }
 
-    /* Peek next card on mobile */
-    .plt__slide {
-      flex: 0 0 calc((100% - var(--plt-gap-mobile, 16px)) / var(--plt-col-mobile, 1.2));
+    .plt-listing-tab--swipe-mobile .plt__track:not(.swiper-initialized) > .swiper-wrapper {
+      gap: var(--plt-gap-mobile, 16px);
+    }
+
+    .plt-listing-tab--swipe-mobile .plt__track:not(.swiper-initialized) .plt__slide {
+      flex: 0 0 calc((100% - var(--plt-gap-mobile, 16px)) / 1.2);
+    }
+
+    /* Stack mode (enable_swipe_mobile = false): 1 column (1 card per row) */
+    plt-listing-tab.plt-listing-tab--stack-mobile {
+      width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .plt-listing-tab--stack-mobile .plt__track {
+      overflow: visible !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      display: block;
+    }
+
+    .plt-listing-tab--stack-mobile .plt__track > .swiper-wrapper {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: var(--plt-gap-mobile, 16px) !important;
+      width: 100% !important;
+      transform: none !important;
+    }
+
+    .plt-listing-tab--stack-mobile .plt__slide {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 0 0 100% !important;
+      margin-right: 0 !important;
+      transform: none !important;
+    }
+
+    .plt-listing-tab--stack-mobile earth-slider-nav {
+      display: none !important;
     }
 
     .plt__nav-wrapper--desktop-only {
@@ -409,8 +515,11 @@
         super();
         this.tabs = [];
         this.panels = [];
+        this.swipers = new Map();
+        this._mqlMobile = window.matchMedia('(max-width: 767.98px)');
         this._onTabClick = this._onTabClick.bind(this);
         this._onKeydown = this._onKeydown.bind(this);
+        this._onMediaChange = this._onMediaChange.bind(this);
       }
 
       connectedCallback() {
@@ -421,6 +530,9 @@
           tab.addEventListener('click', this._onTabClick);
           tab.addEventListener('keydown', this._onKeydown);
         });
+
+        this._mqlMobile.addEventListener('change', this._onMediaChange);
+        this.initCarousels();
 
         // Theme Editor reload & active tab selection support
         document.addEventListener('shopify:block:select', (event) => {
@@ -450,6 +562,94 @@
             }
           }
         });
+      }
+
+      _onMediaChange() {
+        if (this.dataset.swipeMobile === 'false') {
+          if (this._mqlMobile.matches) {
+            this.destroyAllSwipers();
+          } else {
+            this.initCarousels();
+          }
+        }
+      }
+
+      destroyAllSwipers() {
+        this.swipers.forEach((swiper) => {
+          if (swiper && typeof swiper.destroy === 'function') {
+            swiper.destroy(true, true);
+          }
+        });
+        this.swipers.clear();
+      }
+
+      initCarousels() {
+        if (typeof window.Swiper === 'undefined') {
+          // Poll briefly for deferred Swiper script
+          const checkSwiper = setInterval(() => {
+            if (typeof window.Swiper !== 'undefined') {
+              clearInterval(checkSwiper);
+              this.initCarousels();
+            }
+          }, 50);
+          setTimeout(() => clearInterval(checkSwiper), 3000);
+          return;
+        }
+
+        const tracks = this.querySelectorAll('.plt__track');
+        tracks.forEach((track) => this.initSwiperForTrack(track));
+      }
+
+      initSwiperForTrack(track) {
+        if (!track || this.swipers.has(track)) return;
+        if (typeof window.Swiper === 'undefined') return;
+
+        const isSwipeMobile = this.dataset.swipeMobile !== 'false';
+        if (!isSwipeMobile && this._mqlMobile.matches) return;
+
+        const colDesktop = parseFloat(this.dataset.colDesktop) || 3;
+        const gapDesktop = parseFloat(this.dataset.gapDesktop) || 32;
+        const gapMobile = parseFloat(this.dataset.gapMobile) || 16;
+
+        const swiperInstance = new window.Swiper(track, {
+          slidesPerView: isSwipeMobile ? 1.2 : 1,
+          spaceBetween: gapMobile,
+          grabCursor: true,
+          watchOverflow: true,
+          observer: true,
+          observeParents: true,
+          threshold: 5,
+          breakpoints: {
+            768: {
+              slidesPerView: 2,
+              spaceBetween: Math.min(gapDesktop, 24)
+            },
+            1024: {
+              slidesPerView: colDesktop,
+              spaceBetween: gapDesktop
+            }
+          },
+          on: {
+            init: () => this._notifyNav(track),
+            slideChange: () => this._notifyNav(track),
+            update: () => this._notifyNav(track),
+            resize: () => this._notifyNav(track)
+          }
+        });
+
+        this.swipers.set(track, swiperInstance);
+        this._notifyNav(track);
+      }
+
+      _notifyNav(track) {
+        if (!track) return;
+        const panel = track.closest('.plt__panel');
+        if (panel) {
+          const nav = panel.querySelector('earth-slider-nav');
+          if (nav && typeof nav.updateState === 'function') {
+            nav.updateState();
+          }
+        }
       }
 
       _onTabClick(event) {
@@ -508,11 +708,18 @@
             panel.removeAttribute('hidden');
             const track = panel.querySelector('.plt__track');
             if (track) {
-              track.scrollLeft = 0;
-              // Trigger slider nav update
-              const nav = panel.querySelector('earth-slider-nav');
-              if (nav && typeof nav.updateState === 'function') {
-                window.setTimeout(() => nav.updateState(), 60);
+              if (!this.swipers.has(track)) {
+                this.initSwiperForTrack(track);
+              }
+              const swiper = this.swipers.get(track);
+              if (swiper) {
+                window.requestAnimationFrame(() => {
+                  swiper.update();
+                  this._notifyNav(track);
+                });
+              } else {
+                track.scrollLeft = 0;
+                this._notifyNav(track);
               }
             }
           } else {
@@ -539,6 +746,9 @@
           tab.removeEventListener('click', this._onTabClick);
           tab.removeEventListener('keydown', this._onKeydown);
         });
+
+        this._mqlMobile.removeEventListener('change', this._onMediaChange);
+        this.destroyAllSwipers();
       }
     }
 
@@ -560,15 +770,6 @@
       "id": "collections",
       "label": "Collections tabs",
       "limit": 8
-    },
-    {
-      "type": "range",
-      "id": "limit",
-      "label": "Products limit per tab",
-      "min": 2,
-      "max": 16,
-      "step": 1,
-      "default": 8
     },
     {
       "type": "header",
@@ -594,13 +795,10 @@
       "default": 3
     },
     {
-      "type": "range",
-      "id": "columns_mobile",
-      "label": "Columns (mobile)",
-      "min": 1,
-      "max": 2,
-      "step": 0.1,
-      "default": 1.2
+      "type": "checkbox",
+      "id": "enable_swipe_mobile",
+      "label": "Enable swipe on mobile",
+      "default": true
     },
     {
       "type": "range",
@@ -747,7 +945,7 @@
       "settings": {
         "tab_alignment": "center",
         "columns_desktop": 3,
-        "columns_mobile": 1.2,
+        "enable_swipe_mobile": true,
         "gap_desktop": 32,
         "gap_mobile": 16,
         "menu_padding_desktop": 34,

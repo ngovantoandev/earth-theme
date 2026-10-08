@@ -1,19 +1,27 @@
 {% doc %}
-  Renders a sustainable product card for use inside product-listing-tab.
-  - Image with 3:4 aspect ratio, hover image, and dark overlay.
-  - Floating impact score badge and environmental metric chips (water, carbon).
-  - Quick view hover trigger and link arrow.
-  - Composition line, certification tags, origin country, discount label.
-  - Bottom buy group with price block and add to cart button.
+  Renders a sustainable product card for use inside product-listing-tab or product grids.
+  - Centrally controlled by Global Theme Settings (config/settings_schema.json -> "Product cards"):
+    * Layout: Alignment, Title line limit, Image ratio
+    * Gap: Device desktop/mobile Content spacing, Content gap, Product info gap
+    * Display: Show Impact score badge, Show Water & Carbon metric chips, Show composition line, Show certification tags, Show origin country, Show discount badge
+    * Typography: Title font size (Heading), Composition, Tags, Origin, Discount, Impact badge, Metrics chips (Paragraph)
+  - Block settings guide merchants to edit styles in Global Theme Settings.
 {% enddoc %}
 
+{%- render 'product-card-styles' -%}
+
 {%- liquid
-  assign current_product = closest.product | default: product | default: prod | default: block.settings.product
+  # ---------------------------------------------------------------------------
+  # 1. Product Data Resolution
+  # ---------------------------------------------------------------------------
+  assign current_product = closest.product | default: product | default: prod
 
-  # Seed mock index for preview/demo fallback
-  assign demo_idx = card_index | default: 1
+  assign is_demo = false
+  if current_product == blank or request.visual_preview_mode
+    assign is_demo = true
+  endif
 
-  if current_product != blank
+  if current_product != blank and request.visual_preview_mode != true
     assign prod_title = current_product.title
     assign prod_url = current_product.url
     assign prod_price = current_product.price | money_without_trailing_zeros
@@ -28,186 +36,230 @@
     assign prod_second_image = current_product.images[1]
 
     # Metafields with fallbacks
-    assign impact_score = current_product.metafields.custom.impact_score | default: 95
-    assign water_saved = current_product.metafields.custom.water_saved | default: '2,000 L'
-    assign co2_saved = current_product.metafields.custom.co2_saved | default: '3.5 kg'
-    assign composition = current_product.metafields.custom.composition | default: '100% Organic Cotton'
-    assign origin_country = current_product.metafields.custom.origin_country | default: 'Made in Vietnam'
+    assign impact_score = current_product.metafields.custom.impact_score
+    assign water_saved = current_product.metafields.custom.water_saved
+    assign co2_saved = current_product.metafields.custom.co2_saved
+    assign composition = current_product.metafields.custom.composition
+    assign origin_country = current_product.metafields.custom.origin_country
     assign certifications = current_product.metafields.custom.certifications.value
   else
-    # Elegant fallback seed data matching the reference design
-    assign is_demo = true
-    assign prod_url = 'shopify://products'
-    case demo_idx
-      when 1
-        assign prod_title = 'Regenerative Denim'
-        assign prod_price = '$110'
-        assign has_discount = false
-        assign impact_score = 97
-        assign water_saved = '3,200 L'
-        assign co2_saved = '5.5 kg'
-        assign composition = '100% Regenerative Organic Cotton'
-        assign origin_country = 'Made in Vietnam'
-        assign demo_tags = 'Organic Cotton,Recycled Materials' | split: ','
-        assign demo_img_name = 'prod-denim.jpg'
-      when 2
-        assign prod_title = 'Essential Organic Tee'
-        assign prod_price = '$68'
-        assign prod_compare_price = '$128'
-        assign has_discount = true
-        assign discount_pct = 52
-        assign impact_score = 95
-        assign water_saved = '2,000 L'
-        assign co2_saved = '3.5 kg'
-        assign composition = '100% Organic Cotton'
-        assign origin_country = 'Made in India'
-        assign demo_tags = 'Fair Trade,Carbon Neutral' | split: ','
-        assign demo_img_name = 'prod-tee.jpg'
-      when 3
-        assign prod_title = 'Classic Oxford Shirt'
-        assign prod_price = '$68'
-        assign has_discount = false
-        assign impact_score = 93
-        assign water_saved = '2,100 L'
-        assign co2_saved = '3.8 kg'
-        assign composition = '100% Organic Cotton'
-        assign origin_country = 'Made in India'
-        assign demo_tags = 'Plastic-Free,Organic Cotton' | split: ','
-        assign demo_img_name = 'prod-oxford.jpg'
-      else
-        assign prod_title = 'Sustainable Chino Pants'
-        assign prod_price = '$120'
-        assign has_discount = false
-        assign impact_score = 91
-        assign water_saved = '2,800 L'
-        assign co2_saved = '4.2 kg'
-        assign composition = '98% Organic Cotton, 2% Elastane'
-        assign origin_country = 'Made in Portugal'
-        assign demo_tags = 'GOTS Certified,Zero Waste' | split: ','
-        assign demo_img_name = 'prod-denim.jpg'
-    endcase
+    # Generic fallback seed data for demo / onboarding preview (displays all elements fully)
+    assign prod_title = 'Product title'
+    assign prod_url = '#'
+    assign prod_price = 10000 | money_without_trailing_zeros
+    assign prod_compare_price = 12500 | money_without_trailing_zeros
+    assign has_discount = true
+    assign discount_pct = 20
+    assign impact_score = 95
+    assign water_saved = '2,000 L'
+    assign co2_saved = '3.5 kg'
+    assign composition = 'Product composition'
+    assign origin_country = 'Country of origin'
+    assign certifications = 'Tag 1,Tag 2' | split: ','
   endif
+
+  # ---------------------------------------------------------------------------
+  # 2. Global Theme Settings Resolution (Centralized in settings_schema.json)
+  # ---------------------------------------------------------------------------
+  # Layout: Alignment
+  assign card_alignment = settings.product_card_alignment | default: 'left'
+
+  # Layout: Title line limit
+  assign title_line_limit = settings.product_card_title_line_limit | default: '1'
+  if title_line_limit == 'no_limit'
+    assign line_clamp_val = 'unset'
+    assign display_val = 'block'
+  else
+    assign line_clamp_val = title_line_limit
+    assign display_val = '-webkit-box'
+  endif
+
+  # Layout: Image ratio & Object fit
+  assign raw_ratio = settings.product_card_image_ratio | default: '2/3_fill'
+  case raw_ratio
+    when 'original'
+      assign card_aspect_ratio = 'auto'
+      assign card_object_fit = 'cover'
+    when '1/1'
+      assign card_aspect_ratio = '1/1'
+      assign card_object_fit = 'contain'
+    when '1/1_fill'
+      assign card_aspect_ratio = '1/1'
+      assign card_object_fit = 'cover'
+    when '2/3'
+      assign card_aspect_ratio = '2/3'
+      assign card_object_fit = 'contain'
+    when '2/3_fill'
+      assign card_aspect_ratio = '2/3'
+      assign card_object_fit = 'cover'
+    when '3/2'
+      assign card_aspect_ratio = '3/2'
+      assign card_object_fit = 'contain'
+    when '3/2_fill'
+      assign card_aspect_ratio = '3/2'
+      assign card_object_fit = 'cover'
+    when '3/4'
+      assign card_aspect_ratio = '3/4'
+      assign card_object_fit = 'cover'
+    else
+      assign card_aspect_ratio = '2/3'
+      assign card_object_fit = 'cover'
+  endcase
+
+  # Gap: Spacing & Gaps (Desktop & Mobile)
+  assign content_spacing_desktop = settings.product_card_content_spacing_desktop | default: 16
+  assign content_spacing_mobile = settings.product_card_content_spacing_mobile | default: 12
+
+  assign content_gap_desktop = settings.product_card_content_gap_desktop | default: 16
+  assign content_gap_mobile = settings.product_card_content_gap_mobile | default: 12
+
+  assign info_gap_desktop = settings.product_card_info_gap_desktop | default: 12
+  assign info_gap_mobile = settings.product_card_info_gap_mobile | default: 8
+
+  # Display settings
+  assign show_impact = settings.product_card_show_impact_badge
+  if show_impact == nil
+    assign show_impact = true
+  endif
+
+  assign show_metrics = settings.product_card_show_metrics
+  if show_metrics == nil
+    assign show_metrics = true
+  endif
+
+  assign show_composition = settings.product_card_show_composition
+  if show_composition == nil
+    assign show_composition = true
+  endif
+
+  assign show_tags = settings.product_card_show_tags
+  if show_tags == nil
+    assign show_tags = true
+  endif
+
+  assign show_origin = settings.product_card_show_origin
+  if show_origin == nil
+    assign show_origin = true
+  endif
+
+  assign show_discount = settings.product_card_show_discount
+  if show_discount == nil
+    assign show_discount = true
+  endif
+
+  # Typography settings (controlled in Global Theme Settings)
+  assign title_size = settings.product_card_title_size | default: 'vt-heading-h6'
+  assign composition_size = settings.product_card_composition_size | default: 'vt-paragraph-small'
+  assign tags_size = settings.product_card_tags_size | default: 'vt-paragraph-small'
+  assign origin_size = settings.product_card_origin_size | default: 'vt-paragraph-small'
+  assign discount_size = settings.product_card_discount_size | default: 'vt-paragraph-small'
+  assign impact_size = settings.product_card_impact_size | default: 'vt-paragraph-small'
+  assign metrics_size = settings.product_card_metrics_size | default: 'vt-paragraph-small'
+
+  assign add_to_cart_text = 'ADD TO CART'
 -%}
 
 <article 
-  class="vt-product-card flex flex-col h-full w-full relative box-border flex-1"
-  data-product-id="{{ current_product.id }}"
+  class="vt-product-card vt-product-card--align-{{ card_alignment }}"
+  data-product-id="{{ current_product.id | default: 'preview' }}"
   style="
-    --vt-media-info-gap: {{ block.settings.media_info_gap | default: 16 }}px;
-    --vt-info-gap: {{ block.settings.info_gap | default: 12 }}px;
+    --vt-card-content-spacing: {{ content_spacing_desktop }}px;
+    --vt-card-content-spacing-mobile: {{ content_spacing_mobile }}px;
+    --vt-card-content-gap: {{ content_gap_desktop }}px;
+    --vt-card-content-gap-mobile: {{ content_gap_mobile }}px;
+    --vt-card-info-gap: {{ info_gap_desktop }}px;
+    --vt-card-info-gap-mobile: {{ info_gap_mobile }}px;
+    --vt-card-aspect-ratio: {{ card_aspect_ratio }};
+    --vt-card-object-fit: {{ card_object_fit }};
+    --vt-card-title-clamp: {{ line_clamp_val }};
+    --vt-card-title-display: {{ display_val }};
   "
   {{ block.shopify_attributes }}
 >
   <!-- ================= 1. Media Section ================= -->
-  <div class="vt-product-card__media-wrapper relative overflow-hidden group w-full aspect-[3/4] bg-[#f1f2e2] shrink-0">
-    <a href="{{ prod_url }}" class="vt-product-card__media-link block w-full h-full relative cursor-pointer" aria-label="{{ prod_title }}">
+  <div class="vt-product-card__media-wrapper group">
+    <a href="{{ prod_url }}" class="vt-product-card__media-link" aria-label="{{ prod_title }}">
       {%- if prod_image != blank -%}
         {{ prod_image | image_url: width: 800 | image_tag: 
           loading: 'lazy', 
           sizes: '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 85vw',
           widths: '360, 540, 720, 900',
-          class: 'vt-product-card__img vt-product-card__img--primary w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105'
+          class: 'vt-product-card__img vt-product-card__img--primary'
         }}
-        {%- if prod_second_image != blank and block.settings.enable_hover_image -%}
+        {%- if prod_second_image != blank -%}
           {{ prod_second_image | image_url: width: 800 | image_tag: 
             loading: 'lazy', 
             sizes: '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 85vw',
             widths: '360, 540, 720, 900',
-            class: 'vt-product-card__img vt-product-card__img--secondary absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-out'
+            class: 'vt-product-card__img vt-product-card__img--secondary'
           }}
         {%- endif -%}
-      {%- elsif demo_img_name != blank -%}
-        <img 
-          src="{{ demo_img_name | asset_url }}" 
-          alt="{{ prod_title }}" 
-          width="600" 
-          height="800" 
-          loading="lazy" 
-          class="vt-product-card__img w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-        >
       {%- else -%}
-        <div class="w-full h-full flex items-center justify-center bg-[#EAE060] text-[#003225]">
-          {{ 'product-1' | placeholder_svg_tag: 'w-1/2 h-1/2 opacity-40' }}
+        <div class="vt-product-card__placeholder">
+          {{ 'product-apparel-1' | placeholder_svg_tag: 'w-1/2 h-1/2 opacity-35' }}
         </div>
       {%- endif -%}
     </a>
 
     <!-- Hover dark overlay -->
-    <div class="vt-product-card__overlay absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
+    <div class="vt-product-card__overlay"></div>
 
     <!-- Top Left Impact Score Badge -->
-    {%- if block.settings.show_impact_badge and impact_score != blank -%}
-      <div class="vt-product-card__badge vt-product-card__badge--impact absolute top-3 left-3 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-md shadow-sm bg-[#003225] text-[#F8F9DC]">
-        <svg width="15" height="16" viewBox="0 0 15 16" fill="currentColor" class="text-[#F8F9DC] shrink-0" xmlns="http://www.w3.org/2000/svg">
+    {%- if show_impact and impact_score != blank -%}
+      <div class="vt-product-card__badge vt-product-card__badge--impact vt-paragraph {{ impact_size }}">
+        <svg width="15" height="16" viewBox="0 0 15 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25038 8.91809L9.81706 8.85208C10.4351 8.85208 10.9621 9.23993 11.1694 9.78409L12.2502 8.63524C12.189 8.41498 12.0313 8.21011 11.8066 8.06269C11.5456 7.89134 11.2272 7.81883 10.9338 7.86398C10.8041 7.88416 10.6964 7.92075 10.6051 7.97582C10.5504 8.009 10.4833 8.01481 10.4238 7.99155C10.3643 7.96795 10.3188 7.91836 10.3014 7.8568C10.1673 7.38515 9.63031 7.08246 9.07966 7.16728C8.92951 7.19054 8.79202 7.23637 8.67026 7.30306C8.67265 6.8557 8.67505 6.32693 8.67744 6.27016C8.67983 6.25819 8.6812 6.24587 8.68154 6.23322C8.69009 5.48693 9.40048 4.71943 10.1009 4.19545C10.236 4.35449 10.4108 4.47591 10.6129 4.54671C10.7511 4.59527 10.8807 4.61716 11.0028 4.61716C11.5292 4.61716 11.9229 4.21529 12.306 3.8247C12.621 3.5032 12.9466 3.17075 13.358 3.02881C13.4292 3.00453 13.4808 2.94297 13.4935 2.86909C13.5061 2.79521 13.4774 2.72031 13.4182 2.6738C12.8084 2.19223 11.8559 1.94495 11.1017 2.07252C10.6437 2.14982 10.2935 2.3564 10.0886 2.67003C10 2.77777 9.93163 2.89953 9.88512 3.03121C9.79209 3.29662 9.79551 3.5805 9.89299 3.84077C9.7165 3.97143 9.53728 4.11815 9.3632 4.27993C9.14875 4.47899 8.91583 4.72593 8.72054 5.0057C8.72738 4.60143 8.72361 4.21084 8.69865 3.84967C9.17645 3.548 9.49522 3.01548 9.49522 2.40941C9.49522 2.20762 9.45965 2.0089 9.38987 1.81942C9.2623 1.29305 8.88094 0.841583 8.28685 0.5129C7.29328 -0.0367296 5.83626 -0.158831 4.74385 0.215683C4.67305 0.239966 4.62106 0.301188 4.60841 0.375065C4.59575 0.449284 4.62414 0.524186 4.68297 0.570702C5.22233 0.997887 5.52776 1.65115 5.82327 2.28286C6.24395 3.18204 6.67866 4.11166 7.79297 4.11166C7.96843 4.11166 8.13773 4.08498 8.29711 4.03538C8.332 4.72935 8.29814 5.52865 8.26736 6.251C8.26394 6.33275 8.26052 7.27741 8.25744 7.71725C7.98245 8.06543 7.41538 8.13999 6.74331 7.90263C6.19847 7.9724 5.67859 8.23918 5.40908 8.58975C5.34512 8.67286 5.27603 8.78778 5.25038 8.91809ZM4.4073 14.8997L1.93379 10.5526L0 11.6529L2.4735 16L4.4073 14.8997ZM9.82014 9.26251C10.3896 9.26251 10.8527 9.72595 10.8527 10.2951C10.8527 10.8645 10.3896 11.328 9.82014 11.328H7.39417C7.28062 11.328 7.18896 11.4196 7.18896 11.5332C7.18896 11.6464 7.28062 11.7384 7.39417 11.7384H9.82014C10.6157 11.7384 11.2631 11.091 11.2631 10.2951C11.2631 10.2913 11.2628 10.2875 11.2628 10.2834L13.1583 8.26859C13.3464 8.06885 13.6026 7.95393 13.8793 7.94572C14.1559 7.93751 14.4183 8.03602 14.618 8.22413C14.8181 8.41224 14.9327 8.66807 14.9412 8.94477C14.9498 9.22147 14.8506 9.48414 14.6628 9.68388C14.0308 10.3556 13.5082 10.9347 13.0885 11.3995C11.955 12.6557 11.3859 13.2864 10.6478 13.5822C9.90359 13.8801 8.92814 13.8661 6.98546 13.8384C6.25148 13.8282 5.34307 13.8152 4.26365 13.8176L2.79329 11.2336C3.23792 10.435 3.8262 9.86276 4.69528 9.38427C4.75753 9.35007 4.81464 9.33502 4.88579 9.33399L9.82014 9.26251Z"/>
         </svg>
-        <span class="vt-product-card__impact-text text-[#F8F9DC]">{{ impact_score }}% Impact</span>
+        <span class="vt-product-card__impact-text">{{ impact_score }}% Impact</span>
       </div>
     {%- endif -%}
 
     <!-- Bottom Left Metric Chips -->
-    {%- if block.settings.show_metrics -%}
-      <div class="vt-product-card__metrics absolute bottom-3 left-3 z-20 flex items-center gap-2">
+    {%- if show_metrics -%}
+      <div class="vt-product-card__metrics">
         {%- if water_saved != blank -%}
-          <span class="vt-product-card__chip flex items-center gap-1.5 px-3 py-1 rounded-full text-md shadow-sm bg-[#EAE060] text-[#224E09]">
-            <svg class="w-3.5 h-3.5 shrink-0 text-[#224E09]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <span class="vt-product-card__chip vt-paragraph {{ metrics_size }}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
             </svg>
-            <span class="vt-product-card__chip-text text-[#224E09]">{{ water_saved }}</span>
+            <span class="vt-product-card__chip-text">{{ water_saved }}</span>
           </span>
         {%- endif -%}
 
         {%- if co2_saved != blank -%}
-          <span class="vt-product-card__chip flex items-center gap-1.5 px-3 py-1 rounded-full text-md shadow-sm bg-[#EAE060] text-[#224E09]">
-            <svg class="w-4 h-4 shrink-0 text-[#224E09]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <span class="vt-product-card__chip vt-paragraph {{ metrics_size }}">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>
             </svg>
-            <span class="vt-product-card__chip-text text-[#224E09]">{{ co2_saved }}</span>
+            <span class="vt-product-card__chip-text">{{ co2_saved }}</span>
           </span>
         {%- endif -%}
       </div>
     {%- endif -%}
-
-    <!-- Center Quick View Button (reveals on desktop hover) -->
-    {%- if block.settings.show_quick_view -%}
-      <button 
-        type="button" 
-        class="vt-product-card__quick-view absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-none text-md font-bold tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md bg-[#71CC3B] hover:bg-[#62bf2f] text-[#003225] cursor-pointer"
-        aria-label="Quick view {{ prod_title }}"
-        data-quick-view-handle="{{ current_product.handle }}"
-      >
-        <svg class="w-5 h-5 shrink-0 text-[#003225]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
-          <circle cx="12" cy="12" r="3"/>
-        </svg>
-        <span>{{ block.settings.quick_view_text | default: 'QUICK VIEW' }}</span>
-      </button>
-    {%- endif -%}
   </div>
 
   <!-- ================= 2. Information Section ================= -->
-  <div class="vt-product-card__content flex flex-col grow text-[#224E09] flex-1">
+  <div class="vt-product-card__content">
     <!-- Title -->
-    <h3 class="vt-product-card__title text-xl font-bold leading-tight m-0 line-clamp-1 text-[#003225]">
-      <a href="{{ prod_url }}" class="text-[#003225] hover:text-[#71CC3B] transition-colors">
+    <h3 class="vt-product-card__title {{ title_size }}">
+      <a href="{{ prod_url }}">
         {{ prod_title }}
       </a>
     </h3>
 
     <!-- Composition description -->
-    {%- if block.settings.show_composition and composition != blank -%}
-      <p class="vt-product-card__composition text-md m-0 line-clamp-1 opacity-90 text-[#224E09]">
+    {%- if show_composition and composition != blank -%}
+      <p class="vt-product-card__composition vt-paragraph {{ composition_size }}">
         {{ composition }}
       </p>
     {%- endif -%}
 
     <!-- Certification Tag Pills -->
-    {%- if block.settings.show_tags -%}
-      {%- assign tag_items = certifications | default: demo_tags -%}
-      {%- if tag_items != blank and tag_items.size > 0 -%}
-        <div class="vt-product-card__tags flex flex-wrap gap-2 m-0">
-          {%- for tag in tag_items limit: 3 -%}
-            <span class="vt-product-card__tag text-md px-3 py-1 rounded-full border border-[#003225] bg-[#EAE060] text-[#224E09]">
+    {%- if show_tags -%}
+      {%- if certifications != blank and certifications.size > 0 -%}
+        <div class="vt-product-card__tags">
+          {%- for tag in certifications limit: 3 -%}
+            <span class="vt-product-card__tag vt-paragraph {{ tags_size }}">
               {{ tag | strip }}
             </span>
           {%- endfor -%}
@@ -216,22 +268,22 @@
     {%- endif -%}
 
     <!-- Meta row (Origin + Discount) -->
-    <div class="vt-product-card__meta-row flex flex-wrap items-center gap-x-4 gap-y-1 text-md m-0 text-[#224E09]">
-      {%- if block.settings.show_origin and origin_country != blank -%}
-        <span class="vt-product-card__origin flex items-center gap-1.5 text-[#224E09]">
-          <svg class="w-3.5 h-3.5 shrink-0 text-[#224E09]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
+    <div class="vt-product-card__meta-row">
+      {%- if show_origin and origin_country != blank -%}
+        <span class="vt-product-card__origin vt-paragraph {{ origin_size }}">
+          <svg width="15" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
           </svg>
           <span>{{ origin_country }}</span>
         </span>
       {%- endif -%}
 
-      {%- if block.settings.show_discount and has_discount -%}
-        <span class="vt-product-card__discount flex items-center gap-1.5 text-[#224E09]">
-          <svg class="w-3.5 h-3.5 shrink-0 text-[#224E09]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-            <line x1="7" y1="7" x2="7.01" y2="7"/>
+      {%- if show_discount and has_discount -%}
+        <span class="vt-product-card__discount vt-paragraph {{ discount_size }}">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14.4576 0.55C14.0576 0.2 13.5576 0 13.0076 0H8.70755C8.10755 0 7.50755 0.25 7.05755 0.7L0.707551 7.05C0.307551 7.5 0.0575508 8.05 0.00755077 8.6C-0.0424492 9.2 0.157551 9.75 0.557551 10.15L4.85755 14.45C5.20755 14.8 5.70755 15 6.25755 15C6.85755 15 7.45755 14.75 7.90755 14.3L14.2576 7.95C14.7076 7.5 14.9576 6.9 14.9576 6.3L15.0076 2C15.0076 1.45 14.8076 0.95 14.4576 0.55ZM14.0076 6.3C14.0076 6.65 13.8576 7 13.6076 7.25L7.25755 13.6C7.00755 13.85 6.65755 14 6.30755 14C6.00755 14 5.75755 13.9 5.60755 13.7L1.30755 9.4C1.10755 9.25 1.00755 8.95 1.00755 8.65C1.00755 8.3 1.15755 8 1.40755 7.75L7.75755 1.45C8.00755 1.15 8.35755 1 8.70755 1H13.0076C13.3076 1 13.5576 1.1 13.7076 1.3C13.9076 1.45 14.0076 1.7 14.0076 2V6.3Z"/>
+            <path d="M10.0576 2.60039C9.40757 3.25039 9.40757 4.30039 10.0576 4.95039C10.3576 5.25039 10.8076 5.45039 11.2076 5.45039C11.6076 5.45039 12.0576 5.30039 12.3576 4.95039C13.0076 4.30039 13.0076 3.25039 12.3576 2.60039C11.8076 2.00039 10.7076 2.00039 10.0576 2.60039ZM11.7076 4.25039C11.4576 4.50039 11.0076 4.50039 10.8076 4.25039C10.5076 4.00039 10.5076 3.55039 10.7576 3.30039C10.8576 3.20039 11.0576 3.10039 11.2076 3.10039C11.3576 3.10039 11.5576 3.15039 11.6576 3.30039C11.9576 3.55039 11.9576 4.00039 11.7076 4.25039Z"/>
           </svg>
           <span>{{ discount_pct }}% Off (Price as Marked)</span>
         </span>
@@ -239,15 +291,15 @@
     </div>
 
     <!-- ================= 3. Buy Group (Aligned to bottom) ================= -->
-    <div class="vt-product-card__buy-group mt-auto inline-flex items-stretch self-start shrink-0">
+    <div class="vt-product-card__buy-group">
       <!-- Price block -->
-      <div class="vt-product-card__price-box bg-[#003225] flex items-center gap-2 px-4 py-2.5">
+      <div class="vt-product-card__price-box">
         {%- if has_discount and prod_compare_price != blank -%}
-          <span class="vt-product-card__compare-price line-through text-base font-bold text-[#F8F9DC]">
+          <span class="vt-product-card__compare-price">
             {{ prod_compare_price }}
           </span>
         {%- endif -%}
-        <span class="vt-product-card__price text-base font-bold text-[#F8F9DC]">
+        <span class="vt-product-card__price">
           {{ prod_price }}
         </span>
       </div>
@@ -256,35 +308,35 @@
       {%- if is_demo -%}
         <button
           type="button"
-          class="vt-product-card__add-btn bg-[#EAE060] hover:bg-[#dcd14e] text-[#003225] flex items-center gap-2 px-5 py-2.5 text-md font-bold tracking-wider uppercase transition-colors rounded-none"
+          class="vt-product-card__add-btn"
         >
-          <svg class="w-4 h-4 shrink-0 text-[#003225]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/>
-            <path d="M16 17h4m-2-2v4"/>
+          <svg width="23" height="24" viewBox="0 0 23 24" fill="curentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.20021 8.8C7.20021 9.24184 6.84205 9.6 6.40021 9.6C5.95837 9.6 5.60021 9.24184 5.60021 8.8V7.2H4.80021C3.99437 7.2 3.31709 7.78736 3.20253 8.57032L1.61804 20.5654L1.6168 20.5744C1.47909 21.5326 2.22737 22.4 3.21505 22.4H14.1128C14.5546 22.4 14.9128 22.7582 14.9128 23.2C14.9128 23.6418 14.5546 24 14.1128 24H3.21505C1.2658 24 -0.242282 22.2831 0.0323784 20.3516L1.61698 8.35584L1.61823 8.3468C1.84526 6.76708 3.20441 5.6 4.80021 5.6H5.60021V4.8C5.60021 2.14903 7.74925 0 10.4002 0C13.0512 0 15.2002 2.14903 15.2002 4.8V5.6H16.0002C17.5949 5.6 18.9533 6.7654 19.1817 8.34344L19.9912 13.68C20.0574 14.1169 19.757 14.5247 19.3202 14.591C18.8834 14.6572 18.4755 14.3568 18.4093 13.92L17.5994 8.58056L17.5985 8.5744C17.4857 7.7894 16.8075 7.2 16.0002 7.2H15.2002V8.8C15.2002 9.24184 14.8421 9.6 14.4002 9.6C13.9584 9.6 13.6002 9.24184 13.6002 8.8V7.2H7.20021V8.8ZM7.20021 5.6H13.6002V4.8C13.6002 3.03269 12.1675 1.6 10.4002 1.6C8.63289 1.6 7.20021 3.03269 7.20021 4.8V5.6Z" fill="#003225"/>
+            <path d="M18.4002 16C18.842 16 19.2002 16.3582 19.2002 16.8V19.2H21.6002C22.042 19.2 22.4002 19.5582 22.4002 20C22.4002 20.4418 22.042 20.8 21.6002 20.8H19.2002V23.2C19.2002 23.6418 18.842 24 18.4002 24C17.9584 24 17.6002 23.6418 17.6002 23.2V20.8H15.2002C14.7584 20.8 14.4002 20.4418 14.4002 20C14.4002 19.5582 14.7584 19.2 15.2002 19.2H17.6002V16.8C17.6002 16.3582 17.9584 16 18.4002 16Z"/>
           </svg>
-          <span>{{ block.settings.add_to_cart_text | default: 'ADD TO CART' }}</span>
+          <span>{{ add_to_cart_text }}</span>
         </button>
       {%- else -%}
         {%- assign current_variant = current_product.selected_or_first_available_variant -%}
         {%- if current_variant.available -%}
-          <form method="post" action="/cart/add" class="inline-flex m-0">
+          <form method="post" action="{{ routes.cart_add_url }}">
             <input type="hidden" name="id" value="{{ current_variant.id }}">
             <button
               type="submit"
-              class="vt-product-card__add-btn bg-[#EAE060] hover:bg-[#dcd14e] text-[#003225] flex items-center gap-2 px-5 py-2.5 text-md font-bold tracking-wider uppercase transition-colors rounded-none"
+              class="vt-product-card__add-btn"
             >
-              <svg class="w-4 h-4 shrink-0 text-[#003225]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M16 11V7a4 4 0 0 0-8 0v4M5 9h14l1 12H4L5 9z"/>
                 <path d="M16 17h4m-2-2v4"/>
               </svg>
-              <span>{{ block.settings.add_to_cart_text | default: 'ADD TO CART' }}</span>
+              <span>{{ add_to_cart_text }}</span>
             </button>
           </form>
         {%- else -%}
           <button
             type="button"
             disabled
-            class="vt-product-card__add-btn bg-[#EAE060]/50 text-[#003225]/60 vt-product-card__add-btn--disabled cursor-not-allowed flex items-center gap-2 px-5 py-2.5 text-md font-bold tracking-wider uppercase rounded-none"
+            class="vt-product-card__add-btn vt-product-card__add-btn--disabled"
           >
             SOLD OUT
           </button>
@@ -294,160 +346,19 @@
   </div>
 </article>
 
-{% stylesheet %}
-  .vt-product-card {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-  }
-
-  /* Spacing dynamically driven by schema block range settings */
-  .vt-product-card__content {
-    padding-top: var(--vt-media-info-gap, 16px);
-    row-gap: var(--vt-info-gap, 12px);
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .vt-product-card__buy-group {
-    margin-top: auto;
-  }
-{% endstylesheet %}
-
 {% schema %}
 {
   "name": "Product card",
   "tag": null,
   "settings": [
     {
-      "type": "header",
-      "content": "Product data"
-    },
-    {
-      "type": "product",
-      "id": "product",
-      "label": "Product override"
-    },
-    {
-      "type": "header",
-      "content": "Layout & Spacing"
-    },
-    {
-      "type": "range",
-      "id": "media_info_gap",
-      "min": 0,
-      "max": 48,
-      "step": 2,
-      "unit": "px",
-      "label": "Media & info gap",
-      "default": 16
-    },
-    {
-      "type": "range",
-      "id": "info_gap",
-      "min": 4,
-      "max": 32,
-      "step": 2,
-      "unit": "px",
-      "label": "Info items gap",
-      "default": 12
-    },
-    {
-      "type": "header",
-      "content": "Media & Hover"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_hover_image",
-      "label": "Show second image on hover",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_quick_view",
-      "label": "Show Quick View button",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "quick_view_text",
-      "label": "Quick View button label",
-      "default": "QUICK VIEW"
-    },
-    {
-      "type": "header",
-      "content": "Badges & Metrics"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_impact_badge",
-      "label": "Show Impact score badge",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_metrics",
-      "label": "Show Water & Carbon metric chips",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Product information"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_composition",
-      "label": "Show composition line",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_tags",
-      "label": "Show certification tags",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_origin",
-      "label": "Show origin country",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_discount",
-      "label": "Show discount badge",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Buy group"
-    },
-    {
-      "type": "text",
-      "id": "add_to_cart_text",
-      "label": "Add to Cart button label",
-      "default": "ADD TO CART"
+      "type": "paragraph",
+      "content": "Edit style in [theme settings](/admin/themes/current/editor?context=theme&category=Product+cards)"
     }
   ],
   "presets": [
     {
-      "name": "Product card",
-      "settings": {
-        "media_info_gap": 16,
-        "info_gap": 12,
-        "enable_hover_image": true,
-        "show_quick_view": true,
-        "quick_view_text": "QUICK VIEW",
-        "show_impact_badge": true,
-        "show_metrics": true,
-        "show_composition": true,
-        "show_tags": true,
-        "show_origin": true,
-        "show_discount": true,
-        "add_to_cart_text": "ADD TO CART"
-      }
+      "name": "Product card"
     }
   ]
 }

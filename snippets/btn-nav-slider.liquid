@@ -107,17 +107,19 @@
   }
 
   .earth-slider-nav__btn {
-    width: 44px;
-    height: 44px;
+    width: var(--slider-nav-btn-size, 44px);
+    height: var(--slider-nav-btn-size, 44px);
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: none;
+    border: 1px solid transparent;
     cursor: pointer;
     padding: 0;
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
                 background-color 0.25s ease,
+                color 0.25s ease,
+                border-color 0.25s ease,
                 opacity 0.25s ease,
                 visibility 0.25s;
     outline: none;
@@ -133,27 +135,31 @@
     outline-offset: 2px;
   }
 
-  /* Theme: Green (Default - Bright green with dark icon) */
+  /* Theme: Green (Bright green with dark icon) */
   .earth-slider-nav--green .earth-slider-nav__btn {
-    background-color: var(--color-secondary, #71CC3B);
-    color: var(--color-black, #003225);
+    background-color: var(--vt-nav-btn-green-bg, var(--color-secondary, #71CC3B));
+    color: var(--vt-nav-btn-green-icon, var(--color-black, #003225));
+    border-color: var(--vt-nav-btn-green-border, transparent);
   }
 
   .earth-slider-nav--green .earth-slider-nav__btn:hover:not(:disabled) {
-    background-color: #5fb82d;
+    background-color: var(--vt-nav-btn-green-hover-bg, #5fb82d);
+    color: var(--vt-nav-btn-green-hover-icon, var(--color-black, #003225));
+    border-color: var(--vt-nav-btn-green-hover-border, transparent);
     transform: scale(1.06);
   }
 
   /* Theme: Light (Cream/white with dark green icon) */
   .earth-slider-nav--light .earth-slider-nav__btn {
-    background-color: var(--color-white, #F8F9DC);
-    color: var(--color-black, #003225);
-    border: 1px solid rgba(0, 50, 37, 0.12);
+    background-color: var(--vt-nav-btn-light-bg, var(--color-white, #F8F9DC));
+    color: var(--vt-nav-btn-light-icon, var(--color-black, #003225));
+    border-color: var(--vt-nav-btn-light-border, rgba(0, 50, 37, 0.12));
   }
 
   .earth-slider-nav--light .earth-slider-nav__btn:hover:not(:disabled) {
-    background-color: var(--color-secondary, #71CC3B);
-    border-color: transparent;
+    background-color: var(--vt-nav-btn-light-hover-bg, var(--color-secondary, #71CC3B));
+    color: var(--vt-nav-btn-light-hover-icon, var(--color-black, #003225));
+    border-color: var(--vt-nav-btn-light-hover-border, transparent);
     transform: scale(1.06);
   }
 
@@ -162,8 +168,8 @@
      ========================================================= */
   .earth-slider-nav__icon {
     display: block;
-    width: 16px;
-    height: 16px;
+    width: var(--slider-nav-icon-size, 16px);
+    height: var(--slider-nav-icon-size, 16px);
     pointer-events: none;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -249,12 +255,26 @@
         if (this.track) {
           this.track.addEventListener('scroll', this._onScroll, { passive: true });
           window.addEventListener('resize', this._onResize, { passive: true });
+          this._bindSwiperIfAvailable();
           // Check initial positions
           this.updateState();
           // Re-check after images/content finish layout
           window.setTimeout(() => this.updateState(), 100);
           window.setTimeout(() => this.updateState(), 400);
         }
+      }
+
+      _bindSwiperIfAvailable() {
+        if (!this.track || !this.track.swiper || this._swiperBound) return;
+        const swiper = this.track.swiper;
+        swiper.on('slideChange', () => this.updateState());
+        swiper.on('reachBeginning', () => this.updateState());
+        swiper.on('reachEnd', () => this.updateState());
+        swiper.on('fromEdge', () => this.updateState());
+        swiper.on('lock', () => this.updateState());
+        swiper.on('unlock', () => this.updateState());
+        swiper.on('update', () => this.updateState());
+        this._swiperBound = true;
       }
 
       _onScroll() {
@@ -273,6 +293,19 @@
 
       updateState() {
         if (!this.track) return;
+        this._bindSwiperIfAvailable();
+
+        if (this.track.swiper) {
+          const swiper = this.track.swiper;
+          if (swiper.isLocked || (swiper.slides && swiper.slides.length <= 1)) {
+            this._setHidden(this.prevBtn, true);
+            this._setHidden(this.nextBtn, true);
+            return;
+          }
+          this._setHidden(this.prevBtn, swiper.isBeginning);
+          this._setHidden(this.nextBtn, swiper.isEnd);
+          return;
+        }
 
         const sl = this.track.scrollLeft;
         const sw = this.track.scrollWidth;
@@ -321,12 +354,20 @@
 
       _onPrev() {
         if (!this.track) return;
+        if (this.track.swiper) {
+          this.track.swiper.slidePrev();
+          return;
+        }
         const step = this._getStep();
         this.track.scrollBy({ left: -step, behavior: 'smooth' });
       }
 
       _onNext() {
         if (!this.track) return;
+        if (this.track.swiper) {
+          this.track.swiper.slideNext();
+          return;
+        }
         const step = this._getStep();
         this.track.scrollBy({ left: step, behavior: 'smooth' });
       }

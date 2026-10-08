@@ -647,19 +647,35 @@
       
       
 
-      /* Slider & Controls */
-      --slider-nav-btn-size: {{ settings.slider_nav_btn_size | default: 48 }}px;
-      --slider-nav-icon-size: {{ settings.slider_nav_icon_size | default: 15 }}px;
+      /* Slider & Navigation Controls */
+      --slider-nav-btn-size: {{ settings.slider_nav_btn_size | default: 44 }}px;
+      --slider-nav-icon-size: {{ settings.slider_nav_icon_size | default: 16 }}px;
+
+      /* Navigation Button: Green Style */
+      --vt-nav-btn-green-bg: {{ settings.slider_nav_green_background | default: '#71CC3B' }};
+      --vt-nav-btn-green-icon: {{ settings.slider_nav_green_icon | default: '#003225' }};
+      --vt-nav-btn-green-border: {{ settings.slider_nav_green_border | default: 'transparent' }};
+      --vt-nav-btn-green-hover-bg: {{ settings.slider_nav_green_hover_background | default: '#5fb82d' }};
+      --vt-nav-btn-green-hover-icon: {{ settings.slider_nav_green_hover_icon | default: '#003225' }};
+      --vt-nav-btn-green-hover-border: {{ settings.slider_nav_green_hover_border | default: 'transparent' }};
+
+      /* Navigation Button: Light Style */
+      --vt-nav-btn-light-bg: {{ settings.slider_nav_light_background | default: '#F8F9DC' }};
+      --vt-nav-btn-light-icon: {{ settings.slider_nav_light_icon | default: '#003225' }};
+      --vt-nav-btn-light-border: {{ settings.slider_nav_light_border | default: 'rgba(0, 50, 37, 0.12)' }};
+      --vt-nav-btn-light-hover-bg: {{ settings.slider_nav_light_hover_background | default: '#71CC3B' }};
+      --vt-nav-btn-light-hover-icon: {{ settings.slider_nav_light_hover_icon | default: '#003225' }};
+      --vt-nav-btn-light-hover-border: {{ settings.slider_nav_light_hover_border | default: 'transparent' }};
       
       /* ==========================================================================
       Earth Theme Official Color Palette (from Theme Settings)
       ========================================================================== */
-      --vt-background-color: {{ settings.color_palette.background }};
-      --vt-foreground-color: {{ settings.color_palette.foreground }};
-      --vt-color-primary: {{ settings.color_palette.primary }};
-      --vt-color-secondary: {{ settings.color_palette.secondary }};
-      --vt-color-accent: {{ settings.color_palette.accent }};
-      --vt-color-cactus-green: {{ settings.color_palette.cactus_green }};
+      --vt-background-color: {{ settings.color_palette.background | default: '#F8F9DC' }};
+      --vt-foreground-color: {{ settings.color_palette.foreground | default: '#003225' }};
+      --vt-color-primary: {{ settings.color_palette.primary | default: '#224E09' }};
+      --vt-color-secondary: {{ settings.color_palette.secondary | default: '#71CC3B' }};
+      --vt-color-accent: {{ settings.color_palette.accent | default: '#EAE060' }};
+      --vt-color-cactus-green: {{ settings.color_palette.cactus_green | default: '#34601B' }};
 
     }
 

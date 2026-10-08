@@ -1659,6 +1659,499 @@
 				],
 				"default": "standard",
 				"label": "t:general.buttons.hover_effect.label"
+			},
+			{
+				"type": "header",
+				"content": "Slider Navigation"
+			},
+			{
+				"type": "paragraph",
+				"content": "Shared size for both slider navigation button styles"
+			},
+			{
+				"type": "range",
+				"id": "slider_nav_btn_size",
+				"min": 32,
+				"max": 64,
+				"step": 2,
+				"unit": "px",
+				"default": 44,
+				"label": "Button size"
+			},
+			{
+				"type": "range",
+				"id": "slider_nav_icon_size",
+				"min": 12,
+				"max": 28,
+				"step": 1,
+				"unit": "px",
+				"default": 16,
+				"label": "Icon size"
+			},
+			{
+				"type": "header",
+				"content": "Navigation (Green style)"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_green_background",
+				"default": "#71CC3B",
+				"label": "Background"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_green_icon",
+				"default": "#003225",
+				"label": "Icon color"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_green_border",
+				"default": "#00000000",
+				"label": "Border"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_green_hover_background",
+				"default": "#5fb82d",
+				"label": "Hover background"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_green_hover_icon",
+				"default": "#003225",
+				"label": "Hover icon color"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_green_hover_border",
+				"default": "#00000000",
+				"label": "Hover border"
+			},
+			{
+				"type": "header",
+				"content": "Navigation (Light style)"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_light_background",
+				"default": "#F8F9DC",
+				"label": "Background"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_light_icon",
+				"default": "#003225",
+				"label": "Icon color"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_light_border",
+				"default": "#00000000",
+				"label": "Border"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_light_hover_background",
+				"default": "#71CC3B",
+				"label": "Hover background"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_light_hover_icon",
+				"default": "#003225",
+				"label": "Hover icon color"
+			},
+			{
+				"type": "color",
+				"id": "slider_nav_light_hover_border",
+				"default": "#00000000",
+				"label": "Hover border"
+			}
+		]
+	},
+	{
+		"name": "Product cards",
+		"settings": [
+			{
+				"type": "header",
+				"content": "Layout"
+			},
+			{
+				"type": "select",
+				"id": "product_card_alignment",
+				"options": [
+					{
+						"value": "left",
+						"label": "Left"
+					},
+					{
+						"value": "center",
+						"label": "Center"
+					},
+					{
+						"value": "right",
+						"label": "Right"
+					}
+				],
+				"default": "left",
+				"label": "Alignment"
+			},
+			{
+				"type": "select",
+				"id": "product_card_title_line_limit",
+				"options": [
+					{
+						"value": "no_limit",
+						"label": "No limit"
+					},
+					{
+						"value": "1",
+						"label": "1 line"
+					},
+					{
+						"value": "2",
+						"label": "2 lines"
+					},
+					{
+						"value": "3",
+						"label": "3 lines"
+					}
+				],
+				"default": "1",
+				"label": "Title line limit"
+			},
+			{
+				"type": "select",
+				"id": "product_card_image_ratio",
+				"options": [
+					{
+						"value": "original",
+						"label": "Original"
+					},
+					{
+						"value": "1/1",
+						"label": "Square (1:1)"
+					},
+					{
+						"value": "1/1_fill",
+						"label": "Square fill (1:1)"
+					},
+					{
+						"value": "2/3",
+						"label": "Portrait (2:3)"
+					},
+					{
+						"value": "2/3_fill",
+						"label": "Portrait fill (2:3)"
+					},
+					{
+						"value": "3/2",
+						"label": "Landscape (3:2)"
+					},
+					{
+						"value": "3/2_fill",
+						"label": "Landscape fill (3:2)"
+					}
+				],
+				"default": "2/3_fill",
+				"label": "Image ratio"
+			},
+			{
+				"type": "header",
+				"content": "Gap"
+			},
+			{
+				"type": "paragraph",
+				"content": "Desktop"
+			},
+			{
+				"type": "range",
+				"id": "product_card_content_spacing_desktop",
+				"min": 0,
+				"max": 48,
+				"step": 2,
+				"unit": "px",
+				"default": 16,
+				"label": "Content spacing"
+			},
+			{
+				"type": "range",
+				"id": "product_card_content_gap_desktop",
+				"min": 0,
+				"max": 32,
+				"step": 2,
+				"unit": "px",
+				"default": 16,
+				"label": "Content gap"
+			},
+			{
+				"type": "range",
+				"id": "product_card_info_gap_desktop",
+				"min": 4,
+				"max": 32,
+				"step": 2,
+				"unit": "px",
+				"default": 12,
+				"label": "Product info gap"
+			},
+			{
+				"type": "paragraph",
+				"content": "Mobile"
+			},
+			{
+				"type": "range",
+				"id": "product_card_content_spacing_mobile",
+				"min": 0,
+				"max": 32,
+				"step": 2,
+				"unit": "px",
+				"default": 12,
+				"label": "Content spacing"
+			},
+			{
+				"type": "range",
+				"id": "product_card_content_gap_mobile",
+				"min": 0,
+				"max": 24,
+				"step": 2,
+				"unit": "px",
+				"default": 12,
+				"label": "Content gap"
+			},
+			{
+				"type": "range",
+				"id": "product_card_info_gap_mobile",
+				"min": 4,
+				"max": 24,
+				"step": 2,
+				"unit": "px",
+				"default": 8,
+				"label": "Product info gap"
+			},
+			{
+				"type": "header",
+				"content": "Display"
+			},
+			{
+				"type": "checkbox",
+				"id": "product_card_show_impact_badge",
+				"default": true,
+				"label": "Show Impact score badge"
+			},
+			{
+				"type": "checkbox",
+				"id": "product_card_show_metrics",
+				"default": true,
+				"label": "Show Water & Carbon metric chips"
+			},
+			{
+				"type": "checkbox",
+				"id": "product_card_show_composition",
+				"default": true,
+				"label": "Show composition line"
+			},
+			{
+				"type": "checkbox",
+				"id": "product_card_show_tags",
+				"default": true,
+				"label": "Show certification tags"
+			},
+			{
+				"type": "checkbox",
+				"id": "product_card_show_origin",
+				"default": true,
+				"label": "Show origin country"
+			},
+			{
+				"type": "checkbox",
+				"id": "product_card_show_discount",
+				"default": true,
+				"label": "Show discount badge"
+			},
+			{
+				"type": "header",
+				"content": "Typography"
+			},
+			{
+				"type": "select",
+				"id": "product_card_title_size",
+				"options": [
+					{
+						"value": "vt-hero-heading",
+						"label": "Hero"
+					},
+					{
+						"value": "vt-heading-h1",
+						"label": "Heading 1"
+					},
+					{
+						"value": "vt-heading-h2",
+						"label": "Heading 2"
+					},
+					{
+						"value": "vt-heading-h3",
+						"label": "Heading 3"
+					},
+					{
+						"value": "vt-heading-h4",
+						"label": "Heading 4"
+					},
+					{
+						"value": "vt-heading-h5",
+						"label": "Heading 5"
+					},
+					{
+						"value": "vt-heading-h6",
+						"label": "Heading 6"
+					}
+				],
+				"default": "vt-heading-h6",
+				"label": "Title font size"
+			},
+			{
+				"type": "select",
+				"id": "product_card_composition_size",
+				"options": [
+					{
+						"value": "vt-paragraph-extra-small",
+						"label": "Extra Small"
+					},
+					{
+						"value": "vt-paragraph-small",
+						"label": "Small"
+					},
+					{
+						"value": "vt-paragraph-medium",
+						"label": "Medium"
+					},
+					{
+						"value": "vt-paragraph-large",
+						"label": "Large"
+					}
+				],
+				"default": "vt-paragraph-small",
+				"label": "Composition font size"
+			},
+			{
+				"type": "select",
+				"id": "product_card_tags_size",
+				"options": [
+					{
+						"value": "vt-paragraph-extra-small",
+						"label": "Extra Small"
+					},
+					{
+						"value": "vt-paragraph-small",
+						"label": "Small"
+					},
+					{
+						"value": "vt-paragraph-medium",
+						"label": "Medium"
+					},
+					{
+						"value": "vt-paragraph-large",
+						"label": "Large"
+					}
+				],
+				"default": "vt-paragraph-small",
+				"label": "Tags font size"
+			},
+			{
+				"type": "select",
+				"id": "product_card_origin_size",
+				"options": [
+					{
+						"value": "vt-paragraph-extra-small",
+						"label": "Extra Small"
+					},
+					{
+						"value": "vt-paragraph-small",
+						"label": "Small"
+					},
+					{
+						"value": "vt-paragraph-medium",
+						"label": "Medium"
+					},
+					{
+						"value": "vt-paragraph-large",
+						"label": "Large"
+					}
+				],
+				"default": "vt-paragraph-small",
+				"label": "Origin font size"
+			},
+			{
+				"type": "select",
+				"id": "product_card_discount_size",
+				"options": [
+					{
+						"value": "vt-paragraph-extra-small",
+						"label": "Extra Small"
+					},
+					{
+						"value": "vt-paragraph-small",
+						"label": "Small"
+					},
+					{
+						"value": "vt-paragraph-medium",
+						"label": "Medium"
+					},
+					{
+						"value": "vt-paragraph-large",
+						"label": "Large"
+					}
+				],
+				"default": "vt-paragraph-small",
+				"label": "Discount font size"
+			},
+			{
+				"type": "select",
+				"id": "product_card_impact_size",
+				"options": [
+					{
+						"value": "vt-paragraph-extra-small",
+						"label": "Extra Small"
+					},
+					{
+						"value": "vt-paragraph-small",
+						"label": "Small"
+					},
+					{
+						"value": "vt-paragraph-medium",
+						"label": "Medium"
+					},
+					{
+						"value": "vt-paragraph-large",
+						"label": "Large"
+					}
+				],
+				"default": "vt-paragraph-small",
+				"label": "Impact badge font size"
+			},
+			{
+				"type": "select",
+				"id": "product_card_metrics_size",
+				"options": [
+					{
+						"value": "vt-paragraph-extra-small",
+						"label": "Extra Small"
+					},
+					{
+						"value": "vt-paragraph-small",
+						"label": "Small"
+					},
+					{
+						"value": "vt-paragraph-medium",
+						"label": "Medium"
+					},
+					{
+						"value": "vt-paragraph-large",
+						"label": "Large"
+					}
+				],
+				"default": "vt-paragraph-small",
+				"label": "Metrics chips font size"
 			}
 		]
 	}
