@@ -147,6 +147,18 @@
     assign show_discount = true
   endif
 
+  assign show_quick_view = settings.product_card_show_quick_view
+  if show_quick_view == nil
+    assign show_quick_view = true
+  endif
+
+  assign quick_view_text = settings.product_card_quick_view_text | default: 'QUICK VIEW'
+  assign quick_view_mode = settings.product_card_quick_view_mode | default: 'hover'
+  assign quick_view_bg = settings.product_card_quick_view_bg | default: '#71CC3B'
+  assign quick_view_color = settings.product_card_quick_view_color | default: '#003225'
+  assign quick_view_hover_bg = settings.product_card_quick_view_hover_bg | default: '#5EAD31'
+  assign quick_view_hover_color = settings.product_card_quick_view_hover_color | default: '#003225'
+
   # Typography settings (controlled in Global Theme Settings)
   assign title_size = settings.product_card_title_size | default: 'vt-heading-h6'
   assign composition_size = settings.product_card_composition_size | default: 'vt-paragraph-small'
@@ -173,6 +185,10 @@
     --vt-card-object-fit: {{ card_object_fit }};
     --vt-card-title-clamp: {{ line_clamp_val }};
     --vt-card-title-display: {{ display_val }};
+    --vt-quick-view-bg: {{ quick_view_bg }};
+    --vt-quick-view-color: {{ quick_view_color }};
+    --vt-quick-view-hover-bg: {{ quick_view_hover_bg }};
+    --vt-quick-view-hover-color: {{ quick_view_hover_color }};
   "
   {{ block.shopify_attributes }}
 >
@@ -203,6 +219,22 @@
 
     <!-- Hover dark overlay -->
     <div class="vt-product-card__overlay"></div>
+
+    <!-- Center Quick View Button -->
+    {%- if show_quick_view -%}
+      <button
+        type="button"
+        class="vt-product-card__quick-view-btn vt-product-card__quick-view-btn--{{ quick_view_mode }}"
+        data-quick-view-handle="{{ current_product.handle | default: 'preview' }}"
+        aria-label="{{ quick_view_text }}"
+      >
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+        <span>{{ quick_view_text }}</span>
+      </button>
+    {%- endif -%}
 
     <!-- Top Left Impact Score Badge -->
     {%- if show_impact and impact_score != blank -%}

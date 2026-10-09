@@ -1935,6 +1935,12 @@
 			},
 			{
 				"type": "checkbox",
+				"id": "product_card_show_quick_view",
+				"default": true,
+				"label": "Show Quick View button"
+			},
+			{
+				"type": "checkbox",
 				"id": "product_card_show_impact_badge",
 				"default": true,
 				"label": "Show Impact score badge"
@@ -2152,6 +2158,56 @@
 				],
 				"default": "vt-paragraph-small",
 				"label": "Metrics chips font size"
+			},
+			{
+				"type": "header",
+				"content": "Quick View button"
+			},
+			{
+				"type": "text",
+				"id": "product_card_quick_view_text",
+				"default": "QUICK VIEW",
+				"label": "Button text"
+			},
+			{
+				"type": "select",
+				"id": "product_card_quick_view_mode",
+				"options": [
+					{
+						"value": "hover",
+						"label": "Show on hover"
+					},
+					{
+						"value": "always",
+						"label": "Always show"
+					}
+				],
+				"default": "hover",
+				"label": "Display mode"
+			},
+			{
+				"type": "color",
+				"id": "product_card_quick_view_bg",
+				"default": "#71CC3B",
+				"label": "Background color"
+			},
+			{
+				"type": "color",
+				"id": "product_card_quick_view_color",
+				"default": "#003225",
+				"label": "Text and icon color"
+			},
+			{
+				"type": "color",
+				"id": "product_card_quick_view_hover_bg",
+				"default": "#5EAD31",
+				"label": "Hover background color"
+			},
+			{
+				"type": "color",
+				"id": "product_card_quick_view_hover_color",
+				"default": "#003225",
+				"label": "Hover text and icon color"
 			}
 		]
 	}

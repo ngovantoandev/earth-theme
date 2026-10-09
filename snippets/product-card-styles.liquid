@@ -131,6 +131,82 @@
     opacity: 1;
   }
 
+  /* Center Quick View Button */
+  .vt-product-card__quick-view-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 25;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 22px;
+    background-color: var(--vt-quick-view-bg, var(--color-secondary, #71CC3B));
+    color: var(--vt-quick-view-color, var(--color-black, #003225));
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.2s ease, color 0.2s ease, opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .vt-product-card__quick-view-btn svg {
+    color: currentColor;
+    flex-shrink: 0;
+  }
+
+  .vt-product-card__quick-view-btn:hover {
+    background-color: var(--vt-quick-view-hover-bg, #5EAD31);
+    color: var(--vt-quick-view-hover-color, var(--color-black, #003225));
+  }
+
+  /* Mode: Hover only (Desktop default) */
+  .vt-product-card__quick-view-btn--hover {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -45%);
+  }
+
+  .vt-product-card__media-wrapper:hover .vt-product-card__quick-view-btn--hover {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Mode: Always show */
+  .vt-product-card__quick-view-btn--always {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  @media (max-width: 768px) {
+    .vt-product-card__quick-view-btn {
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      gap: 6px;
+    }
+
+    .vt-product-card__quick-view-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* On mobile, if mode is hover, show when touch/card hover */
+    .vt-product-card:hover .vt-product-card__quick-view-btn--hover,
+    .vt-product-card:active .vt-product-card__quick-view-btn--hover {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%);
+    }
+  }
+
   /* Top Left Impact Badge */
   .vt-product-card__badge--impact {
     position: absolute;
