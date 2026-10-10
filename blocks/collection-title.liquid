@@ -5,12 +5,10 @@
   {% content_for 'block', type: 'heading', id: 'heading' %}
 {% enddoc %}
 
-{%- assign current_col = closest.collection | default: collection | default: col -%}
+{%- assign current_col = closest.collection | default: collection -%}
 
 {%- if current_col.title != blank -%}
   {%- assign title_text = current_col.title -%}
-{%- elsif default_title != blank -%}
-  {%- assign title_text = default_title -%}
 {%- else -%}
   {%- assign title_text = block.settings.heading | default: 'Collection title' -%}
 {%- endif -%}

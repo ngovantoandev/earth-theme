@@ -51,7 +51,7 @@
 %}
 
 {% liquid
-  assign current_col = closest.collection | default: col | default: collection
+  assign current_col = closest.collection | default: collection
   assign source = block.settings.content_source | default: 'description'
   assign words_limit = block.settings.truncate_words | default: 18
 

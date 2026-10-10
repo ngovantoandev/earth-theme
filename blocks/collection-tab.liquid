@@ -1,0 +1,232 @@
+{% doc %}
+  Renders a single collection tab item inside collection-tabs.
+  - Contains tab title (UI from menu-tab) and corresponding product carousel.
+  - Whitelists only 'product-card' child block.
+  - Takes products from selected collection or fallback demo products.
+{% enddoc %}
+
+{%- liquid
+  assign is_preview = false
+  if request.visual_preview_mode
+    assign is_preview = true
+  endif
+
+  assign current_collection = block.settings.collection
+  assign tab_title = block.settings.title
+  assign is_auto_title = false
+  if tab_title == blank
+    if current_collection != blank
+      assign tab_title = current_collection.title
+    else
+      if is_preview
+        assign tab_title = 'Tab'
+      else
+        assign tab_title = 'Tab'
+        assign is_auto_title = true
+      endif
+    endif
+  endif
+
+  assign products_limit = block.settings.products_to_show | default: 8
+
+  assign is_connected = false
+  if current_collection != blank and current_collection.products_count > 0
+    assign is_connected = true
+    assign products_list = current_collection.products
+  endif
+
+  # Fallback demo items khi chưa kết nối collection
+  if is_connected and products_list != blank
+    assign items_to_loop = products_list
+  else
+    assign items_to_loop = (1..6)
+  endif
+
+  assign track_id = 'plt-track-' | append: block.id
+  assign panel_id = 'plt-panel-' | append: block.id
+  assign tab_id = 'plt-tab-' | append: block.id
+-%}
+
+<collection-tab
+  class="collection-tab-wrapper{% if is_preview %} collection-tab--preview{% endif %}"
+  data-block-id="{{ block.id }}"
+  {% if is_preview %}data-preview="true"{% endif %}
+  {{ block.shopify_attributes }}
+>
+  <!-- ================= Tab Button (UI from menu-tab) ================= -->
+  <button
+    type="button"
+    role="tab"
+    id="{{ tab_id }}"
+    class="plt__tab{% if is_preview %} plt__tab--active{% endif %}"
+    data-block-id="{{ block.id }}"
+    {% if is_auto_title %}data-auto-title="true"{% endif %}
+    aria-controls="{{ panel_id }}"
+    aria-selected="{% if is_preview %}true{% else %}false{% endif %}"
+    tabindex="{% if is_preview %}0{% else %}-1{% endif %}"
+    data-tab-target="{{ panel_id }}"
+  >
+    <span class="vt-heading vt-heading-h6">{{ tab_title }}</span>
+  </button>
+
+  <!-- ================= Tab Panel (Carousel with product-card) ================= -->
+  <div
+    role="tabpanel"
+    id="{{ panel_id }}"
+    class="plt__panel has-slider-nav{% unless is_preview %} plt__panel--hidden{% endunless %}"
+    aria-labelledby="{{ tab_id }}"
+    {% unless is_preview %}hidden{% endunless %}
+  >
+    {%- if items_to_loop != blank -%}
+      <div 
+        class="plt__track swiper" 
+        id="{{ track_id }}" 
+        data-slider-track
+        tabindex="0"
+      >
+        <div class="swiper-wrapper">
+          {%- for product_item in items_to_loop limit: products_limit -%}
+            {%- liquid
+              if is_connected
+                assign current_product = product_item
+              else
+                assign current_product = nil
+              endif
+            -%}
+            <div class="plt__slide swiper-slide" role="listitem">
+              {% content_for 'block', type: 'product-card', id: 'product-card', closest.product: current_product %}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {% render 'btn-nav-slider', target_id: track_id, layout: 'split', show_on_hover: true, theme: 'light' %}
+    {%- else -%}
+      <div class="plt__empty">
+        <p class="plt__empty-text">No products available</p>
+      </div>
+    {%- endif -%}
+  </div>
+</collection-tab>
+
+{% stylesheet %}
+  collection-tab.collection-tab-wrapper {
+    display: contents;
+  }
+
+  /* =========================================================
+     Visual Preview Mode (Theme Editor Block Picker)
+     ========================================================= */
+  collection-tab.collection-tab--preview {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 16px 20px !important;
+    background-color: var(--color-white, #F8F9DC);
+  }
+
+  /* When nested inside collection-tabs during preview, let parent control layout */
+  collection-tabs collection-tab.collection-tab--preview {
+    display: contents !important;
+    background-color: transparent !important;
+    padding: 0 !important;
+  }
+
+  /* Standalone tab button preview */
+  collection-tab.collection-tab--preview > .plt__tab {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--color-secondary, #71CC3B);
+    padding: 8px 20px 12px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-secondary, #71CC3B);
+    margin-bottom: 20px;
+    cursor: default;
+  }
+
+  /* Hide redundant tab button when inside collection-tabs */
+  collection-tabs collection-tab.collection-tab--preview > .plt__tab {
+    display: none !important;
+  }
+
+  /* Panel styling in preview mode */
+  collection-tab.collection-tab--preview .plt__panel {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  collection-tab.collection-tab--preview .swiper-wrapper {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 16px !important;
+    overflow: hidden !important;
+  }
+
+  collection-tab.collection-tab--preview .plt__slide {
+    flex: 0 0 calc((100% - 32px) / 3) !important;
+    max-width: calc((100% - 32px) / 3) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Hide arrows in standalone preview */
+  collection-tab.collection-tab--preview earth-slider-nav {
+    display: none !important;
+  }
+
+  @media screen and (max-width: 768px) {
+    collection-tab.collection-tab--preview .plt__slide {
+      flex: 0 0 calc((100% - 16px) / 2) !important;
+      max-width: calc((100% - 16px) / 2) !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection tab",
+  "tag": null,
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Tab title",
+      "info": "Leave blank to use the collection's title"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Maximum products to show",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection tab",
+      "settings": {
+        "title": "Tab 1",
+        "products_to_show": 8
+      },
+      "blocks": [
+        {
+          "type": "product-card",
+          "id": "product-card",
+          "static": true
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

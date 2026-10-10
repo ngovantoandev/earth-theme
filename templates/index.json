@@ -1607,10 +1607,9 @@
                     ]
                 },
                 "product_listing_tab": {
-                    "type": "product-listing-tab",
+                    "type": "collection-tabs",
                     "settings": {
                         "collections": [],
-                        "tab_alignment": "center",
                         "columns_desktop": 3,
                         "enable_swipe_mobile": true,
                         "gap_desktop": 10,
@@ -1626,50 +1625,57 @@
                         "show_arrows_mobile": false
                     },
                     "blocks": {
-                        "menu-tab": {
-                            "type": "menu-tab",
-                            "static": true,
-                            "settings": {
-                                "title_color": "#003225",
-                                "active_title_color": "#71CC3B",
-                                "line_color": "#003225",
-                                "active_line_color": "#71CC3B",
-                                "padding_horizontal_desktop": 34,
-                                "padding_horizontal_mobile": 20,
-                                "item_padding_horizontal": 24,
-                                "item_padding_horizontal_mobile": 16
-                            },
+                        "collection_tab_1": {
+                            "type": "collection-tab",
                             "blocks": {
-                                "collection-title": {
-                                    "type": "collection-title",
+                                "product-card": {
+                                    "type": "product-card",
                                     "static": true,
-                                    "settings": {
-                                        "heading_size": "vt-heading-h6",
-                                        "heading_tag": "h4",
-                                        "heading_alignment": "text-inherit"
-                                    }
+                                    "settings": {}
                                 }
                             },
                             "block_order": []
                         },
-                        "product-card": {
-                            "type": "product-card",
-                            "static": true,
-                            "settings": {
-                                "enable_hover_image": true,
-                                "show_quick_view": true,
-                                "quick_view_text": "QUICK VIEW",
-                                "show_impact_badge": true,
-                                "show_metrics": true,
-                                "show_composition": true,
-                                "show_tags": true,
-                                "show_origin": true,
-                                "show_discount": true,
-                                "add_to_cart_text": "ADD TO CART"
-                            }
-                        }
+                        "collection_tab_2": {
+                            "type": "collection-tab",
+                            "blocks": {
+                                "product-card": {
+                                    "type": "product-card",
+                                    "static": true,
+                                    "settings": {}
+                                }
+                            },
+                            "block_order": []
+                        },
+                        "collection_tab_3": {
+                            "type": "collection-tab",
+                            "blocks": {
+                                "product-card": {
+                                    "type": "product-card",
+                                    "static": true,
+                                    "settings": {}
+                                }
+                            },
+                            "block_order": []
+                        },
+                        "collection_tab_4": {
+                            "type": "collection-tab",
+                            "blocks": {
+                                "product-card": {
+                                    "type": "product-card",
+                                    "static": true,
+                                    "settings": {}
+                                }
+                            },
+                            "block_order": []
+                        },
                     },
-                    "block_order": []
+                    "block_order": [
+                        "collection_tab_1",
+                        "collection_tab_2",
+                        "collection_tab_3",
+                        "collection_tab_4"
+                    ]
                 }
             },
             "block_order": [                

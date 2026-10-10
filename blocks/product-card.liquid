@@ -14,7 +14,7 @@
   # ---------------------------------------------------------------------------
   # 1. Product Data Resolution
   # ---------------------------------------------------------------------------
-  assign current_product = closest.product | default: product | default: prod
+  assign current_product = closest.product | default: product
 
   assign is_demo = false
   if current_product == blank or request.visual_preview_mode

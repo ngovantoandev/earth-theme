@@ -104,7 +104,7 @@
 {%- endunless -%}
 
 {% liquid
-  assign current_col = closest.collection | default: col | default: collection
+  assign current_col = closest.collection | default: collection
   assign target_link = block.settings.button_link
   if current_col.url != blank
     if target_link == blank or target_link == 'shopify://collections/all' or target_link == '#'
