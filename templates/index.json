@@ -1502,9 +1502,6 @@
             "type": "sustainable-essentials",
             "settings": {
                 "make_section_page_width": true,
-                "background_color": "#F8F9DC",
-                "heading_color": "#003225",
-                "paragraph_color": "#224E09",
                 "padding_top": 80,
                 "padding_bottom": 96,
                 "padding_horizontal": 34,
@@ -1682,6 +1679,79 @@
                 "stack_group",
                 "product_listing_tab"
             ]
+        },
+        "text-marquee": {
+            "type": "text-marquee",
+            "settings": {
+                "make_section_page_width": true,
+                "speed": 3,
+                "gap_desktop": 32,
+                "gap_mobile": 24,
+                "padding_top": 0,
+                "padding_bottom": 96,
+                "padding_horizontal": 0,
+                "padding_top_mobile": 0,
+                "padding_bottom_mobile": 64,
+                "padding_horizontal_mobile": 0,
+                "animation_type": "fade-in",
+                "animation_direction": "from-bottom",
+                "animation_duration": 0.5,
+                "animation_delay": 0,
+                "animation_easing": "ease-out-sine",
+                "animation_blur_intensity": 5
+            },
+            "blocks": {
+                "text_marquee_one": {
+                    "type": "heading",
+                    "settings":{
+                        "heading": "<span>Sustainable Fabrics</span>",
+                        "heading_size": "vt-heading-h5",
+                        "heading_alignment": "text-inherit",
+                        "heading_tag": "h3",
+                        "heading_width": "fit",                                        
+                        "enable_max_width": false,
+                    }
+                },
+                "icon_one": {
+                    "type": "icons",
+                    "settings": {
+                        "icon": "flower",
+                        "icon_color": "#71CC3B",
+                        "icon_size": "default",
+                        "animation_type": "fade-in",
+                        "animation_duration": 0.5,
+                        "animation_delay": 0
+                    }
+                },
+                "text_marquee_two": {
+                    "type": "heading",
+                    "settings":{
+                        "heading": "<span>Feel Good Clothes</span>",
+                        "heading_size": "vt-heading-h5",
+                        "heading_alignment": "text-inherit",
+                        "heading_tag": "h3",
+                        "heading_width": "fit",                                        
+                        "enable_max_width": false,
+                    }
+                },
+                "icon_two": {
+                    "type": "icons",
+                    "settings": {
+                        "icon": "flower",
+                        "icon_color": "#71CC3B",
+                        "icon_size": "default",
+                        "animation_type": "fade-in",
+                        "animation_duration": 0.5,
+                        "animation_delay": 0
+                    }
+                }
+            },
+            "block_order": [
+                "text_marquee_one",
+                "icon_one",
+                "text_marquee_two",
+                "icon_two"
+            ],
         }
     },
     "order": [
@@ -1691,6 +1761,7 @@
         "rich_text_two_section",
         "impact_stats_section",
         "featured_collections",
-        "sustainable-essentials"
+        "sustainable-essentials",
+        "text-marquee"
     ]
 }

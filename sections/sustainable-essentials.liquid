@@ -6,15 +6,36 @@
 
 {%- liquid
   assign make_section_page_width = section.settings.make_section_page_width
+
+  assign section_bg = section.settings.background_color
+  if section_bg != blank and section_bg != 'rgba(0,0,0,0)' and section_bg != '#00000000'
+    assign bg_color = section_bg
+  else
+    assign bg_color = 'var(--vt-background-color, #F8F9DC)'
+  endif
+
+  assign section_heading_color = section.settings.heading_color
+  if section_heading_color != blank and section_heading_color != 'rgba(0,0,0,0)' and section_heading_color != '#00000000'
+    assign heading_color = section_heading_color
+  else
+    assign heading_color = 'var(--vt-foreground-color, #003225)'
+  endif
+
+  assign section_paragraph_color = section.settings.paragraph_color
+  if section_paragraph_color != blank and section_paragraph_color != 'rgba(0,0,0,0)' and section_paragraph_color != '#00000000'
+    assign paragraph_color = section_paragraph_color
+  else
+    assign paragraph_color = 'var(--vt-color-primary, #224E09)'
+  endif
 -%}
 
 <div
   class="vt-sustainable-essentials{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
   id="vtSustainableEssentials-{{ section.id }}"
   style="
-    --vt-bg: {{ section.settings.background_color | default: '#F8F9DC' }};
-    --vt-heading-color: {{ section.settings.heading_color | default: '#003225' }};
-    --vt-paragraph-color: {{ section.settings.paragraph_color | default: '#224E09' }};
+    --vt-bg: {{ bg_color }};
+    --vt-heading-color: {{ heading_color }};
+    --vt-paragraph-color: {{ paragraph_color }};
     --vt-pt: {{ section.settings.padding_top | default: 80 }}px;
     --vt-pb: {{ section.settings.padding_bottom | default: 96 }}px;
     --vt-ph: {{ section.settings.padding_horizontal | default: 34 }}px;
@@ -34,7 +55,7 @@
 {% stylesheet %}
   .vt-sustainable-essentials {
     width: 100%;
-    background-color: var(--vt-bg, #F8F9DC);
+    background-color: var(--vt-bg, var(--vt-background-color, #F8F9DC));
     padding-top: var(--vt-pt, 80px);
     padding-bottom: var(--vt-pb, 96px);
     box-sizing: border-box;
@@ -70,7 +91,7 @@
   .vt-sustainable-essentials .vt-heading,
   .vt-sustainable-essentials .vt-heading-group,
   .vt-sustainable-essentials .vt-subheading {
-    color: var(--vt-heading-color, #003225);
+    color: var(--vt-heading-color, var(--vt-foreground-color, #003225));
   }
 
   .vt-sustainable-essentials .vt-heading-group .vt-heading {
@@ -78,7 +99,7 @@
   }
 
   .vt-sustainable-essentials .vt-paragraph {
-    color: var(--vt-paragraph-color, #224E09);
+    color: var(--vt-paragraph-color, var(--vt-color-primary, #224E09));
   }
 
   @media screen and (min-width: 769px) and (max-width: 1024px) {
@@ -128,20 +149,17 @@
     {
       "type": "color",
       "id": "background_color",
-      "label": "Background color",
-      "default": "#EAE060"
+      "label": "t:sections.rich_text.settings.background_color.label"
     },
     {
       "type": "color",
       "id": "heading_color",
-      "label": "Heading color",
-      "default": "#003225"
+      "label": "Heading color"
     },
     {
       "type": "color",
       "id": "paragraph_color",
-      "label": "Paragraph color",
-      "default": "#224E09"
+      "label": "Paragraph color"
     },
     {
       "type": "header",
@@ -241,9 +259,6 @@
       "name": "Sustainable essentials",
       "settings": {
         "make_section_page_width": true,
-        "background_color": "#F8F9DC",
-        "heading_color": "#003225",
-        "paragraph_color": "#224E09",
         "padding_top": 80,
         "padding_bottom": 96,
         "padding_horizontal": 34,

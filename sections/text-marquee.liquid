@@ -1,21 +1,23 @@
 {%- liquid
+  assign make_section_page_width = section.settings.make_section_page_width
+
   assign speed_level = section.settings.speed | default: 3 | plus: 0
   case speed_level
     when 5
-      assign speed_duration = 12
+      assign speed_duration = 20
     when 4
-      assign speed_duration = 18
+      assign speed_duration = 30
     when 3
-      assign speed_duration = 24
+      assign speed_duration = 45
     when 2
-      assign speed_duration = 34
+      assign speed_duration = 65
     when 1
-      assign speed_duration = 48
+      assign speed_duration = 90
     else
       if speed_level > 5
         assign speed_duration = speed_level
       else
-        assign speed_duration = 24
+        assign speed_duration = 45
       endif
   endcase
 
@@ -28,6 +30,20 @@
   assign pt_mob = section.settings.padding_top_mobile | default: 0
   assign pb_mob = section.settings.padding_bottom_mobile | default: 64
   assign ph_mob = section.settings.padding_horizontal_mobile | default: 0
+
+  assign section_bg = section.settings.background_color | default: section.settings.bg_color
+  if section_bg != blank and section_bg != 'rgba(0,0,0,0)' and section_bg != '#00000000'
+    assign marquee_bg = section_bg
+  else
+    assign marquee_bg = 'var(--vt-background-color, #F8F9DC)'
+  endif
+
+  assign section_text_color = section.settings.text_color
+  if section_text_color != blank and section_text_color != 'rgba(0,0,0,0)' and section_text_color != '#00000000'
+    assign marquee_color = section_text_color
+  else
+    assign marquee_color = 'var(--vt-foreground-color, #003225)'
+  endif
 -%}
 
 {%- capture marquee_blocks -%}
@@ -47,16 +63,28 @@
       echo '</span></div>'
     endcapture
   endif
+
+  assign repeat_count = 10
+  if section.blocks.size > 0 and section.blocks.size < 3
+    assign repeat_count = 16
+  endif
 -%}
 
-<section
-  class="earth-marquee earth-marquee-{{ section.id }}{% if section.settings.full_width %} full-width{% endif %}"
+{%- capture marquee_group_content -%}
+  {%- for j in (1..repeat_count) -%}
+    {{ marquee_blocks }}
+  {%- endfor -%}
+{%- endcapture -%}
+
+<div
+  class="earth-marquee earth-marquee-{{ section.id }}{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
   id="earthMarquee-{{ section.id }}"
   style="
     --marquee-duration: {{ speed_duration }}s;
     --marquee-direction: {% if section.settings.direction == 'right' %}reverse{% else %}normal{% endif %};
-    --marquee-bg: {{ section.settings.bg_color | default: 'var(--color-white, #F8F9DC)' }};
-    --marquee-color: {{ section.settings.text_color | default: 'var(--color-black, #003225)' }};
+    --vt-bg: {{ marquee_bg }};
+    --marquee-bg: var(--vt-bg, var(--vt-background-color, #F8F9DC));
+    --marquee-color: {{ marquee_color }};
     --marquee-gap: {{ gap_desktop }}px;
     --marquee-gap-mobile: {{ gap_mobile }}px;
     --marquee-padding-top: {{ pt }}px;
@@ -66,34 +94,39 @@
     --marquee-padding-bottom-mobile: {{ pb_mob }}px;
     --marquee-padding-horizontal-mobile: {{ ph_mob }}px;
   "
+  {{ section.shopify_attributes }}
 >
-  <div class="earth-marquee__container">
+  <div class="earth-marquee__container{% if make_section_page_width %} vt-page-width{% endif %}">
     <div class="earth-marquee__track">
-      {%- for i in (1..6) -%}
-        <div class="earth-marquee__group" {% if i > 1 %}aria-hidden="true"{% endif %}>
-          {{ marquee_blocks }}
-        </div>
-      {%- endfor -%}
+      <div class="earth-marquee__group">
+        {{ marquee_group_content }}
+      </div>
+      <div class="earth-marquee__group" aria-hidden="true">
+        {{ marquee_group_content }}
+      </div>
     </div>
   </div>
-</section>
+</div>
 
 {% stylesheet %}
   .earth-marquee {
-    grid-column: 1 / -1 !important;
+    grid-column: 1 / -1;
     overflow: hidden;
     width: 100%;
     user-select: none;
-    background-color: var(--marquee-bg, #F8F9DC);
-    color: var(--marquee-color, #003225);
+    background-color: var(--marquee-bg, var(--vt-background-color, #F8F9DC));
+    color: var(--marquee-color, var(--vt-foreground-color, #003225));
     padding-top: var(--marquee-padding-top, 0px);
     padding-bottom: var(--marquee-padding-bottom, 96px);
-    padding-left: var(--marquee-padding-horizontal, 0px);
-    padding-right: var(--marquee-padding-horizontal, 0px);
     margin: 0;
     box-sizing: border-box;
     display: flex;
     align-items: center;
+  }
+
+  .earth-marquee.vt-page-full-width {
+    padding-left: var(--marquee-padding-horizontal, 0px);
+    padding-right: var(--marquee-padding-horizontal, 0px);
   }
 
   .earth-marquee__container {
@@ -103,19 +136,22 @@
     overflow: hidden;
   }
 
-  .earth-marquee:not(.full-width) .earth-marquee__container {
-    max-width: 1200px;
+  .earth-marquee__container.vt-page-width {
+    max-width: var(--vt-page-width, 1200px);
+    padding-left: var(--marquee-padding-horizontal, 0px);
+    padding-right: var(--marquee-padding-horizontal, 0px);
   }
 
-  .earth-marquee.full-width .earth-marquee__container {
+  .earth-marquee__container:not(.vt-page-width) {
     max-width: 100%;
   }
 
   .earth-marquee__track {
     display: flex;
+    flex-wrap: nowrap;
     width: max-content;
     will-change: transform;
-    animation: earthMarqueeScroll var(--marquee-duration, 24s) linear infinite;
+    animation: earthMarqueeScroll var(--marquee-duration, 45s) linear infinite;
     animation-direction: var(--marquee-direction, normal);
   }
 
@@ -125,96 +161,100 @@
     cursor: default;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .earth-marquee__track {
+      animation-play-state: paused;
+    }
+  }
+
   .earth-marquee__group {
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    flex-wrap: nowrap;
+    white-space: nowrap;
     gap: var(--marquee-gap, 32px);
     padding-right: var(--marquee-gap, 32px);
   }
 
   /* Child block wrappers align horizontally in single line */
   .earth-marquee__group > * {
-    flex-shrink: 0 !important;
-    width: auto !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 !important;
+    flex-shrink: 0;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
   }
 
   /* Block 1: heading.liquid */
   .earth-marquee .vt-heading-wrapper {
-    width: auto !important;
-    max-width: none !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
+    width: auto;
+    max-width: none;
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
   }
 
   .earth-marquee .vt-heading {
-    color: var(--marquee-color, #003225) !important;
-    white-space: nowrap !important;
-    margin: 0 !important;
-    line-height: 1 !important;
-    font-family: inherit;
-    font-weight: 800;
+    color: var(--marquee-color, var(--vt-foreground-color, #003225));
+    white-space: nowrap;
+    margin: 0;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    font-size: 22px;
   }
 
   /* Block 2: icons.liquid */
   .earth-marquee .vt-icon {
-    flex-shrink: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    color: var(--vt-icon-color, #71CC3B) !important;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    color: var(--vt-icon-color, #71CC3B);
   }
 
   .earth-marquee .vt-icon svg {
-    display: block !important;
-    width: var(--vt-icon-size, 28px) !important;
-    height: var(--vt-icon-size, 26px) !important;
-    min-width: 20px !important;
-    min-height: 20px !important;
-    object-fit: contain !important;
-    fill: currentColor !important;
+    display: block;
+    width: var(--vt-icon-size, 28px);
+    height: var(--vt-icon-size, 26px);
+    min-width: 20px;
+    min-height: 20px;
+    object-fit: contain;
+    fill: currentColor;
   }
 
   .earth-marquee .vt-icon svg path {
-    fill: currentColor !important;
+    fill: currentColor;
   }
 
   /* Block 3: image.liquid */
   .earth-marquee .vt-image {
-    flex-shrink: 0 !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    width: auto !important;
-    height: auto !important;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    width: auto;
+    height: auto;
   }
 
   .earth-marquee .vt-image img {
-    width: auto !important;
-    height: auto !important;
-    max-height: 36px !important;
-    object-fit: contain !important;
-    display: inline-block !important;
+    width: auto;
+    height: auto;
+    max-height: 36px;
+    object-fit: contain;
+    display: inline-block;
   }
 
   /* Disable entrance transitions inside continuous marquee track */
   .earth-marquee .vt-animate {
-    opacity: 1 !important;
-    transform: none !important;
-    filter: none !important;
-    transition: none !important;
-    animation: none !important;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    animation: none;
   }
 
   @keyframes earthMarqueeScroll {
@@ -230,6 +270,10 @@
     .earth-marquee {
       padding-top: var(--marquee-padding-top-mobile, 0px);
       padding-bottom: var(--marquee-padding-bottom-mobile, 64px);
+    }
+
+    .earth-marquee.vt-page-full-width,
+    .earth-marquee__container.vt-page-width {
       padding-left: var(--marquee-padding-horizontal-mobile, 0px);
       padding-right: var(--marquee-padding-horizontal-mobile, 0px);
     }
@@ -239,12 +283,8 @@
       padding-right: var(--marquee-gap-mobile, 24px);
     }
 
-    .earth-marquee .vt-heading {
-      font-size: 18px !important;
-    }
-
     .earth-marquee .vt-image img {
-      max-height: 24px !important;
+      max-height: 24px;
     }
   }
 {% endstylesheet %}
@@ -252,6 +292,7 @@
 {% schema %}
 {
   "name": "Text marquee",
+  "tag": "section",
   "class": "earth-marquee-section",
   "blocks": [
     { "type": "heading" },
@@ -261,19 +302,27 @@
   "settings": [
     {
       "type": "header",
+      "content": "Section Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "make_section_page_width",
+      "label": "t:sections.rich_text.settings.make_section_page_width.label",
+      "default": true
+    },
+    {
+      "type": "header",
       "content": "Colors"
     },
     {
       "type": "color",
-      "id": "bg_color",
-      "label": "Background Color",
-      "default": "#F8F9DC"
+      "id": "background_color",
+      "label": "t:sections.rich_text.settings.background_color.label"
     },
     {
       "type": "color",
       "id": "text_color",
-      "label": "Text Color",
-      "default": "#003225"
+      "label": "t:sections.rich_text.settings.text_color.label"
     },
     {
       "type": "header",
@@ -385,26 +434,19 @@
       "unit": "px",
       "label": "Gap between items",
       "default": 24
-    },
-    {
-      "type": "header",
-      "content": "Section Layout"
-    },
-    {
-      "type": "checkbox",
-      "id": "full_width",
-      "label": "Make section full width",
-      "default": true
     }
   ],
   "presets": [
     {
       "name": "Text marquee",
+      "settings": {
+        "make_section_page_width": true
+      },
       "blocks": [
         {
           "type": "heading",
           "settings": {
-            "heading": "SUSTAINABLE FABRICS",
+            "heading": "Heading",
             "heading_size": "vt-heading-h5",
             "heading_alignment": "text-center",
             "heading_tag": "h3"
@@ -422,7 +464,7 @@
         {
           "type": "heading",
           "settings": {
-            "heading": "FEEL GOOD CLOTHES",
+            "heading": "Heading",
             "heading_size": "vt-heading-h5",
             "heading_alignment": "text-center",
             "heading_tag": "h3"
