@@ -1,92 +1,27 @@
 {%- liquid
   assign make_section_page_width = section.settings.make_section_page_width
 
-  assign speed_level = section.settings.speed | default: 3 | plus: 0
-  case speed_level
-    when 5
-      assign speed_duration = 20
-    when 4
-      assign speed_duration = 30
-    when 3
-      assign speed_duration = 45
-    when 2
-      assign speed_duration = 65
-    when 1
-      assign speed_duration = 90
-    else
-      if speed_level > 5
-        assign speed_duration = speed_level
-      else
-        assign speed_duration = 45
-      endif
-  endcase
+  assign bg_color = section.settings.background_color
+  if bg_color != blank and bg_color != 'rgba(0,0,0,0)' and bg_color != '#00000000'
+    assign marquee_bg = bg_color
+  else
+    assign marquee_bg = 'transparent'
+  endif
 
-  assign gap_desktop = section.settings.gap_desktop | default: 32
   assign pt = section.settings.padding_top | default: 0
   assign pb = section.settings.padding_bottom | default: 96
   assign ph = section.settings.padding_horizontal | default: 0
 
-  assign gap_mobile = section.settings.gap_mobile | default: 24
   assign pt_mob = section.settings.padding_top_mobile | default: 0
   assign pb_mob = section.settings.padding_bottom_mobile | default: 64
   assign ph_mob = section.settings.padding_horizontal_mobile | default: 0
-
-  assign section_bg = section.settings.background_color | default: section.settings.bg_color
-  if section_bg != blank and section_bg != 'rgba(0,0,0,0)' and section_bg != '#00000000'
-    assign marquee_bg = section_bg
-  else
-    assign marquee_bg = 'var(--vt-background-color, #F8F9DC)'
-  endif
-
-  assign section_text_color = section.settings.text_color
-  if section_text_color != blank and section_text_color != 'rgba(0,0,0,0)' and section_text_color != '#00000000'
-    assign marquee_color = section_text_color
-  else
-    assign marquee_color = 'var(--vt-foreground-color, #003225)'
-  endif
 -%}
-
-{%- capture marquee_blocks -%}
-  {% content_for 'blocks' %}
-{%- endcapture -%}
-
-{%- liquid
-  if marquee_blocks == blank or section.blocks.size == 0
-    capture marquee_blocks
-      echo '<div class="vt-heading-wrapper text-center"><h3 class="vt-heading vt-heading-h5">SUSTAINABLE FABRICS</h3></div>'
-      echo '<div class="vt-icon vt-icon--flower" style="--vt-icon-color: #71CC3B; --vt-icon-size: 28px;"><span class="vt-icon__inner">'
-      render 'icons', icon: 'flower'
-      echo '</span></div>'
-      echo '<div class="vt-heading-wrapper text-center"><h3 class="vt-heading vt-heading-h5">FEEL GOOD CLOTHES</h3></div>'
-      echo '<div class="vt-icon vt-icon--flower" style="--vt-icon-color: #71CC3B; --vt-icon-size: 28px;"><span class="vt-icon__inner">'
-      render 'icons', icon: 'flower'
-      echo '</span></div>'
-    endcapture
-  endif
-
-  assign repeat_count = 10
-  if section.blocks.size > 0 and section.blocks.size < 3
-    assign repeat_count = 16
-  endif
--%}
-
-{%- capture marquee_group_content -%}
-  {%- for j in (1..repeat_count) -%}
-    {{ marquee_blocks }}
-  {%- endfor -%}
-{%- endcapture -%}
 
 <div
-  class="earth-marquee earth-marquee-{{ section.id }}{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
+  class="earth-marquee-wrapper{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
   id="earthMarquee-{{ section.id }}"
   style="
-    --marquee-duration: {{ speed_duration }}s;
-    --marquee-direction: {% if section.settings.direction == 'right' %}reverse{% else %}normal{% endif %};
-    --vt-bg: {{ marquee_bg }};
-    --marquee-bg: var(--vt-bg, var(--vt-background-color, #F8F9DC));
-    --marquee-color: {{ marquee_color }};
-    --marquee-gap: {{ gap_desktop }}px;
-    --marquee-gap-mobile: {{ gap_mobile }}px;
+    --marquee-bg: {{ marquee_bg }};
     --marquee-padding-top: {{ pt }}px;
     --marquee-padding-bottom: {{ pb }}px;
     --marquee-padding-horizontal: {{ ph }}px;
@@ -96,195 +31,50 @@
   "
   {{ section.shopify_attributes }}
 >
-  <div class="earth-marquee__container{% if make_section_page_width %} vt-page-width{% endif %}">
-    <div class="earth-marquee__track">
-      <div class="earth-marquee__group">
-        {{ marquee_group_content }}
-      </div>
-      <div class="earth-marquee__group" aria-hidden="true">
-        {{ marquee_group_content }}
-      </div>
-    </div>
+  <div class="earth-marquee-wrapper__container{% if make_section_page_width %} vt-page-width{% endif %}">
+    {% content_for 'blocks' %}
   </div>
 </div>
 
 {% stylesheet %}
-  .earth-marquee {
-    grid-column: 1 / -1;
-    overflow: hidden;
+  .earth-marquee-wrapper {
     width: 100%;
-    user-select: none;
-    background-color: var(--marquee-bg, var(--vt-background-color, #F8F9DC));
-    color: var(--marquee-color, var(--vt-foreground-color, #003225));
+    background-color: var(--marquee-bg, transparent);
     padding-top: var(--marquee-padding-top, 0px);
     padding-bottom: var(--marquee-padding-bottom, 96px);
-    margin: 0;
     box-sizing: border-box;
     display: flex;
     align-items: center;
   }
 
-  .earth-marquee.vt-page-full-width {
+  .earth-marquee-wrapper.vt-page-full-width {
     padding-left: var(--marquee-padding-horizontal, 0px);
     padding-right: var(--marquee-padding-horizontal, 0px);
   }
 
-  .earth-marquee__container {
+  .earth-marquee-wrapper__container {
     width: 100%;
-    box-sizing: border-box;
     margin: 0 auto;
+    box-sizing: border-box;
     overflow: hidden;
   }
 
-  .earth-marquee__container.vt-page-width {
+  .earth-marquee-wrapper__container.vt-page-width {
     max-width: var(--vt-page-width, 1200px);
     padding-left: var(--marquee-padding-horizontal, 0px);
     padding-right: var(--marquee-padding-horizontal, 0px);
   }
 
-  .earth-marquee__container:not(.vt-page-width) {
-    max-width: 100%;
-  }
-
-  .earth-marquee__track {
-    display: flex;
-    flex-wrap: nowrap;
-    width: max-content;
-    will-change: transform;
-    animation: earthMarqueeScroll var(--marquee-duration, 45s) linear infinite;
-    animation-direction: var(--marquee-direction, normal);
-  }
-
-  .earth-marquee__track:hover,
-  .earth-marquee:hover .earth-marquee__track {
-    animation-play-state: paused;
-    cursor: default;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .earth-marquee__track {
-      animation-play-state: paused;
-    }
-  }
-
-  .earth-marquee__group {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    gap: var(--marquee-gap, 32px);
-    padding-right: var(--marquee-gap, 32px);
-  }
-
-  /* Child block wrappers align horizontally in single line */
-  .earth-marquee__group > * {
-    flex-shrink: 0;
-    width: auto;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-  }
-
-  /* Block 1: heading.liquid */
-  .earth-marquee .vt-heading-wrapper {
-    width: auto;
-    max-width: none;
-    display: inline-flex;
-    align-items: center;
-    margin: 0;
-    padding: 0;
-  }
-
-  .earth-marquee .vt-heading {
-    color: var(--marquee-color, var(--vt-foreground-color, #003225));
-    white-space: nowrap;
-    margin: 0;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-  }
-
-  /* Block 2: icons.liquid */
-  .earth-marquee .vt-icon {
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    color: var(--vt-icon-color, #71CC3B);
-  }
-
-  .earth-marquee .vt-icon svg {
-    display: block;
-    width: var(--vt-icon-size, 28px);
-    height: var(--vt-icon-size, 26px);
-    min-width: 20px;
-    min-height: 20px;
-    object-fit: contain;
-    fill: currentColor;
-  }
-
-  .earth-marquee .vt-icon svg path {
-    fill: currentColor;
-  }
-
-  /* Block 3: image.liquid */
-  .earth-marquee .vt-image {
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0;
-    width: auto;
-    height: auto;
-  }
-
-  .earth-marquee .vt-image img {
-    width: auto;
-    height: auto;
-    max-height: 36px;
-    object-fit: contain;
-    display: inline-block;
-  }
-
-  /* Disable entrance transitions inside continuous marquee track */
-  .earth-marquee .vt-animate {
-    opacity: 1;
-    transform: none;
-    filter: none;
-    transition: none;
-    animation: none;
-  }
-
-  @keyframes earthMarqueeScroll {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
-  }
-
   @media (max-width: 768px) {
-    .earth-marquee {
+    .earth-marquee-wrapper {
       padding-top: var(--marquee-padding-top-mobile, 0px);
       padding-bottom: var(--marquee-padding-bottom-mobile, 64px);
     }
 
-    .earth-marquee.vt-page-full-width,
-    .earth-marquee__container.vt-page-width {
+    .earth-marquee-wrapper.vt-page-full-width,
+    .earth-marquee-wrapper__container.vt-page-width {
       padding-left: var(--marquee-padding-horizontal-mobile, 0px);
       padding-right: var(--marquee-padding-horizontal-mobile, 0px);
-    }
-
-    .earth-marquee__group {
-      gap: var(--marquee-gap-mobile, 24px);
-      padding-right: var(--marquee-gap-mobile, 24px);
-    }
-
-    .earth-marquee .vt-image img {
-      max-height: 24px;
     }
   }
 {% endstylesheet %}
@@ -295,9 +85,7 @@
   "tag": "section",
   "class": "earth-marquee-section",
   "blocks": [
-    { "type": "heading" },
-    { "type": "icons" },
-    { "type": "image" }
+    { "type": "marquee" }
   ],
   "settings": [
     {
@@ -312,40 +100,12 @@
     },
     {
       "type": "header",
-      "content": "Colors"
+      "content": "t:sections.rich_text.settings.header_colors.content"
     },
     {
       "type": "color",
       "id": "background_color",
       "label": "t:sections.rich_text.settings.background_color.label"
-    },
-    {
-      "type": "color",
-      "id": "text_color",
-      "label": "t:sections.rich_text.settings.text_color.label"
-    },
-    {
-      "type": "header",
-      "content": "Motion"
-    },
-    {
-      "type": "select",
-      "id": "direction",
-      "label": "Direction",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ],
-      "default": "left"
-    },
-    {
-      "type": "range",
-      "id": "speed",
-      "min": 1,
-      "max": 5,
-      "step": 1,
-      "label": "Speed",
-      "default": 3
     },
     {
       "type": "header",
@@ -382,16 +142,6 @@
       "default": 0
     },
     {
-      "type": "range",
-      "id": "gap_desktop",
-      "min": 12,
-      "max": 80,
-      "step": 2,
-      "unit": "px",
-      "label": "Gap between items",
-      "default": 32
-    },
-    {
       "type": "header",
       "content": "Mobile Spacing"
     },
@@ -424,16 +174,6 @@
       "unit": "px",
       "label": "Side padding (left & right)",
       "default": 0
-    },
-    {
-      "type": "range",
-      "id": "gap_mobile",
-      "min": 8,
-      "max": 60,
-      "step": 2,
-      "unit": "px",
-      "label": "Gap between items",
-      "default": 24
     }
   ],
   "presets": [
@@ -444,40 +184,7 @@
       },
       "blocks": [
         {
-          "type": "heading",
-          "settings": {
-            "heading": "Heading",
-            "heading_size": "vt-heading-h5",
-            "heading_alignment": "text-center",
-            "heading_tag": "h3"
-          }
-        },
-        {
-          "type": "icons",
-          "settings": {
-            "icon": "flower",
-            "icon_color": "#71CC3B",
-            "icon_size_desktop": 28,
-            "icon_size_mobile": 22
-          }
-        },
-        {
-          "type": "heading",
-          "settings": {
-            "heading": "Heading",
-            "heading_size": "vt-heading-h5",
-            "heading_alignment": "text-center",
-            "heading_tag": "h3"
-          }
-        },
-        {
-          "type": "icons",
-          "settings": {
-            "icon": "flower",
-            "icon_color": "#71CC3B",
-            "icon_size_desktop": 28,
-            "icon_size_mobile": 22
-          }
+          "type": "marquee"
         }
       ]
     }

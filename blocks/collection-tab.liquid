@@ -30,14 +30,16 @@
   assign products_limit = block.settings.products_to_show | default: 8
 
   assign is_connected = false
-  if current_collection != blank and current_collection.products_count > 0
+  if current_collection != blank
     assign is_connected = true
     assign products_list = current_collection.products
   endif
 
   # Fallback demo items khi chưa kết nối collection
-  if is_connected and products_list != blank
+  if is_connected and products_list != blank and products_list.size > 0
     assign items_to_loop = products_list
+  elsif is_connected
+    assign items_to_loop = nil
   else
     assign items_to_loop = (1..6)
   endif
@@ -51,7 +53,6 @@
   class="collection-tab-wrapper{% if is_preview %} collection-tab--preview{% endif %}"
   data-block-id="{{ block.id }}"
   {% if is_preview %}data-preview="true"{% endif %}
-  {{ block.shopify_attributes }}
 >
   <!-- ================= Tab Button (UI from menu-tab) ================= -->
   <button
@@ -65,6 +66,9 @@
     aria-selected="{% if is_preview %}true{% else %}false{% endif %}"
     tabindex="{% if is_preview %}0{% else %}-1{% endif %}"
     data-tab-target="{{ panel_id }}"
+    onclick="const p = this.closest('collection-tabs'); if (p && typeof p.activateTabByBlockId === 'function') p.activateTabByBlockId('{{ block.id }}');"
+    onfocus="const p = this.closest('collection-tabs'); if (p && typeof p.activateTabByBlockId === 'function') p.activateTabByBlockId('{{ block.id }}');"
+    {{ block.shopify_attributes }}
   >
     <span class="vt-heading vt-heading-h6">{{ tab_title }}</span>
   </button>
@@ -109,6 +113,26 @@
   </div>
 </collection-tab>
 
+<script>
+  if (!customElements.get('collection-tab')) {
+    class CollectionTab extends HTMLElement {
+      connectedCallback() {
+        this._onSelect = () => {
+          const parent = this.closest('collection-tabs');
+          if (parent && typeof parent.activateTabByBlockId === 'function') {
+            parent.activateTabByBlockId(this.dataset.blockId);
+          }
+        };
+        this.addEventListener('shopify:block:select', this._onSelect);
+      }
+      disconnectedCallback() {
+        this.removeEventListener('shopify:block:select', this._onSelect);
+      }
+    }
+    customElements.define('collection-tab', CollectionTab);
+  }
+</script>
+
 {% stylesheet %}
   collection-tab.collection-tab-wrapper {
     display: contents;
@@ -123,7 +147,7 @@
     width: 100% !important;
     box-sizing: border-box !important;
     padding: 16px 20px !important;
-    background-color: var(--color-white, #F8F9DC);
+    background-color: var(--vt-background-color, #F8F9DC);
   }
 
   /* When nested inside collection-tabs during preview, let parent control layout */

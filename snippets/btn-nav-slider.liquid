@@ -45,7 +45,9 @@
   </button>
 </earth-slider-nav>
 
-<style>
+<script src="{{ 'slider-nav.js' | asset_url }}" defer="defer"></script>
+
+{% stylesheet %}
   /* =========================================================
      Slider Navigation Base & Layouts
      ========================================================= */
@@ -61,7 +63,6 @@
     gap: 12px;
   }
 
-  /* Split layout: buttons positioned on the two sides of the track */
   /* Split layout: buttons positioned on the two sides of the track */
   earth-slider-nav.earth-slider-nav--split {
     position: absolute;
@@ -210,176 +211,4 @@
     opacity: 1;
     pointer-events: auto;
   }
-</style>
-
-<script>
-  if (!customElements.get('earth-slider-nav')) {
-    class EarthSliderNav extends HTMLElement {
-      constructor() {
-        super();
-        this.prevBtn = null;
-        this.nextBtn = null;
-        this.track = null;
-        this._ticking = false;
-
-        this._onScroll = this._onScroll.bind(this);
-        this._onPrev = this._onPrev.bind(this);
-        this._onNext = this._onNext.bind(this);
-        this._onResize = this._onResize.bind(this);
-      }
-
-      connectedCallback() {
-        this.prevBtn = this.querySelector('.earth-slider-nav__btn--prev');
-        this.nextBtn = this.querySelector('.earth-slider-nav__btn--next');
-
-        if (this.prevBtn) this.prevBtn.addEventListener('click', this._onPrev);
-        if (this.nextBtn) this.nextBtn.addEventListener('click', this._onNext);
-
-        this._bindTrack();
-      }
-
-      _bindTrack() {
-        const targetId = this.getAttribute('data-target-id');
-        if (targetId) {
-          this.track = document.getElementById(targetId) || document.querySelector(targetId);
-        }
-
-        // Fallback: search closest parent container
-        if (!this.track) {
-          const parent = this.closest('.has-slider-nav') || this.parentElement;
-          if (parent) {
-            this.track = parent.querySelector('[data-slider-track]') || parent.querySelector('.plt__track') || parent.querySelector('.vt-carousel__track');
-          }
-        }
-
-        if (this.track) {
-          this.track.addEventListener('scroll', this._onScroll, { passive: true });
-          window.addEventListener('resize', this._onResize, { passive: true });
-          this._bindSwiperIfAvailable();
-          // Check initial positions
-          this.updateState();
-          // Re-check after images/content finish layout
-          window.setTimeout(() => this.updateState(), 100);
-          window.setTimeout(() => this.updateState(), 400);
-        }
-      }
-
-      _bindSwiperIfAvailable() {
-        if (!this.track || !this.track.swiper || this._swiperBound) return;
-        const swiper = this.track.swiper;
-        swiper.on('slideChange', () => this.updateState());
-        swiper.on('reachBeginning', () => this.updateState());
-        swiper.on('reachEnd', () => this.updateState());
-        swiper.on('fromEdge', () => this.updateState());
-        swiper.on('lock', () => this.updateState());
-        swiper.on('unlock', () => this.updateState());
-        swiper.on('update', () => this.updateState());
-        this._swiperBound = true;
-      }
-
-      _onScroll() {
-        if (!this._ticking) {
-          window.requestAnimationFrame(() => {
-            this.updateState();
-            this._ticking = false;
-          });
-          this._ticking = true;
-        }
-      }
-
-      _onResize() {
-        this.updateState();
-      }
-
-      updateState() {
-        if (!this.track) return;
-        this._bindSwiperIfAvailable();
-
-        if (this.track.swiper) {
-          const swiper = this.track.swiper;
-          if (swiper.isLocked || (swiper.slides && swiper.slides.length <= 1)) {
-            this._setHidden(this.prevBtn, true);
-            this._setHidden(this.nextBtn, true);
-            return;
-          }
-          this._setHidden(this.prevBtn, swiper.isBeginning);
-          this._setHidden(this.nextBtn, swiper.isEnd);
-          return;
-        }
-
-        const sl = this.track.scrollLeft;
-        const sw = this.track.scrollWidth;
-        const cw = this.track.clientWidth;
-
-        // If not enough content to scroll, hide both
-        if (sw <= cw + 2) {
-          this._setHidden(this.prevBtn, true);
-          this._setHidden(this.nextBtn, true);
-          return;
-        }
-
-        // At beginning: hide Prev
-        const atStart = sl <= 6;
-        this._setHidden(this.prevBtn, atStart);
-
-        // At end: hide Next
-        const atEnd = Math.ceil(sl + cw) >= sw - 6;
-        this._setHidden(this.nextBtn, atEnd);
-      }
-
-      _setHidden(btn, isHidden) {
-        if (!btn) return;
-        btn.disabled = isHidden;
-        if (isHidden) {
-          btn.setAttribute('data-hidden', 'true');
-        } else {
-          btn.removeAttribute('data-hidden');
-        }
-      }
-
-      _getStep() {
-        if (!this.track) return 300;
-        // Try to get width of one child card/slide
-        const firstCard = this.track.querySelector('.shopify-block, .product-card, .vt-product-card, [role="listitem"]') || this.track.firstElementChild;
-        if (firstCard) {
-          const computed = window.getComputedStyle(this.track);
-          const gap = parseFloat(computed.columnGap || computed.gap || 0);
-          const cardWidth = firstCard.getBoundingClientRect().width;
-          if (cardWidth > 50) {
-            return cardWidth + gap;
-          }
-        }
-        return this.track.clientWidth * 0.8;
-      }
-
-      _onPrev() {
-        if (!this.track) return;
-        if (this.track.swiper) {
-          this.track.swiper.slidePrev();
-          return;
-        }
-        const step = this._getStep();
-        this.track.scrollBy({ left: -step, behavior: 'smooth' });
-      }
-
-      _onNext() {
-        if (!this.track) return;
-        if (this.track.swiper) {
-          this.track.swiper.slideNext();
-          return;
-        }
-        const step = this._getStep();
-        this.track.scrollBy({ left: step, behavior: 'smooth' });
-      }
-
-      disconnectedCallback() {
-        if (this.track) {
-          this.track.removeEventListener('scroll', this._onScroll);
-        }
-        window.removeEventListener('resize', this._onResize);
-      }
-    }
-
-    customElements.define('earth-slider-nav', EarthSliderNav);
-  }
-</script>
+{% endstylesheet %}

@@ -24,7 +24,7 @@
   if tab_color_setting != blank and tab_color_setting != 'rgba(0,0,0,0)' and tab_color_setting != '#00000000'
     assign tab_color = tab_color_setting
   else
-    assign tab_color = 'var(--vt-heading-color, var(--vt-foreground-color, var(--color-black, #003225)))'
+    assign tab_color = 'var(--vt-heading-color, var(--vt-foreground-color, var(--color-primary, #224E09)))'
   endif
 
   assign tab_active_color_setting = block.settings.tab_active_color
@@ -38,7 +38,7 @@
   if tab_line_color_setting != blank and tab_line_color_setting != 'rgba(0,0,0,0)' and tab_line_color_setting != '#00000000'
     assign tab_line_color = tab_line_color_setting
   else
-    assign tab_line_color = 'var(--vt-heading-color, var(--vt-foreground-color, var(--color-black, #003225)))'
+    assign tab_line_color = 'var(--vt-heading-color, var(--vt-foreground-color, var(--color-primary, #224E09)))'
   endif
 
   assign tab_active_line_color_setting = block.settings.tab_active_line_color
@@ -74,6 +74,7 @@
     --plt-tab-active-color: {{ tab_active_color }};
     --plt-tab-line-color: {{ tab_line_color }};
     --plt-tab-active-line-color: {{ tab_active_line_color }};
+    --plt-tab-font-size: {{ block.settings.tab_font_size | default: 18 }}px;
   "
   {{ block.shopify_attributes }}
 >
@@ -144,7 +145,7 @@
     align-items: center;
     position: relative;
     gap: 0;
-    border-bottom: 1px solid var(--plt-tab-line-color, var(--vt-heading-color, var(--vt-foreground-color, #003225)));
+    border-bottom: 1px solid var(--plt-tab-line-color, var(--vt-heading-color, var(--vt-foreground-color, var(--color-primary, #224E09))));
     padding: 0;
     min-width: max-content;
     counter-reset: plt-tab-counter;
@@ -169,9 +170,9 @@
     cursor: pointer;
     padding: 10px var(--plt-tab-item-ph, clamp(18px, 2.5vw, 32px)) 14px;
     font-family: inherit;
-    font-size: 1.125rem;
+    font-size: var(--plt-tab-font-size, 18px);
     font-weight: 700;
-    color: var(--plt-tab-color, var(--vt-heading-color, var(--vt-foreground-color, #003225)));
+    color: var(--plt-tab-color, var(--vt-heading-color, var(--vt-foreground-color, var(--color-primary, #224E09))));
     position: relative;
     transition: color 0.25s ease;
     user-select: none;
@@ -180,15 +181,18 @@
     text-align: center;
   }
 
+  .plt__tab,
+  .plt__tab .vt-heading,
+  .plt__tab .vt-heading[class*="vt-heading-"] {
+    font-size: var(--plt-tab-font-size, 18px);
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
   .plt__tab .vt-heading {
     color: inherit;
     display: inline-flex;
     margin: 0;
-  }
-
-  .plt__tab .vt-heading:not([class*="vt-heading-"]):not([class*="vt-hero-"]) {
-    font-size: 1.125rem;
-    font-weight: 700;
   }
 
   .plt__tab:hover {
@@ -207,7 +211,7 @@
     left: 0;
     right: 0;
     width: 100%;
-    height: 2px;
+    height: 1px;
     background-color: var(--plt-tab-active-line-color, var(--vt-color-secondary, var(--color-secondary, #71CC3B)));
     z-index: 10;
   }
@@ -231,39 +235,39 @@
 
   .plt__panel[hidden],
   .plt__panel--hidden {
-    display: none !important;
+    display: none;
   }
 
   /* SSR & Preview Fallback: ensure first panel is visible before JS activates */
   collection-tabs:not(:defined) collection-tab:first-of-type .plt__panel,
   .plt-listing-tab--preview collection-tab:first-of-type .plt__panel,
   collection-tabs[data-preview="true"] collection-tab:first-of-type .plt__panel {
-    display: block !important;
+    display: block;
   }
 
   .plt-listing-tab--preview collection-tab:not(:first-of-type) .plt__panel,
   collection-tabs[data-preview="true"] collection-tab:not(:first-of-type) .plt__panel {
-    display: none !important;
+    display: none;
   }
 
   .plt-listing-tab--preview .swiper-wrapper,
   collection-tabs[data-preview="true"] .swiper-wrapper {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    gap: var(--plt-gap-desktop, 32px) !important;
-    overflow: hidden !important;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: var(--plt-gap-desktop, 32px);
+    overflow: hidden;
   }
 
   .plt-listing-tab--preview .plt__slide,
   collection-tabs[data-preview="true"] .plt__slide {
-    flex: 0 0 calc((100% - (var(--plt-col-desktop, 3) - 1) * var(--plt-gap-desktop, 32px)) / var(--plt-col-desktop, 3)) !important;
-    max-width: calc((100% - (var(--plt-col-desktop, 3) - 1) * var(--plt-gap-desktop, 32px)) / var(--plt-col-desktop, 3)) !important;
-    box-sizing: border-box !important;
+    flex: 0 0 calc((100% - (var(--plt-col-desktop, 3) - 1) * var(--plt-gap-desktop, 32px)) / var(--plt-col-desktop, 3));
+    max-width: calc((100% - (var(--plt-col-desktop, 3) - 1) * var(--plt-gap-desktop, 32px)) / var(--plt-col-desktop, 3));
+    box-sizing: border-box;
   }
 
   .plt-listing-tab--preview earth-slider-nav,
   collection-tabs[data-preview="true"] earth-slider-nav {
-    display: none !important;
+    display: none;
   }
 
   .plt__track {
@@ -328,7 +332,7 @@
   }
 
   .plt__track.swiper-initialized > .swiper-wrapper {
-    gap: 0 !important;
+    gap: 0;
   }
 
   .plt__track.swiper-initialized .plt__slide {
@@ -402,10 +406,19 @@
       scroll-padding-right: var(--plt-menu-ph-mobile, 20px);
     }
 
+    .plt__tab,
+    .plt__tab .vt-heading,
+    .plt__tab .vt-heading[class*="vt-heading-"] {
+      font-size: clamp(14px, calc(var(--plt-tab-font-size, 18px) - 2px), var(--plt-tab-font-size, 18px));
+    }
+
     .plt__tab {
-      font-size: 1rem;
       padding: 8px var(--plt-tab-item-ph-mobile, 16px) 12px;
     }
+    
+    .plt__tablist-container--center {
+    justify-content: center;
+  }
 
     /* Swipeable mode (enable_swipe_mobile = true): 1.2 cards with edge peek */
     collection-tabs.plt-listing-tab--swipe-mobile {
@@ -442,340 +455,39 @@
     }
 
     .plt-listing-tab--stack-mobile .plt__track {
-      overflow: visible !important;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+      overflow: visible;
+      padding-left: 0;
+      padding-right: 0;
       display: block;
     }
 
     .plt-listing-tab--stack-mobile .plt__track > .swiper-wrapper {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: var(--plt-gap-mobile, 16px) !important;
-      width: 100% !important;
-      transform: none !important;
+      display: flex;
+      flex-direction: column;
+      gap: var(--plt-gap-mobile, 16px);
+      width: 100%;
+      transform: none;
     }
 
     .plt-listing-tab--stack-mobile .plt__slide {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 0 0 100% !important;
-      margin-right: 0 !important;
-      transform: none !important;
+      width: 100%;
+      max-width: 100%;
+      flex: 0 0 100%;
+      margin-right: 0;
+      transform: none;
     }
 
     .plt-listing-tab--stack-mobile earth-slider-nav {
-      display: none !important;
+      display: none;
     }
 
     .plt__nav-wrapper--desktop-only {
-      display: none !important;
+      display: none;
     }
   }
 {% endstylesheet %}
 
-{% javascript %}
-  if (!customElements.get('collection-tabs')) {
-    class CollectionTabs extends HTMLElement {
-      constructor() {
-        super();
-        this.tablist = null;
-        this.tabs = [];
-        this.panels = [];
-        this.swipers = new Map();
-        this._mqlMobile = window.matchMedia('(max-width: 767.98px)');
-        this._onTabClick = this._onTabClick.bind(this);
-        this._onKeydown = this._onKeydown.bind(this);
-        this._onMediaChange = this._onMediaChange.bind(this);
-      }
-
-      connectedCallback() {
-        if (this.dataset.preview === 'true') {
-          return;
-        }
-        this.tablist = this.querySelector('.plt__tablist');
-        this.buildTabs();
-
-        this._mqlMobile.addEventListener('change', this._onMediaChange);
-
-        // Observer in case blocks change dynamically in Theme Editor
-        this._observer = new MutationObserver(() => {
-          this.buildTabs();
-        });
-        const panelsWrapper = this.querySelector('.plt__panels-wrapper');
-        if (panelsWrapper) {
-          this._observer.observe(panelsWrapper, { childList: true });
-        }
-
-        // Theme Editor block select event
-        document.addEventListener('shopify:block:select', (event) => {
-          const selectedEl = event.target;
-          if (selectedEl === this) {
-            this.updateLayout();
-            return;
-          }
-          if (this.contains(selectedEl)) {
-            const tabBlock = selectedEl.closest('collection-tab') || selectedEl.querySelector('collection-tab');
-            if (tabBlock) {
-              const panel = tabBlock.querySelector('.plt__panel');
-              if (panel) {
-                const targetIdx = this.panels.indexOf(panel);
-                if (targetIdx !== -1) {
-                  this.activateTab(targetIdx);
-                }
-              }
-            }
-          }
-        });
-      }
-
-      buildTabs() {
-        if (!this.tablist) return;
-
-        const tabBlocks = Array.from(this.querySelectorAll('collection-tab'));
-        this.tabs = [];
-        this.panels = [];
-
-        tabBlocks.forEach((block) => {
-          const blockId = block.dataset.blockId;
-          const panel = block.querySelector('.plt__panel');
-          if (!panel) return;
-
-          // Check if button is already mounted inside this.tablist
-          let btn = this.tablist.querySelector(`[data-block-id="${blockId}"]`);
-          const blockBtn = block.querySelector('.plt__tab');
-
-          if (blockBtn && blockBtn !== btn) {
-            if (btn) {
-              this.tablist.replaceChild(blockBtn, btn);
-            } else {
-              this.tablist.appendChild(blockBtn);
-            }
-            btn = blockBtn;
-          }
-
-          if (btn) {
-            btn.dataset.blockId = blockId;
-            btn.removeEventListener('click', this._onTabClick);
-            btn.removeEventListener('keydown', this._onKeydown);
-            btn.addEventListener('click', this._onTabClick);
-            btn.addEventListener('keydown', this._onKeydown);
-
-            if (btn.dataset.autoTitle === 'true' || btn.getAttribute('data-auto-title') === 'true') {
-              const span = btn.querySelector('.vt-heading');
-              if (span) {
-                span.textContent = `Tab ${tabBlocks.indexOf(block) + 1}`;
-                btn.removeAttribute('data-auto-title');
-              }
-            }
-
-            this.tabs.push(btn);
-            this.panels.push(panel);
-          }
-        });
-
-        // Clean up any stale tab buttons from removed blocks
-        const validIds = new Set(tabBlocks.map((b) => b.dataset.blockId));
-        this.tablist.querySelectorAll('.plt__tab').forEach((tabBtn) => {
-          if (!validIds.has(tabBtn.dataset.blockId)) {
-            tabBtn.remove();
-          }
-        });
-
-        if (this.tabs.length === 1) {
-          this.tablist.classList.add('plt__tablist--single');
-        } else {
-          this.tablist.classList.remove('plt__tablist--single');
-        }
-
-        // Ensure active tab
-        let activeIdx = this.tabs.findIndex((t) => t.classList.contains('plt__tab--active'));
-        if (activeIdx === -1) activeIdx = 0;
-        this.activateTab(activeIdx);
-      }
-
-      _onMediaChange() {
-        if (this.dataset.swipeMobile === 'false') {
-          if (this._mqlMobile.matches) {
-            this.destroyAllSwipers();
-          } else {
-            this.initCarousels();
-          }
-        }
-      }
-
-      destroyAllSwipers() {
-        this.swipers.forEach((swiper) => {
-          if (swiper && typeof swiper.destroy === 'function') {
-            swiper.destroy(true, true);
-          }
-        });
-        this.swipers.clear();
-      }
-
-      initCarousels() {
-        if (typeof window.Swiper === 'undefined') {
-          const checkSwiper = setInterval(() => {
-            if (typeof window.Swiper !== 'undefined') {
-              clearInterval(checkSwiper);
-              this.initCarousels();
-            }
-          }, 50);
-          setTimeout(() => clearInterval(checkSwiper), 3000);
-          return;
-        }
-
-        const tracks = this.querySelectorAll('.plt__track');
-        tracks.forEach((track) => this.initSwiperForTrack(track));
-      }
-
-      initSwiperForTrack(track) {
-        if (!track || this.swipers.has(track)) return;
-        if (typeof window.Swiper === 'undefined') return;
-
-        const isSwipeMobile = this.dataset.swipeMobile !== 'false';
-        if (!isSwipeMobile && this._mqlMobile.matches) return;
-
-        const colDesktop = parseFloat(this.dataset.colDesktop) || 3;
-        const gapDesktop = parseFloat(this.dataset.gapDesktop) || 32;
-        const gapMobile = parseFloat(this.dataset.gapMobile) || 16;
-
-        const swiperInstance = new window.Swiper(track, {
-          slidesPerView: isSwipeMobile ? 1.2 : 1,
-          spaceBetween: gapMobile,
-          grabCursor: true,
-          watchOverflow: true,
-          observer: true,
-          observeParents: true,
-          threshold: 5,
-          breakpoints: {
-            768: {
-              slidesPerView: 2,
-              spaceBetween: Math.min(gapDesktop, 24)
-            },
-            1024: {
-              slidesPerView: colDesktop,
-              spaceBetween: gapDesktop
-            }
-          },
-          on: {
-            init: () => this._notifyNav(track),
-            slideChange: () => this._notifyNav(track),
-            update: () => this._notifyNav(track),
-            resize: () => this._notifyNav(track)
-          }
-        });
-
-        this.swipers.set(track, swiperInstance);
-        this._notifyNav(track);
-      }
-
-      _notifyNav(track) {
-        if (!track) return;
-        const panel = track.closest('.plt__panel');
-        if (panel) {
-          const nav = panel.querySelector('earth-slider-nav');
-          if (nav && typeof nav.updateState === 'function') {
-            nav.updateState();
-          }
-        }
-      }
-
-      _onTabClick(event) {
-        const clickedTab = event.currentTarget;
-        const targetIndex = this.tabs.indexOf(clickedTab);
-        if (targetIndex !== -1) {
-          this.activateTab(targetIndex);
-        }
-      }
-
-      _onKeydown(event) {
-        const currentTab = event.currentTarget;
-        const currentIndex = this.tabs.indexOf(currentTab);
-        let nextIndex = currentIndex;
-
-        switch (event.key) {
-          case 'ArrowRight':
-            nextIndex = (currentIndex + 1) % this.tabs.length;
-            break;
-          case 'ArrowLeft':
-            nextIndex = (currentIndex - 1 + this.tabs.length) % this.tabs.length;
-            break;
-          case 'Home':
-            nextIndex = 0;
-            break;
-          case 'End':
-            nextIndex = this.tabs.length - 1;
-            break;
-          default:
-            return;
-        }
-
-        event.preventDefault();
-        this.tabs[nextIndex].focus();
-        this.activateTab(nextIndex);
-      }
-
-      activateTab(index) {
-        if (!this.tabs[index]) return;
-
-        this.tabs.forEach((tab, i) => {
-          const isActive = i === index;
-          tab.classList.toggle('plt__tab--active', isActive);
-          tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
-          tab.setAttribute('tabindex', isActive ? '0' : '-1');
-
-          if (isActive) {
-            tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-          }
-        });
-
-        this.panels.forEach((panel, i) => {
-          const isCurrent = i === index;
-          panel.classList.toggle('plt__panel--hidden', !isCurrent);
-          if (isCurrent) {
-            panel.removeAttribute('hidden');
-            const track = panel.querySelector('.plt__track');
-            if (track) {
-              if (!this.swipers.has(track)) {
-                this.initSwiperForTrack(track);
-              }
-              const swiper = this.swipers.get(track);
-              if (swiper) {
-                window.requestAnimationFrame(() => {
-                  swiper.update();
-                  this._notifyNav(track);
-                });
-              } else {
-                track.scrollLeft = 0;
-                this._notifyNav(track);
-              }
-            }
-          } else {
-            panel.setAttribute('hidden', '');
-          }
-        });
-      }
-
-      updateLayout() {
-        const activeIndex = this.tabs.findIndex((t) => t.classList.contains('plt__tab--active'));
-        if (activeIndex !== -1) {
-          this.activateTab(activeIndex);
-        }
-      }
-
-      disconnectedCallback() {
-        if (this._observer) {
-          this._observer.disconnect();
-        }
-        this._mqlMobile.removeEventListener('change', this._onMediaChange);
-        this.destroyAllSwipers();
-      }
-    }
-
-    customElements.define('collection-tabs', CollectionTabs);
-  }
-{% endjavascript %}
+<script src="{{ 'collection-tabs.js' | asset_url }}" defer="defer"></script>
 
 {% schema %}
 {
@@ -849,6 +561,16 @@
       "step": 2,
       "unit": "px",
       "default": 20
+    },
+    {
+      "type": "range",
+      "id": "tab_font_size",
+      "label": "Tab font size",
+      "min": 14,
+      "max": 36,
+      "step": 1,
+      "unit": "px",
+      "default": 18
     },
     {
       "type": "header",
@@ -979,6 +701,7 @@
         "gap_mobile": 16,
         "menu_padding_desktop": 34,
         "menu_padding_mobile": 20,
+        "tab_font_size": 18,
         "padding_desktop": 34,
         "padding_mobile": 20,
         "show_arrows": true,
