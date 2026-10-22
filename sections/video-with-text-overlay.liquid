@@ -1,15 +1,13 @@
 {% comment %}
   Renders a video with text overlay section.
-  Supports Shopify-hosted video and YouTube/Vimeo embed (with mobile video overrides),
-  responsive heights, custom colors, overlay opacity, desktop and mobile alignment,
+  Supports Shopify-hosted video and YouTube/Vimeo embed,
+  responsive heights, custom colors, overlay opacity, alignment,
   and child blocks (heading, paragraph, button).
 {% endcomment %}
 
 {%- liquid
   assign video = section.settings.video
   assign video_url = section.settings.video_url
-  assign mobile_video = section.settings.mobile_video
-  assign mobile_video_url = section.settings.mobile_video_url
   assign cover_image = section.settings.cover_image
   assign autoplay = section.settings.enable_video_autoplay
   assign loop = section.settings.enable_video_looping
@@ -20,12 +18,8 @@
   assign content_pos = section.settings.desktop_content_position
   assign content_align = section.settings.desktop_content_alignment
 
-  assign mobile_height = section.settings.mobile_height | default: 'auto'
-  assign mobile_content_pos = section.settings.mobile_content_position | default: 'middle-center'
-  assign mobile_content_align = section.settings.mobile_content_alignment | default: 'center'
-
   assign has_media = false
-  if video != blank or video_url != blank or mobile_video != blank or mobile_video_url != blank or cover_image != blank
+  if video != blank or video_url != blank or cover_image != blank
     assign has_media = true
   endif
 
@@ -49,7 +43,6 @@
       data-autoplay="{{ autoplay }}"
       style="
         --vt-desktop-height: {{ desktop_height }};
-        --vt-mobile-height: {{ mobile_height }};
         --vt-text-color: {{ section.settings.text_color | default: '#FFFFFF' }};
         --vt-overlay-color: {{ section.settings.overlay_color | default: '#171717' }};
         --vt-overlay-opacity: {{ overlay_opacity_decimal }};
@@ -67,12 +60,8 @@
     >
       <!-- Background Video / Media Container -->
       <div class="vt-video-overlay__media-wrapper">
-        <!-- Desktop Shopify-hosted video -->
+        <!-- Video Layer -->
         {%- if video != blank -%}
-          {%- assign desktop_video_class = 'vt-video-overlay__video' -%}
-          {%- if mobile_video != blank -%}
-            {%- assign desktop_video_class = desktop_video_class | append: ' vt-hide-mobile' -%}
-          {%- endif -%}
           {{
             video
             | video_tag:
@@ -82,13 +71,13 @@
               muted: autoplay,
               controls: false,
               playsinline: true,
-              class: desktop_video_class
+              class: 'vt-video-overlay__video'
           }}
         {%- elsif video_url != blank -%}
           {%- if video_url.type == 'youtube' -%}
             <iframe
               src="https://www.youtube.com/embed/{{ video_url.id }}?enablejsapi=1&playsinline=1{% if autoplay %}&autoplay=1&mute=1{% endif %}{% if loop %}&loop=1&playlist={{ video_url.id }}{% endif %}"
-              class="vt-video-overlay__iframe{% if mobile_video_url != blank %} vt-hide-mobile{% endif %}"
+              class="vt-video-overlay__iframe"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
               title="{{ section.settings.video_alt_text | default: 'Video' | escape }}"
@@ -96,43 +85,10 @@
           {%- elsif video_url.type == 'vimeo' -%}
             <iframe
               src="https://player.vimeo.com/video/{{ video_url.id }}?{% if autoplay %}autoplay=1&muted=1{% endif %}{% if loop %}loop=1{% endif %}"
-              class="vt-video-overlay__iframe{% if mobile_video_url != blank %} vt-hide-mobile{% endif %}"
+              class="vt-video-overlay__iframe"
               allow="autoplay; fullscreen; picture-in-picture"
               allowfullscreen
               title="{{ section.settings.video_alt_text | default: 'Video' | escape }}"
-            ></iframe>
-          {%- endif -%}
-        {%- endif -%}
-
-        <!-- Mobile Video overrides (if provided) -->
-        {%- if mobile_video != blank -%}
-          {{
-            mobile_video
-            | video_tag:
-              image_size: '1000x',
-              autoplay: autoplay,
-              loop: loop,
-              muted: autoplay,
-              controls: false,
-              playsinline: true,
-              class: 'vt-video-overlay__video vt-hide-desktop'
-          }}
-        {%- elsif mobile_video_url != blank -%}
-          {%- if mobile_video_url.type == 'youtube' -%}
-            <iframe
-              src="https://www.youtube.com/embed/{{ mobile_video_url.id }}?enablejsapi=1&playsinline=1{% if autoplay %}&autoplay=1&mute=1{% endif %}{% if loop %}&loop=1&playlist={{ mobile_video_url.id }}{% endif %}"
-              class="vt-video-overlay__iframe vt-hide-desktop"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              title="{{ section.settings.video_alt_text | default: 'Mobile Video' | escape }}"
-            ></iframe>
-          {%- elsif mobile_video_url.type == 'vimeo' -%}
-            <iframe
-              src="https://player.vimeo.com/video/{{ mobile_video_url.id }}?{% if autoplay %}autoplay=1&muted=1{% endif %}{% if loop %}loop=1{% endif %}"
-              class="vt-video-overlay__iframe vt-hide-desktop"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowfullscreen
-              title="{{ section.settings.video_alt_text | default: 'Mobile Video' | escape }}"
             ></iframe>
           {%- endif -%}
         {%- endif -%}
@@ -156,8 +112,8 @@
       </div>
 
       <!-- Overlay Content Area (ALWAYS remains visible over video) -->
-      <div class="vt-video-overlay__content vt-desktop-pos-{{ content_pos }} vt-mobile-pos-{{ mobile_content_pos }}">
-        <div class="vt-video-overlay__content-box vt-desktop-align-{{ content_align }} vt-mobile-align-{{ mobile_content_align }}">
+      <div class="vt-video-overlay__content vt-pos-{{ content_pos }} vt-desktop-pos-{{ content_pos }}">
+        <div class="vt-video-overlay__content-box vt-align-{{ content_align }} vt-desktop-align-{{ content_align }}">
           {%- if section.blocks.size > 0 -%}
             {% content_for 'blocks' %}
           {%- elsif request.visual_preview_mode or request.design_mode -%}
@@ -236,25 +192,6 @@
     contain: layout paint;
   }
 
-  @media screen and (max-width: 768px) {
-    .vt-video-overlay {
-      min-height: var(--vt-mobile-height, auto);
-    }
-  }
-
-  /* Responsive visibility helpers */
-  @media screen and (max-width: 768px) {
-    .vt-hide-mobile {
-      display: none !important;
-    }
-  }
-
-  @media screen and (min-width: 769px) {
-    .vt-hide-desktop {
-      display: none !important;
-    }
-  }
-
   /* -------------------------------------------------------------------------
      Media & Video Layer
      ------------------------------------------------------------------------- */
@@ -330,35 +267,18 @@
     }
   }
 
-  /* Desktop Content Positions */
-  @media screen and (min-width: 769px) {
-    .vt-desktop-pos-top-left { justify-content: flex-start; align-items: flex-start; }
-    .vt-desktop-pos-top-center { justify-content: center; align-items: flex-start; }
-    .vt-desktop-pos-top-right { justify-content: flex-end; align-items: flex-start; }
+  /* Content Positions */
+  .vt-pos-top-left, .vt-desktop-pos-top-left { justify-content: flex-start; align-items: flex-start; }
+  .vt-pos-top-center, .vt-desktop-pos-top-center { justify-content: center; align-items: flex-start; }
+  .vt-pos-top-right, .vt-desktop-pos-top-right { justify-content: flex-end; align-items: flex-start; }
 
-    .vt-desktop-pos-middle-left { justify-content: flex-start; align-items: center; }
-    .vt-desktop-pos-middle-center { justify-content: center; align-items: center; }
-    .vt-desktop-pos-middle-right { justify-content: flex-end; align-items: center; }
+  .vt-pos-middle-left, .vt-desktop-pos-middle-left { justify-content: flex-start; align-items: center; }
+  .vt-pos-middle-center, .vt-desktop-pos-middle-center { justify-content: center; align-items: center; }
+  .vt-pos-middle-right, .vt-desktop-pos-middle-right { justify-content: flex-end; align-items: center; }
 
-    .vt-desktop-pos-bottom-left { justify-content: flex-start; align-items: flex-end; }
-    .vt-desktop-pos-bottom-center { justify-content: center; align-items: flex-end; }
-    .vt-desktop-pos-bottom-right { justify-content: flex-end; align-items: flex-end; }
-  }
-
-  /* Mobile Content Positions */
-  @media screen and (max-width: 768px) {
-    .vt-mobile-pos-top-left { justify-content: flex-start; align-items: flex-start; }
-    .vt-mobile-pos-top-center { justify-content: center; align-items: flex-start; }
-    .vt-mobile-pos-top-right { justify-content: flex-end; align-items: flex-start; }
-
-    .vt-mobile-pos-middle-left { justify-content: flex-start; align-items: center; }
-    .vt-mobile-pos-middle-center { justify-content: center; align-items: center; }
-    .vt-mobile-pos-middle-right { justify-content: flex-end; align-items: center; }
-
-    .vt-mobile-pos-bottom-left { justify-content: flex-start; align-items: flex-end; }
-    .vt-mobile-pos-bottom-center { justify-content: center; align-items: flex-end; }
-    .vt-mobile-pos-bottom-right { justify-content: flex-end; align-items: flex-end; }
-  }
+  .vt-pos-bottom-left, .vt-desktop-pos-bottom-left { justify-content: flex-start; align-items: flex-end; }
+  .vt-pos-bottom-center, .vt-desktop-pos-bottom-center { justify-content: center; align-items: flex-end; }
+  .vt-pos-bottom-right, .vt-desktop-pos-bottom-right { justify-content: flex-end; align-items: flex-end; }
 
   /* Content Box */
   .vt-video-overlay__content-box {
@@ -371,161 +291,98 @@
   }
 
   /* -------------------------------------------------------------------------
-     Desktop Content Alignments (Applied on Desktop > 768px)
+     Content Alignments
      ------------------------------------------------------------------------- */
-  @media screen and (min-width: 769px) {
-    .vt-desktop-align-left {
-      text-align: left;
-      align-items: flex-start;
-    }
-    .vt-desktop-align-center {
-      text-align: center;
-      align-items: center;
-    }
-    .vt-desktop-align-right {
-      text-align: right;
-      align-items: flex-end;
-    }
-
-    .vt-desktop-align-left .vt-video-overlay__play-btn-wrapper {
-      justify-content: flex-start;
-    }
-    .vt-desktop-align-center .vt-video-overlay__play-btn-wrapper {
-      justify-content: center;
-    }
-    .vt-desktop-align-right .vt-video-overlay__play-btn-wrapper {
-      justify-content: flex-end;
-    }
-
-    .vt-desktop-align-left .vt-buttons {
-      justify-content: flex-start;
-    }
-    .vt-desktop-align-center .vt-buttons {
-      justify-content: center;
-    }
-    .vt-desktop-align-right .vt-buttons {
-      justify-content: flex-end;
-    }
-
-    .vt-desktop-align-left .vt-heading-wrapper.text-inherit,
-    .vt-desktop-align-left .vt-paragraph.text-inherit {
-      text-align: left;
-      align-items: flex-start;
-      justify-content: flex-start;
-      margin-inline-start: 0;
-      margin-inline-end: auto;
-    }
-    .vt-desktop-align-left .vt-heading-wrapper.text-inherit .vt-heading,
-    .vt-desktop-align-left .vt-paragraph.text-inherit p {
-      text-align: left;
-      justify-content: flex-start;
-    }
-
-    .vt-desktop-align-center .vt-heading-wrapper.text-inherit,
-    .vt-desktop-align-center .vt-paragraph.text-inherit {
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      margin-inline: auto;
-    }
-    .vt-desktop-align-center .vt-heading-wrapper.text-inherit .vt-heading,
-    .vt-desktop-align-center .vt-paragraph.text-inherit p {
-      text-align: center;
-      justify-content: center;
-    }
-
-    .vt-desktop-align-right .vt-heading-wrapper.text-inherit,
-    .vt-desktop-align-right .vt-paragraph.text-inherit {
-      text-align: right;
-      align-items: flex-end;
-      justify-content: flex-end;
-      margin-inline-start: auto;
-      margin-inline-end: 0;
-    }
-    .vt-desktop-align-right .vt-heading-wrapper.text-inherit .vt-heading,
-    .vt-desktop-align-right .vt-paragraph.text-inherit p {
-      text-align: right;
-      justify-content: flex-end;
-    }
+  .vt-align-left, .vt-desktop-align-left {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .vt-align-center, .vt-desktop-align-center {
+    text-align: center;
+    align-items: center;
+  }
+  .vt-align-right, .vt-desktop-align-right {
+    text-align: right;
+    align-items: flex-end;
   }
 
-  /* -------------------------------------------------------------------------
-     Mobile Content Alignments (Applied on Mobile <= 768px)
-     ------------------------------------------------------------------------- */
-  @media screen and (max-width: 768px) {
-    .vt-mobile-align-left {
-      text-align: left;
-      align-items: flex-start;
-    }
-    .vt-mobile-align-center {
-      text-align: center;
-      align-items: center;
-    }
-    .vt-mobile-align-right {
-      text-align: right;
-      align-items: flex-end;
-    }
+  .vt-align-left .vt-video-overlay__play-btn-wrapper,
+  .vt-desktop-align-left .vt-video-overlay__play-btn-wrapper {
+    justify-content: flex-start;
+  }
+  .vt-align-center .vt-video-overlay__play-btn-wrapper,
+  .vt-desktop-align-center .vt-video-overlay__play-btn-wrapper {
+    justify-content: center;
+  }
+  .vt-align-right .vt-video-overlay__play-btn-wrapper,
+  .vt-desktop-align-right .vt-video-overlay__play-btn-wrapper {
+    justify-content: flex-end;
+  }
 
-    .vt-mobile-align-left .vt-video-overlay__play-btn-wrapper {
-      justify-content: flex-start;
-    }
-    .vt-mobile-align-center .vt-video-overlay__play-btn-wrapper {
-      justify-content: center;
-    }
-    .vt-mobile-align-right .vt-video-overlay__play-btn-wrapper {
-      justify-content: flex-end;
-    }
+  .vt-align-left .vt-buttons,
+  .vt-desktop-align-left .vt-buttons {
+    justify-content: flex-start;
+  }
+  .vt-align-center .vt-buttons,
+  .vt-desktop-align-center .vt-buttons {
+    justify-content: center;
+  }
+  .vt-align-right .vt-buttons,
+  .vt-desktop-align-right .vt-buttons {
+    justify-content: flex-end;
+  }
 
-    .vt-mobile-align-left .vt-buttons {
-      justify-content: flex-start;
-    }
-    .vt-mobile-align-center .vt-buttons {
-      justify-content: center;
-    }
-    .vt-mobile-align-right .vt-buttons {
-      justify-content: flex-end;
-    }
+  .vt-align-left .vt-heading-wrapper.text-inherit,
+  .vt-align-left .vt-paragraph.text-inherit,
+  .vt-desktop-align-left .vt-heading-wrapper.text-inherit,
+  .vt-desktop-align-left .vt-paragraph.text-inherit {
+    text-align: left;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-inline-start: 0;
+    margin-inline-end: auto;
+  }
+  .vt-align-left .vt-heading-wrapper.text-inherit .vt-heading,
+  .vt-align-left .vt-paragraph.text-inherit p,
+  .vt-desktop-align-left .vt-heading-wrapper.text-inherit .vt-heading,
+  .vt-desktop-align-left .vt-paragraph.text-inherit p {
+    text-align: left;
+    justify-content: flex-start;
+  }
 
-    .vt-mobile-align-left .vt-heading-wrapper.text-inherit,
-    .vt-mobile-align-left .vt-paragraph.text-inherit {
-      text-align: left;
-      align-items: flex-start;
-      justify-content: flex-start;
-      margin-inline-start: 0;
-      margin-inline-end: auto;
-    }
-    .vt-mobile-align-left .vt-heading-wrapper.text-inherit .vt-heading,
-    .vt-mobile-align-left .vt-paragraph.text-inherit p {
-      text-align: left;
-      justify-content: flex-start;
-    }
+  .vt-align-center .vt-heading-wrapper.text-inherit,
+  .vt-align-center .vt-paragraph.text-inherit,
+  .vt-desktop-align-center .vt-heading-wrapper.text-inherit,
+  .vt-desktop-align-center .vt-paragraph.text-inherit {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin-inline: auto;
+  }
+  .vt-align-center .vt-heading-wrapper.text-inherit .vt-heading,
+  .vt-align-center .vt-paragraph.text-inherit p,
+  .vt-desktop-align-center .vt-heading-wrapper.text-inherit .vt-heading,
+  .vt-desktop-align-center .vt-paragraph.text-inherit p {
+    text-align: center;
+    justify-content: center;
+  }
 
-    .vt-mobile-align-center .vt-heading-wrapper.text-inherit,
-    .vt-mobile-align-center .vt-paragraph.text-inherit {
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      margin-inline: auto;
-    }
-    .vt-mobile-align-center .vt-heading-wrapper.text-inherit .vt-heading,
-    .vt-mobile-align-center .vt-paragraph.text-inherit p {
-      text-align: center;
-      justify-content: center;
-    }
-
-    .vt-mobile-align-right .vt-heading-wrapper.text-inherit,
-    .vt-mobile-align-right .vt-paragraph.text-inherit {
-      text-align: right;
-      align-items: flex-end;
-      justify-content: flex-end;
-      margin-inline-start: auto;
-      margin-inline-end: 0;
-    }
-    .vt-mobile-align-right .vt-heading-wrapper.text-inherit .vt-heading,
-    .vt-mobile-align-right .vt-paragraph.text-inherit p {
-      text-align: right;
-      justify-content: flex-end;
-    }
+  .vt-align-right .vt-heading-wrapper.text-inherit,
+  .vt-align-right .vt-paragraph.text-inherit,
+  .vt-desktop-align-right .vt-heading-wrapper.text-inherit,
+  .vt-desktop-align-right .vt-paragraph.text-inherit {
+    text-align: right;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-inline-start: auto;
+    margin-inline-end: 0;
+  }
+  .vt-align-right .vt-heading-wrapper.text-inherit .vt-heading,
+  .vt-align-right .vt-paragraph.text-inherit p,
+  .vt-desktop-align-right .vt-heading-wrapper.text-inherit .vt-heading,
+  .vt-desktop-align-right .vt-paragraph.text-inherit p {
+    text-align: right;
+    justify-content: flex-end;
   }
 
   /* Re-ordering child elements: Heading (1) -> Play Button (2) -> Paragraph (3) -> Button (4) */
@@ -770,108 +627,6 @@
     },
     {
       "type": "header",
-      "content": "Mobile layout"
-    },
-    {
-      "type": "video",
-      "id": "mobile_video",
-      "label": "Mobile video"
-    },
-    {
-      "type": "video_url",
-      "id": "mobile_video_url",
-      "label": "Or embed video from URL",
-      "accept": [
-        "youtube",
-        "vimeo"
-      ],
-      "placeholder": "Paste a link",
-      "info": "Use a YouTube or Vimeo URL"
-    },
-    {
-      "type": "select",
-      "id": "mobile_height",
-      "label": "Mobile height",
-      "options": [
-        {
-          "value": "auto",
-          "label": "Auto"
-        },
-        {
-          "value": "300px",
-          "label": "300px"
-        },
-        {
-          "value": "350px",
-          "label": "350px"
-        },
-        {
-          "value": "400px",
-          "label": "400px"
-        },
-        {
-          "value": "450px",
-          "label": "450px"
-        },
-        {
-          "value": "100vh",
-          "label": "Full screen"
-        }
-      ],
-      "default": "auto"
-    },
-    {
-      "type": "select",
-      "id": "mobile_content_position",
-      "label": "Mobile content position",
-      "options": [
-        {
-          "value": "top-left",
-          "label": "Top Left"
-        },
-        {
-          "value": "top-center",
-          "label": "Top Center"
-        },
-        {
-          "value": "top-right",
-          "label": "Top Right"
-        },
-        {
-          "value": "middle-left",
-          "label": "Middle Left"
-        },
-        {
-          "value": "middle-center",
-          "label": "Middle Center"
-        },
-        {
-          "value": "middle-right",
-          "label": "Middle Right"
-        },
-        {
-          "value": "bottom-left",
-          "label": "Bottom Left"
-        },
-        {
-          "value": "bottom-center",
-          "label": "Bottom Center"
-        },
-        {
-          "value": "bottom-right",
-          "label": "Bottom Right"
-        }
-      ],
-      "default": "middle-center"
-    },
-    {
-      "type": "text_alignment",
-      "id": "mobile_content_alignment",
-      "label": "Mobile content alignment",
-      "default": "center"
-    },
-    {
-      "type": "header",
       "content": "Colors"
     },
     {
@@ -963,9 +718,6 @@
         "desktop_content_width": "medium",
         "desktop_content_position": "middle-center",
         "desktop_content_alignment": "center",
-        "mobile_height": "auto",
-        "mobile_content_position": "middle-center",
-        "mobile_content_alignment": "center",
         "text_color": "#FFFFFF",
         "overlay_color": "#171717",
         "overlay_opacity": 30,

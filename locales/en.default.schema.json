@@ -1251,7 +1251,19 @@
 					},
 					"options__12": {
 						"label": "Sparkle"
-					}					
+					},
+					"options__13": {
+						"label": "Heart"
+					},
+					"options__14": {
+						"label": "Check circle"
+					},
+					"options__15": {
+						"label": "X circle"
+					},
+					"options__16": {
+						"label": "Info"
+					}
 				},
 				"icon_size_desktop": {
 					"label": "Icon size desktop"

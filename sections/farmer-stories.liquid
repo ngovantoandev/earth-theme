@@ -10,38 +10,39 @@
   assign make_section_page_width = section.settings.make_section_page_width
 
   assign section_bg = section.settings.background_color
+  assign bg_style = ''
   if section_bg != blank and section_bg != 'rgba(0,0,0,0)' and section_bg != '#00000000'
-    assign bg_color = section_bg
-  else
-    assign bg_color = 'var(--vt-background-color, #F8F9DC)'
+    assign bg_style = '--vt-bg: ' | append: section_bg | append: ';'
   endif
 
   assign heading_color = section.settings.heading_color
-  if heading_color == blank or heading_color == 'rgba(0,0,0,0)' or heading_color == '#00000000'
-    assign heading_color = 'var(--vt-foreground-color, #003225)'
+  assign heading_style = ''
+  if heading_color != blank and heading_color != 'rgba(0,0,0,0)' and heading_color != '#00000000'
+    assign heading_style = '--vt-heading-color: ' | append: heading_color | append: ';'
   endif
 
   assign paragraph_color = section.settings.paragraph_color
-  if paragraph_color == blank or paragraph_color == 'rgba(0,0,0,0)' or paragraph_color == '#00000000'
-    assign paragraph_color = 'var(--vt-color-primary, #224E09)'
+  assign paragraph_style = ''
+  if paragraph_color != blank and paragraph_color != 'rgba(0,0,0,0)' and paragraph_color != '#00000000'
+    assign paragraph_style = '--vt-paragraph-color: ' | append: paragraph_color | append: ';'
   endif
+
+  assign pad_top_mobile = section.settings.padding_top_mobile | default: 48
+  assign pad_bottom_mobile = section.settings.padding_bottom_mobile | default: 48
+  assign pad_left_mobile = section.settings.padding_horizontal_mobile | default: 20
 -%}
 
 <div
   class="vt-farmer-stories{% unless make_section_page_width %} vt-page-full-width{% endunless %}"
   id="vtFarmerStories-{{ section.id }}"
   style="
-    --vt-bg: {{ bg_color }};
-    --vt-heading-color: {{ heading_color }};
-    --vt-paragraph-color: {{ paragraph_color }};
-    --vt-pt: {{ section.settings.padding_top | default: 80 }}px;
-    --vt-pb: {{ section.settings.padding_bottom | default: 96 }}px;
-    --vt-ph: {{ section.settings.padding_horizontal | default: 34 }}px;
-    --vt-pt-mobile: {{ section.settings.padding_top_mobile | default: 48 }}px;
-    --vt-pb-mobile: {{ section.settings.padding_bottom_mobile | default: 48 }}px;
-    --vt-ph-mobile: {{ section.settings.padding_horizontal_mobile | default: 20 }}px;
-    --vt-block-gap: {{ section.settings.block_gap | default: 48 }}px;
-    --vt-block-gap-mobile: {{ section.settings.block_gap_mobile | default: 32 }}px;
+    {{ bg_style }}
+    {{ heading_style }}
+    {{ paragraph_style }}
+    --vt-pt: {% render 'fluid-clamp', min_px: pad_top_mobile, max_px: section.settings.padding_top %};
+    --vt-pb: {% render 'fluid-clamp', min_px: pad_bottom_mobile, max_px: section.settings.padding_bottom %};
+    --vt-ph: {% render 'fluid-clamp', min_px: pad_left_mobile, max_px: section.settings.padding_horizontal %};
+    --vt-block-gap: {% render 'fluid-clamp', min_px: section.settings.block_gap_mobile, max_px: section.settings.block_gap %};
   "
   {{ section.shopify_attributes }}
 >
@@ -54,7 +55,8 @@
   .vt-farmer-stories {
     display: block;
     width: 100%;
-    background-color: var(--vt-bg, var(--vt-background-color, #F8F9DC));
+    background-color: var(--vt-bg, var(--vt-background-color));
+    color: var(--vt-heading-color, var(--vt-foreground-color));
     padding-top: var(--vt-pt, 80px);
     padding-bottom: var(--vt-pb, 96px);
     box-sizing: border-box;
@@ -142,19 +144,19 @@
       "type": "color",
       "id": "background_color",
       "label": "Background color",
-      "default": "#F8F9DC"
+      "default": "#00000000"
     },
     {
       "type": "color",
       "id": "heading_color",
       "label": "Heading color",
-      "default": "#003225"
+      "default": "#00000000"
     },
     {
       "type": "color",
       "id": "paragraph_color",
       "label": "Paragraph color",
-      "default": "#224E09"
+      "default": "#00000000"
     },
     {
       "type": "header",
@@ -254,7 +256,7 @@
       "name": "Farmer stories",
       "settings": {
         "make_section_page_width": true,
-        "background_color": "#F8F9DC",
+        "background_color": "#00000000",
         "heading_color": "#003225",
         "paragraph_color": "#224E09",
         "padding_top": 80,
