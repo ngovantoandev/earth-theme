@@ -5,7 +5,7 @@
   - Configurable gaps and responsive padding.
 
   @example
-  {% content_for 'block', type: 'accordion', id: 'accordion' %}
+  {% content_for 'block', type: 'accordion-list', id: 'accordion-list' %}
 {% enddoc %}
 
 {%- liquid
@@ -28,6 +28,14 @@
   {{ block.shopify_attributes }}
 >
   {% content_for 'blocks' %}
+  {%- if block.blocks.size == 0 and request.design_mode -%}
+    <div class="vt-accordion__empty-placeholder" style="display: flex; flex-direction: column; gap: 12px; width: 100%; opacity: 0.7;">
+      <div style="border: 1px dashed var(--vt-color-accent, #EAE060); padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 4px;">
+        <span style="font-weight: 600; font-size: 15px;">Accordion (Click + to add Accordion item)</span>
+        <span style="font-size: 18px;">+</span>
+      </div>
+    </div>
+  {%- endif -%}
 </vt-accordion>
 
 {% stylesheet %}
@@ -95,10 +103,12 @@
 
 {% schema %}
 {
-  "name": "Accordion",
+  "name": "Accordion list",
   "tag": null,
   "blocks": [
-    { "type": "accordion-item" }
+    {
+      "type": "accordion-item"
+    }
   ],
   "settings": [
     {
@@ -222,7 +232,7 @@
   ],
   "presets": [
     {
-      "name": "Accordion",
+      "name": "Accordion list",
       "blocks": [
         {
           "type": "accordion-item",
@@ -251,8 +261,8 @@
               "id": "heading",
               "static": true,
               "settings": {
-                "heading": "Why Sustainable Fashion?",
-                "heading_size": "vt-heading-h3",
+                "heading": "Accordion item 1",
+                "heading_size": "vt-heading-h4",
                 "heading_tag": "h3",
                 "heading_alignment": "text-left"
               }
@@ -262,7 +272,7 @@
               "id": "paragraph",
               "static": true,
               "settings": {
-                "text": "<p>Understanding the real cost of fast fashion</p>",
+                "text": "<p>Accordion item description or subtitle</p>",
                 "paragraph_size": "vt-paragraph-small",
                 "paragraph_alignment": "text-left"
               }
@@ -288,18 +298,23 @@
                     "background_color": "#EAE060",
                     "heading_color": "#003225",
                     "text_color": "#003225",
-                    "alignment": "left",
+                    "border": "none",
+                    "border_radius": 0,
+                    "padding_vertical": 24,
+                    "padding_horizontal": 24,
+                    "gap": 16,
+                    "width": "fill",
                     "position": "top",
-                    "padding_vertical": 36,
-                    "padding_horizontal": 36,
-                    "border_radius": 0
+                    "alignment": "left"
                   },
                   "blocks": [
                     {
-                      "type": "sub-heading",
+                      "type": "heading",
                       "settings": {
-                        "sub_heading": "FAST FASHION",
-                        "subheading_tag": "h4"
+                        "heading": "Column 1",
+                        "heading_tag": "h4",
+                        "heading_size": "vt-heading-h5",
+                        "heading_alignment": "left"
                       }
                     },
                     {
@@ -309,7 +324,10 @@
                         "layout_direction_tablet": "vt-stack--vertical",
                         "layout_direction_mobile": "vt-stack--vertical",
                         "gap_desktop": 12,
-                        "gap_mobile": 12
+                        "gap_mobile": 12,
+                        "alignment": "flex-start",
+                        "position": "flex-start",
+                        "width": "fill"
                       },
                       "blocks": [
                         {
@@ -332,13 +350,14 @@
                                 "icon_color": "#D32F2F",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>Average 1–7 wears before disposal</p>",
+                                "text": "<p>Example feature description 1</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -364,13 +383,14 @@
                                 "icon_color": "#D32F2F",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>92 million tons → landfill yearly</p>",
+                                "text": "<p>Example feature description 2</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -396,13 +416,14 @@
                                 "icon_color": "#D32F2F",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>High water pollution from synthetic dyes</p>",
+                                "text": "<p>Example feature description 3</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -428,13 +449,14 @@
                                 "icon_color": "#D32F2F",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>Exploitative labor practices</p>",
+                                "text": "<p>Example feature description 4</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -447,21 +469,26 @@
                 {
                   "type": "card",
                   "settings": {
-                    "background_color": "#003225",
+                    "background_color": "#00241A",
                     "heading_color": "#F8F9DC",
                     "text_color": "#F8F9DC",
-                    "alignment": "left",
+                    "border": "none",
+                    "border_radius": 0,
+                    "padding_vertical": 24,
+                    "padding_horizontal": 24,
+                    "gap": 16,
+                    "width": "fill",
                     "position": "top",
-                    "padding_vertical": 36,
-                    "padding_horizontal": 36,
-                    "border_radius": 0
+                    "alignment": "left"
                   },
                   "blocks": [
                     {
-                      "type": "sub-heading",
+                      "type": "heading",
                       "settings": {
-                        "sub_heading": "SUSTAINABLE FASHION",
-                        "subheading_tag": "h4"
+                        "heading": "Column 2",
+                        "heading_tag": "h4",
+                        "heading_size": "vt-heading-h5",
+                        "heading_alignment": "left"
                       }
                     },
                     {
@@ -471,7 +498,10 @@
                         "layout_direction_tablet": "vt-stack--vertical",
                         "layout_direction_mobile": "vt-stack--vertical",
                         "gap_desktop": 12,
-                        "gap_mobile": 12
+                        "gap_mobile": 12,
+                        "alignment": "flex-start",
+                        "position": "flex-start",
+                        "width": "fill"
                       },
                       "blocks": [
                         {
@@ -494,13 +524,14 @@
                                 "icon_color": "#71CC3B",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>Average 20+ wears, recyclable design</p>",
+                                "text": "<p>Example benefit description 1</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -526,13 +557,14 @@
                                 "icon_color": "#71CC3B",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>Circular economy reduces 80% waste</p>",
+                                "text": "<p>Example benefit description 2</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -558,13 +590,14 @@
                                 "icon_color": "#71CC3B",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>Natural/recycled materials, low-impact dyes</p>",
+                                "text": "<p>Example benefit description 3</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -590,13 +623,14 @@
                                 "icon_color": "#71CC3B",
                                 "icon_size_desktop": 18,
                                 "icon_size_mobile": 18,
-                                "show_box": false
+                                "show_box": false,
+                                "animation_type": "none"
                               }
                             },
                             {
                               "type": "paragraph",
                               "settings": {
-                                "text": "<p>Fair wages, safe working conditions</p>",
+                                "text": "<p>Example benefit description 4</p>",
                                 "paragraph_size": "vt-paragraph-small"
                               }
                             }
@@ -612,14 +646,18 @@
               "type": "card",
               "settings": {
                 "background_color": "#224E09",
+                "heading_color": "#F8F9DC",
+                "text_color": "#F8F9DC",
                 "border": "solid",
                 "border_width": 1,
                 "border_color": "#71CC3B",
-                "alignment": "left",
+                "border_radius": 0,
+                "padding_vertical": 20,
+                "padding_horizontal": 24,
+                "gap": 8,
+                "width": "fill",
                 "position": "top",
-                "padding_vertical": 24,
-                "padding_horizontal": 28,
-                "border_radius": 4
+                "alignment": "left"
               },
               "blocks": [
                 {
@@ -628,49 +666,44 @@
                     "layout_direction_desktop": "vt-stack--horizontal",
                     "layout_direction_tablet": "vt-stack--horizontal",
                     "layout_direction_mobile": "vt-stack--horizontal",
-                    "gap_desktop": 16,
-                    "gap_mobile": 12,
                     "alignment": "flex-start",
-                    "position": "flex-start"
+                    "position": "center",
+                    "gap_desktop": 10,
+                    "gap_mobile": 8,
+                    "width": "fill"
                   },
                   "blocks": [
                     {
                       "type": "icons",
                       "settings": {
                         "icon": "info",
-                        "icon_color": "#71CC3B",
-                        "icon_size_desktop": 28,
-                        "icon_size_mobile": 24
+                        "icon_size_desktop": 20,
+                        "icon_size_mobile": 18,
+                        "icon_color": "#F8F9DC",
+                        "show_box": false,
+                        "animation_type": "none"
                       }
                     },
                     {
-                      "type": "stack",
+                      "type": "heading",
                       "settings": {
-                        "layout_direction_desktop": "vt-stack--vertical",
-                        "layout_direction_tablet": "vt-stack--vertical",
-                        "layout_direction_mobile": "vt-stack--vertical",
-                        "gap_desktop": 8,
-                        "gap_mobile": 6,
-                        "alignment": "flex-start"
-                      },
-                      "blocks": [
-                        {
-                          "type": "sub-heading",
-                          "settings": {
-                            "sub_heading": "Did You Know?",
-                            "subheading_tag": "h4"
-                          }
-                        },
-                        {
-                          "type": "paragraph",
-                          "settings": {
-                            "text": "<p>The fashion industry produces 10% of global CO₂ emissions—more than international flights and maritime shipping combined. By choosing sustainable fashion, you can reduce your personal fashion footprint by up to 73%.</p>",
-                            "paragraph_size": "vt-paragraph-small"
-                          }
-                        }
-                      ]
+                        "heading": "Notice / Announcement",
+                        "heading_tag": "h5",
+                        "heading_size": "vt-heading-h5",
+                        "heading_alignment": "text-left",
+                        "animation_type": "none"
+                      }
                     }
                   ]
+                },
+                {
+                  "type": "paragraph",
+                  "settings": {
+                    "text": "<p>Use this callout box to share important tips, notes, or additional context with your customers.</p>",
+                    "paragraph_size": "vt-paragraph-small",
+                    "paragraph_alignment": "text-left",
+                    "animation_type": "none"
+                  }
                 }
               ]
             }
@@ -687,7 +720,7 @@
               "id": "icon",
               "static": true,
               "settings": {
-                "icon": "leaf",
+                "icon": "tree",
                 "icon_color": "#003225",
                 "icon_size_desktop": 24,
                 "icon_size_mobile": 20,
@@ -703,8 +736,8 @@
               "id": "heading",
               "static": true,
               "settings": {
-                "heading": "Material Guide",
-                "heading_size": "vt-heading-h3",
+                "heading": "Accordion item 2",
+                "heading_size": "vt-heading-h4",
                 "heading_tag": "h3",
                 "heading_alignment": "text-left"
               }
@@ -714,140 +747,190 @@
               "id": "paragraph",
               "static": true,
               "settings": {
-                "text": "<p>Eco-friendly fabrics and care instructions</p>",
+                "text": "<p>Accordion item description or subtitle</p>",
                 "paragraph_size": "vt-paragraph-small",
                 "paragraph_alignment": "text-left"
               }
+            }
+          ]
+        },
+        {
+          "type": "accordion-item",
+          "settings": {
+            "open_by_default": false
+          },
+          "blocks": [
+            {
+              "type": "icons",
+              "id": "icon",
+              "static": true,
+              "settings": {
+                "icon": "quality",
+                "icon_color": "#003225",
+                "icon_size_desktop": 24,
+                "icon_size_mobile": 20,
+                "show_box": true,
+                "box_size_desktop": 48,
+                "box_size_mobile": 40,
+                "box_bg_color": "#EAE060",
+                "box_radius": "50%"
+              }
             },
             {
-              "type": "card",
+              "type": "heading",
+              "id": "heading",
+              "static": true,
               "settings": {
-                "background_color": "#00000000",
-                "border": "solid",
-                "border_width": 1,
-                "alignment": "left",
-                "position": "top",
-                "padding_vertical": 24,
-                "padding_horizontal": 28,
-                "border_radius": 4
-              },
-              "blocks": [
-                {
-                  "type": "sub-heading",
-                  "settings": {
-                    "sub_heading": "Preferred Materials",
-                    "subheading_tag": "h4"
-                  }
-                },
-                {
-                  "type": "stack",
-                  "settings": {
-                    "layout_direction_desktop": "vt-stack--vertical",
-                    "layout_direction_tablet": "vt-stack--vertical",
-                    "layout_direction_mobile": "vt-stack--vertical",
-                    "gap_desktop": 12,
-                    "gap_mobile": 12
-                  },
-                  "blocks": [
-                    {
-                      "type": "stack",
-                      "settings": {
-                        "layout_direction_desktop": "vt-stack--horizontal",
-                        "layout_direction_tablet": "vt-stack--horizontal",
-                        "layout_direction_mobile": "vt-stack--horizontal",
-                        "alignment": "flex-start",
-                        "position": "center",
-                        "gap_desktop": 10,
-                        "gap_mobile": 8,
-                        "width": "fill"
-                      },
-                      "blocks": [
-                        {
-                          "type": "icons",
-                          "settings": {
-                            "icon": "check-circle",
-                            "icon_color": "#71CC3B",
-                            "icon_size_desktop": 18,
-                            "icon_size_mobile": 18,
-                            "show_box": false
-                          }
-                        },
-                        {
-                          "type": "paragraph",
-                          "settings": {
-                            "text": "<p>100% GOTS Certified Organic Cotton</p>",
-                            "paragraph_size": "vt-paragraph-small"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "stack",
-                      "settings": {
-                        "layout_direction_desktop": "vt-stack--horizontal",
-                        "layout_direction_tablet": "vt-stack--horizontal",
-                        "layout_direction_mobile": "vt-stack--horizontal",
-                        "alignment": "flex-start",
-                        "position": "center",
-                        "gap_desktop": 10,
-                        "gap_mobile": 8,
-                        "width": "fill"
-                      },
-                      "blocks": [
-                        {
-                          "type": "icons",
-                          "settings": {
-                            "icon": "check-circle",
-                            "icon_color": "#71CC3B",
-                            "icon_size_desktop": 18,
-                            "icon_size_mobile": 18,
-                            "show_box": false
-                          }
-                        },
-                        {
-                          "type": "paragraph",
-                          "settings": {
-                            "text": "<p>Recycled Wool and Regenerated Nylon</p>",
-                            "paragraph_size": "vt-paragraph-small"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "stack",
-                      "settings": {
-                        "layout_direction_desktop": "vt-stack--horizontal",
-                        "layout_direction_tablet": "vt-stack--horizontal",
-                        "layout_direction_mobile": "vt-stack--horizontal",
-                        "alignment": "flex-start",
-                        "position": "center",
-                        "gap_desktop": 10,
-                        "gap_mobile": 8,
-                        "width": "fill"
-                      },
-                      "blocks": [
-                        {
-                          "type": "icons",
-                          "settings": {
-                            "icon": "check-circle",
-                            "icon_color": "#71CC3B",
-                            "icon_size_desktop": 18,
-                            "icon_size_mobile": 18,
-                            "show_box": false
-                          }
-                        },
-                        {
-                          "type": "paragraph",
-                          "settings": {
-                            "text": "<p>TENCEL™ Lyocell from sustainable forests</p>",
-                            "paragraph_size": "vt-paragraph-small"
-                          }
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+                "heading": "Accordion item 3",
+                "heading_size": "vt-heading-h4",
+                "heading_tag": "h3",
+                "heading_alignment": "text-left"
+              }
+            },
+            {
+              "type": "paragraph",
+              "id": "paragraph",
+              "static": true,
+              "settings": {
+                "text": "<p>Accordion item description or subtitle</p>",
+                "paragraph_size": "vt-paragraph-small",
+                "paragraph_alignment": "text-left"
+              }
+            }
+          ]
+        },
+        {
+          "type": "accordion-item",
+          "settings": {
+            "open_by_default": false
+          },
+          "blocks": [
+            {
+              "type": "icons",
+              "id": "icon",
+              "static": true,
+              "settings": {
+                "icon": "drop",
+                "icon_color": "#003225",
+                "icon_size_desktop": 24,
+                "icon_size_mobile": 20,
+                "show_box": true,
+                "box_size_desktop": 48,
+                "box_size_mobile": 40,
+                "box_bg_color": "#EAE060",
+                "box_radius": "50%"
+              }
+            },
+            {
+              "type": "heading",
+              "id": "heading",
+              "static": true,
+              "settings": {
+                "heading": "Accordion item 4",
+                "heading_size": "vt-heading-h4",
+                "heading_tag": "h3",
+                "heading_alignment": "text-left"
+              }
+            },
+            {
+              "type": "paragraph",
+              "id": "paragraph",
+              "static": true,
+              "settings": {
+                "text": "<p>Accordion item description or subtitle</p>",
+                "paragraph_size": "vt-paragraph-small",
+                "paragraph_alignment": "text-left"
+              }
+            }
+          ]
+        },
+        {
+          "type": "accordion-item",
+          "settings": {
+            "open_by_default": false
+          },
+          "blocks": [
+            {
+              "type": "icons",
+              "id": "icon",
+              "static": true,
+              "settings": {
+                "icon": "ecology",
+                "icon_color": "#003225",
+                "icon_size_desktop": 24,
+                "icon_size_mobile": 20,
+                "show_box": true,
+                "box_size_desktop": 48,
+                "box_size_mobile": 40,
+                "box_bg_color": "#EAE060",
+                "box_radius": "50%"
+              }
+            },
+            {
+              "type": "heading",
+              "id": "heading",
+              "static": true,
+              "settings": {
+                "heading": "Accordion item 5",
+                "heading_size": "vt-heading-h4",
+                "heading_tag": "h3",
+                "heading_alignment": "text-left"
+              }
+            },
+            {
+              "type": "paragraph",
+              "id": "paragraph",
+              "static": true,
+              "settings": {
+                "text": "<p>Accordion item description or subtitle</p>",
+                "paragraph_size": "vt-paragraph-small",
+                "paragraph_alignment": "text-left"
+              }
+            }
+          ]
+        },
+        {
+          "type": "accordion-item",
+          "settings": {
+            "open_by_default": false
+          },
+          "blocks": [
+            {
+              "type": "icons",
+              "id": "icon",
+              "static": true,
+              "settings": {
+                "icon": "info",
+                "icon_color": "#003225",
+                "icon_size_desktop": 24,
+                "icon_size_mobile": 20,
+                "show_box": true,
+                "box_size_desktop": 48,
+                "box_size_mobile": 40,
+                "box_bg_color": "#EAE060",
+                "box_radius": "50%"
+              }
+            },
+            {
+              "type": "heading",
+              "id": "heading",
+              "static": true,
+              "settings": {
+                "heading": "Accordion item 6",
+                "heading_size": "vt-heading-h4",
+                "heading_tag": "h3",
+                "heading_alignment": "text-left"
+              }
+            },
+            {
+              "type": "paragraph",
+              "id": "paragraph",
+              "static": true,
+              "settings": {
+                "text": "<p>Accordion item description or subtitle</p>",
+                "paragraph_size": "vt-paragraph-small",
+                "paragraph_alignment": "text-left"
+              }
             }
           ]
         }
