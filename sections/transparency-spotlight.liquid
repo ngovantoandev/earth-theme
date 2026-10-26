@@ -51,6 +51,10 @@
     --vt-pt: {% render 'fluid-clamp', min_px: pad_top_mobile, max_px: section.settings.padding_top %};
     --vt-pb: {% render 'fluid-clamp', min_px: pad_bottom_mobile, max_px: section.settings.padding_bottom %};
     --vt-ph: {% render 'fluid-clamp', min_px: pad_left_mobile, max_px: section.settings.padding_horizontal %};
+    --vt-ph-desktop: {{ section.settings.padding_horizontal | default: 34 }}px;
+    --vt-ph-mobile: {{ pad_left_mobile }}px;
+    --vt-page-padding: {{ section.settings.padding_horizontal | default: 34 }}px;
+    --vt-page-padding-mobile: {{ pad_left_mobile }}px;
     --vt-block-gap: {% render 'fluid-clamp', min_px: section.settings.gap_mobile, max_px: section.settings.gap %};
   "
   {{ section.shopify_attributes }}
@@ -73,11 +77,6 @@
     position: relative;
   }
 
-  .vt-transparency-spotlight.vt-page-full-width {
-    padding-left: var(--vt-ph, 34px);
-    padding-right: var(--vt-ph, 34px);
-  }
-
   .vt-transparency-spotlight__container {
     width: 100%;
     margin: 0 auto;
@@ -86,10 +85,19 @@
     flex-direction: column;
     align-items: stretch;
     gap: var(--vt-block-gap, 48px);
+    padding-left: var(--vt-ph, 34px);
+    padding-right: var(--vt-ph, 34px);
   }
 
   .vt-transparency-spotlight__container:not(.vt-page-width) {
     max-width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-transparency-spotlight__container {
+      padding-left: var(--vt-ph-mobile, 20px);
+      padding-right: var(--vt-ph-mobile, 20px);
+    }
   }
 
   /* Support Theme Editor wrappers without altering block layouts or configs */

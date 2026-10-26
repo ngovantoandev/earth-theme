@@ -16,7 +16,7 @@
   assign gap_desktop = block.settings.gap_desktop | default: 32
   assign gap_mobile = block.settings.gap_mobile | default: 16
 
-  assign track_pad_desktop = block.settings.padding_desktop | default: 34
+  assign track_pad_desktop = block.settings.padding_desktop | default: 0
   assign track_pad_mobile = block.settings.padding_mobile | default: 20
 
   assign show_arrows = block.settings.show_arrows
@@ -82,20 +82,23 @@
   card-list.plt-listing-tab {
     display: flex;
     flex-direction: column;
-    width: calc(100% + var(--vt-ph, 0px) * 2);
-    margin-left: calc(-1 * var(--vt-ph, 0px));
-    margin-right: calc(-1 * var(--vt-ph, 0px));
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     position: relative;
     box-sizing: border-box;
+    min-width: 0;
   }
 
   .vt-card-list__slider-wrapper {
     width: 100%;
     position: relative;
+    overflow: hidden;
     box-sizing: border-box;
   }
 
-  .vt-card-list__track.plt__track {
+  .vt-card-list__track.plt__track,
+  .vt-card-list__track {
     width: 100%;
     box-sizing: border-box;
     padding-left: var(--plt-pad-desktop, 0px);
@@ -106,6 +109,20 @@
 
   .vt-card-list__track.swiper {
     overflow: hidden;
+  }
+
+  .vt-card-list__track:focus-visible {
+    outline: 2px solid var(--vt-color-secondary, #71CC3B);
+    outline-offset: -2px;
+  }
+
+  /* Completely hide disabled or out-of-bounds nav buttons */
+  card-list .earth-slider-nav__btn:disabled,
+  card-list .earth-slider-nav__btn[data-hidden="true"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
   }
 
   .vt-card-list__track .swiper-wrapper {
@@ -142,7 +159,7 @@
   }
 
   .vt-card-list__track:not(.swiper-initialized) .swiper-wrapper > * {
-    flex: 0 0 calc((100% - (var(--plt-gap-desktop, 32px) * (var(--plt-col-desktop, 3) - 1))) / var(--plt-col-desktop, 3));
+    flex: 0 0 calc((100% - (var(--plt-gap-desktop, 32px) * 1.35)) / 2.35);
     min-width: 0;
     scroll-snap-align: start;
     box-sizing: border-box;

@@ -58,6 +58,7 @@
   data-gap-mobile="{{ gap_mobile }}"
   data-show-arrows="{{ block.settings.show_arrows }}"
   data-arrows-mobile="{{ block.settings.show_arrows_mobile }}"
+  data-arrows-visibility="{{ block.settings.arrows_visibility | default: 'hover' }}"
   {% if request.visual_preview_mode %}data-preview="true"{% endif %}
   style="
     --plt-col-desktop: {{ col_desktop }};
@@ -110,11 +111,12 @@
   collection-tabs.plt-listing-tab {
     display: flex;
     flex-direction: column;
-    width: calc(100% + var(--vt-ph, 0px) * 2);
-    margin-left: calc(-1 * var(--vt-ph, 0px));
-    margin-right: calc(-1 * var(--vt-ph, 0px));
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     position: relative;
     box-sizing: border-box;
+    min-width: 0;
   }
 
   /* ================= Tablist ================= */
@@ -283,6 +285,31 @@
     overflow: hidden;
   }
 
+  .plt__track:focus-visible {
+    outline: 2px solid var(--plt-tab-active-color, var(--vt-color-secondary, #71CC3B));
+    outline-offset: -2px;
+  }
+
+  collection-tabs[data-show-arrows="false"] earth-slider-nav {
+    display: none !important;
+  }
+
+  collection-tabs[data-arrows-visibility="always"] .earth-slider-nav--show-on-hover {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  /* Completely hide disabled or out-of-bounds nav buttons */
+  collection-tabs .earth-slider-nav__btn:disabled,
+  collection-tabs .earth-slider-nav__btn[data-hidden="true"],
+  collection-tab .earth-slider-nav__btn:disabled,
+  collection-tab .earth-slider-nav__btn[data-hidden="true"] {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
   .plt__track .swiper-wrapper {
     display: flex;
     align-items: stretch;
@@ -317,7 +344,7 @@
   }
 
   .plt__track:not(.swiper-initialized) .plt__slide {
-    flex: 0 0 calc((100% - (var(--plt-gap-desktop, 32px) * (var(--plt-col-desktop, 3) - 1))) / var(--plt-col-desktop, 3));
+    flex: 0 0 calc((100% - (var(--plt-gap-desktop, 32px) * 1.35)) / 2.35);
     min-width: 0;
     scroll-snap-align: start;
   }
@@ -478,7 +505,12 @@
     }
 
     .plt-listing-tab--stack-mobile earth-slider-nav {
-      display: none;
+      display: none !important;
+    }
+
+    collection-tabs:not([data-arrows-mobile="true"]) earth-slider-nav,
+    collection-tabs[data-arrows-mobile="false"] earth-slider-nav {
+      display: none !important;
     }
 
     .plt__nav-wrapper--desktop-only {

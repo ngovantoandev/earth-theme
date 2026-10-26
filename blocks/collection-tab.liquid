@@ -104,7 +104,13 @@
         </div>
       </div>
 
-      {% render 'btn-nav-slider', target_id: track_id, layout: 'split', show_on_hover: true, theme: 'light' %}
+      {% render 'btn-nav-slider',
+        target_id: track_id,
+        layout: 'split',
+        show_on_hover: true,
+        show_arrows_mobile: false,
+        theme: 'light'
+      %}
     {%- else -%}
       <div class="plt__empty">
         <p class="plt__empty-text">No products available</p>

@@ -36,6 +36,11 @@
     --vt-nl-pt: {% render 'fluid-clamp', min_px: pad_top_mobile, max_px: pad_top %};
     --vt-nl-pb: {% render 'fluid-clamp', min_px: pad_bottom_mobile, max_px: pad_bottom %};
     --vt-nl-ph: {% render 'fluid-clamp', min_px: pad_horizontal_mobile, max_px: pad_horizontal %};
+    --vt-ph: {% render 'fluid-clamp', min_px: pad_horizontal_mobile, max_px: pad_horizontal %};
+    --vt-ph-desktop: {{ pad_horizontal }}px;
+    --vt-ph-mobile: {{ pad_horizontal_mobile }}px;
+    --vt-page-padding: {{ pad_horizontal }}px;
+    --vt-page-padding-mobile: {{ pad_horizontal_mobile }}px;
   "
   {{ section.shopify_attributes }}
 >
@@ -59,12 +64,19 @@
     width: 100%;
     margin-inline: auto;
     box-sizing: border-box;
+    padding-left: var(--vt-nl-ph, var(--vt-ph, 34px));
+    padding-right: var(--vt-nl-ph, var(--vt-ph, 34px));
   }
 
-  /* When Apply max width is OFF: Full width with 2-sided padding */
   .vt-newsletter__inner:not(.vt-page-width) {
     max-width: 100%;
-    padding-inline: var(--vt-nl-ph, 34px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-newsletter__inner {
+      padding-left: var(--vt-ph-mobile, 20px);
+      padding-right: var(--vt-ph-mobile, 20px);
+    }
   }
 
   .vt-newsletter__inner > .shopify-block,

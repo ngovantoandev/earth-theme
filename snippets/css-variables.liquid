@@ -617,9 +617,13 @@
         --vt-breakpoint-mobile: 375;
         --vt-breakpoint-tablet: 1024;
         --vt-breakpoint-desktop: 1440;
+        --container-padding-desktop: 34px;
+        --container-padding-tablet: 28px;
+        --container-padding-mobile: {{ settings.page_padding_mobile | default: 20 }}px;
+
         --vt-page-padding-mobile: {{ settings.page_padding_mobile | default: 20 }};
-        --vt-page-padding-tablet: 29;
-        --vt-page-padding-desktop: 216;
+        --vt-page-padding-tablet: 28;
+        --vt-page-padding-desktop: 34;
 
         /* From mobile → tablet */
         --vt-pad-slope-1: calc((var(--vt-page-padding-tablet) - var(--vt-page-padding-mobile)) / (var(--vt-breakpoint-tablet) - var(--vt-breakpoint-mobile)));

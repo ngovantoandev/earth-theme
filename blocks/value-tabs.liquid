@@ -14,10 +14,7 @@
 
   assign gap_desktop = block.settings.gap_desktop | default: 32
   assign gap_mobile = block.settings.gap_mobile | default: 16
-  assign track_pad_desktop = block.settings.padding_desktop
-  if track_pad_desktop == blank
-    assign track_pad_desktop = 34
-  endif
+  assign track_pad_desktop = block.settings.padding_desktop | default: 0
   assign track_pad_mobile = block.settings.padding_mobile
   if track_pad_mobile == blank
     assign track_pad_mobile = 20
@@ -197,9 +194,9 @@
   values-tabs.vt-values-tabs {
     display: flex;
     flex-direction: column;
-    width: calc(100% + var(--vt-ph, 0px) * 2);
-    margin-left: calc(-1 * var(--vt-ph, 0px));
-    margin-right: calc(-1 * var(--vt-ph, 0px));
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     position: relative;
     box-sizing: border-box;
     min-width: 0;
@@ -217,8 +214,8 @@
   .vt-values-tabs__track {
     width: 100%;
     box-sizing: border-box;
-    padding-left: var(--vt-pad-desktop, 34px);
-    padding-right: var(--vt-pad-desktop, 34px);
+    padding-left: var(--vt-pad-desktop, 0px);
+    padding-right: var(--vt-pad-desktop, 0px);
     outline: none;
     position: relative;
   }

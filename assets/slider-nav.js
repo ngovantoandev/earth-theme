@@ -483,12 +483,7 @@
         const colDesktop = parseFloat(this.dataset.colDesktop) || 3;
         const gapDesktop = parseFloat(this.dataset.gapDesktop) || 32;
         const gapMobile = parseFloat(this.dataset.gapMobile) || 16;
-        const slidesCount = wrapper ? wrapper.children.length : 0;
-
-        let desktopSlidesPerView = colDesktop;
-        if (slidesCount <= colDesktop && colDesktop >= 3) {
-          desktopSlidesPerView = 2.35;
-        }
+        const desktopSlidesPerView = colDesktop >= 3 ? (colDesktop - 0.65) : (colDesktop === 2 ? 1.35 : 1);
 
         if (window.VtCarousel) {
           window.VtCarousel.init(this.track, {

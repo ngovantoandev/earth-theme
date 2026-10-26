@@ -261,22 +261,26 @@
         const colDesktop = parseFloat(this.dataset.colDesktop) || 3;
         const gapDesktop = parseFloat(this.dataset.gapDesktop) || 32;
         const gapMobile = parseFloat(this.dataset.gapMobile) || 16;
+        const desktopSlidesPerView = colDesktop >= 3 ? (colDesktop - 0.65) : (colDesktop === 2 ? 1.35 : 1);
 
         if (window.VtCarousel) {
           window.VtCarousel.init(track, {
             swipeMobile: isSwipeMobile,
             gapDesktop: gapDesktop,
             gapMobile: gapMobile,
-            slidesPerViewDesktop: colDesktop,
+            slidesPerViewDesktop: desktopSlidesPerView,
             swiperOptions: {
               slidesPerView: isSwipeMobile ? 1.2 : 1,
+              spaceBetween: gapMobile,
+              grabCursor: true,
+              watchOverflow: true,
               breakpoints: {
                 768: {
-                  slidesPerView: 2,
+                  slidesPerView: 1.8,
                   spaceBetween: Math.min(gapDesktop, 24)
                 },
                 1024: {
-                  slidesPerView: colDesktop,
+                  slidesPerView: desktopSlidesPerView,
                   spaceBetween: gapDesktop
                 }
               }

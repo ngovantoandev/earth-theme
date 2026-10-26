@@ -64,6 +64,10 @@
     --vt-pt: {% render 'fluid-clamp', min_px: pad_top_mobile, max_px: section.settings.padding_top %};
     --vt-pb: {% render 'fluid-clamp', min_px: pad_bottom_mobile, max_px: section.settings.padding_bottom %};
     --vt-ph: {% render 'fluid-clamp', min_px: pad_left_mobile, max_px: section.settings.padding_horizontal %};
+    --vt-ph-desktop: {{ section.settings.padding_horizontal | default: 34 }}px;
+    --vt-ph-mobile: {{ pad_left_mobile }}px;
+    --vt-page-padding: {{ section.settings.padding_horizontal | default: 34 }}px;
+    --vt-page-padding-mobile: {{ pad_left_mobile }}px;
     --vt-block-gap: {% render 'fluid-clamp', min_px: section.settings.block_gap_mobile, max_px: section.settings.block_gap %};
     --vt-timeline-line-top-desktop: {{ line_top_desktop }}px;
     --vt-timeline-line-top-mobile: {{ line_top_mobile }}px;
@@ -218,11 +222,6 @@
     position: relative;
   }
 
-  .vt-our-sustainability.vt-page-full-width {
-    padding-left: var(--vt-ph, 34px);
-    padding-right: var(--vt-ph, 34px);
-  }
-
   .vt-our-sustainability__container {
     width: 100%;
     margin: 0 auto;
@@ -230,10 +229,19 @@
     display: flex;
     flex-direction: column;
     gap: var(--vt-block-gap, 24px);
+    padding-left: var(--vt-ph, 34px);
+    padding-right: var(--vt-ph, 34px);
   }
 
   .vt-our-sustainability__container:not(.vt-page-width) {
     max-width: 100%;
+  }
+
+  @media screen and (max-width: 768px) {
+    .vt-our-sustainability__container {
+      padding-left: var(--vt-ph-mobile, 20px);
+      padding-right: var(--vt-ph-mobile, 20px);
+    }
   }
 
   .vt-our-sustainability__container > .shopify-block,
