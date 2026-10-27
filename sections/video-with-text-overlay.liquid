@@ -68,7 +68,7 @@
               image_size: '2000x',
               autoplay: autoplay,
               loop: loop,
-              muted: autoplay,
+              muted: true,
               controls: false,
               playsinline: true,
               class: 'vt-video-overlay__video'
@@ -76,7 +76,7 @@
         {%- elsif video_url != blank -%}
           {%- if video_url.type == 'youtube' -%}
             <iframe
-              src="https://www.youtube.com/embed/{{ video_url.id }}?enablejsapi=1&playsinline=1{% if autoplay %}&autoplay=1&mute=1{% endif %}{% if loop %}&loop=1&playlist={{ video_url.id }}{% endif %}"
+              src="https://www.youtube.com/embed/{{ video_url.id }}?enablejsapi=1&playsinline=1&mute=1{% if autoplay %}&autoplay=1{% endif %}{% if loop %}&loop=1&playlist={{ video_url.id }}{% endif %}"
               class="vt-video-overlay__iframe"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
@@ -84,7 +84,7 @@
             ></iframe>
           {%- elsif video_url.type == 'vimeo' -%}
             <iframe
-              src="https://player.vimeo.com/video/{{ video_url.id }}?{% if autoplay %}autoplay=1&muted=1{% endif %}{% if loop %}loop=1{% endif %}"
+              src="https://player.vimeo.com/video/{{ video_url.id }}?muted=1{% if autoplay %}&autoplay=1{% endif %}{% if loop %}loop=1{% endif %}"
               class="vt-video-overlay__iframe"
               allow="autoplay; fullscreen; picture-in-picture"
               allowfullscreen

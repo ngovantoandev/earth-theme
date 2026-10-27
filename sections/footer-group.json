@@ -110,8 +110,8 @@
           "settings": {
             "text": "<p>Redefining fashion through sustainable practices, transparent supply chains, and timeless design.</p>",
             "paragraph_size": "vt-paragraph-medium",
-            "enable_max_width": true,
-            "paragraph_max_width": 760
+            "enable_max_width": false,
+            "paragraph_width": "fill"
           }
         },
         "menus_column_layout": {

@@ -86,7 +86,7 @@ if (!customElements.get('vt-video-overlay')) {
       const iframe = this.getActiveIframe();
 
       if (video) {
-        video.muted = false;
+        video.muted = true;
         const playPromise = video.play();
         if (playPromise !== undefined) {
           playPromise.catch((err) => {
@@ -99,12 +99,14 @@ if (!customElements.get('vt-video-overlay')) {
         let src = iframe.getAttribute('src');
         if (src) {
           if (!src.includes('autoplay=1')) {
-            src += (src.includes('?') ? '&' : '?') + 'autoplay=1&mute=0';
+            src += (src.includes('?') ? '&' : '?') + 'autoplay=1&mute=1';
             iframe.setAttribute('src', src);
           } else if (iframe.contentWindow) {
             if (src.includes('youtube.com')) {
+              iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'mute', args: [] }), '*');
               iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: [] }), '*');
             } else if (src.includes('vimeo.com')) {
+              iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0 }), '*');
               iframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
             }
           }
